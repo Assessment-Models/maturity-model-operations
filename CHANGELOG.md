@@ -6,6 +6,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- CR-AM-11 §18–20 (Phase 5): explicit reuse of the `operations-modernization`
+  dimension package published in `Assessment-Models/maturity-components`
+  (version 1.0.0, immutable reference `v1.0.0`, kind: import). This makes
+  `operations-modernization` the first component reused by two independently
+  versioned models (`maturity-model-digital-transformation` and this model),
+  satisfying the CR-AM-11 Phase 5 exit criterion. The reference carries no
+  scoring or scale semantics — those remain owned by this model.
+
 ## [1.0.0] — 2026-11-13
 
 ### Added

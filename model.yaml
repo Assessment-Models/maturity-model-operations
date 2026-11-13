@@ -14,6 +14,14 @@ conformance:
 dependencies:
 - id: dea-maturity-bands-v2
   reference: v1.0.0
+components:
+- id: operations-modernization
+  type: dimension
+  kind: import
+  source:
+    repository: Assessment-Models/maturity-components
+  version: 1.0.0
+  reference: v1.0.0
 compatibility:
   metamodel:
     minimum: 1.0.0
