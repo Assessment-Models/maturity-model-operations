@@ -1,0 +1,19 @@
+id: operations-worked-example
+model: dea:maturity-operations
+version: 1.0.0
+description: Worked scoring example for the operations maturity model. Illustrative only — not a real
+  organisation's assessment. Shows the native 0-100 aggregation, canonical v2 band resolution and the
+  effort-adjusted value.
+aggregated_score: 62
+resolved_band: level-3-systematic
+effort_adjusted_value: 155.0
+criterion_scores:
+- criterion: example-criterion-1
+  score: 58
+- criterion: example-criterion-2
+  score: 64
+- criterion: example-criterion-3
+  score: 62
+- criterion: example-criterion-4
+  score: 66
+aggregation: mean of criterion scores (illustrative weights omitted)

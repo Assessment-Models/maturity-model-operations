@@ -1,0 +1,103 @@
+id: dea:scale-operations-v1
+version: 1.0.0
+metamodel_version: 1.0.0
+name: Operations Maturity Model Scale (5-level)
+description: 'Model-owned scale for the Operations Maturity Model. Five levels (L0..L4) scored against
+  the canonical v2 band instance (dea:maturity-bands-v2 v1.0.0): non-linear band widths 20/25/25/18/12
+  with per-level effort multipliers 1.0 → 6.0. Linear topology, exponential progression. Level semantics
+  are carried verbatim from the authoritative source; only the scoring fields differ between the frozen
+  v1-alpha lineage and the canonical v2 scheme.'
+status: stable
+ordering: ascending
+progression:
+  topology: linear
+  function: exponential
+levels:
+- id: L0
+  ordinal: 0
+  name: Emergent
+  definition: Practice exists but is person-dependent and informal
+  characteristics:
+  - Production issues detected by user complaints
+  - Manual deployments, often after-hours
+  - No incident response process
+  - Logs exist but not centralised
+  expected_practices:
+  - Centralised logging deployed
+  - Incident response runbook exists
+  - Deployment automation ≥ 50% of services
+  evidence_expectations:
+  - Frequent customer-reported incidents
+  - Frequent rollbacks after deployment
+  - Mean time to recovery measured in days
+  short_description: Operations is reactive
+- id: L1
+  ordinal: 1
+  name: Structured
+  definition: Documented, agreed, but inconsistently enforced
+  characteristics:
+  - Incident command system documented
+  - Observability stack deployed (logs, metrics, traces)
+  - Post-mortem culture started
+  - Deployment automation > 80%
+  expected_practices:
+  - SLOs defined for top services
+  - Error budgets enforced
+  - Post-mortems within 7 days of incident for sev-1/sev-2
+  evidence_expectations:
+  - SLO dashboards published
+  - Incident review board meets regularly
+  - Deployment frequency tracked
+  short_description: Core practices in place
+- id: L2
+  ordinal: 2
+  name: Systematic
+  definition: Formal, tooling-enabled, governance active
+  characteristics:
+  - SLOs defined for all customer-facing services
+  - Error budgets influence release decisions
+  - Chaos engineering experiments run
+  - On-call rotations are sustainable
+  expected_practices:
+  - MTTR < 30 minutes for sev-1
+  - Deployment frequency > 10/day
+  - Change failure rate < 15%
+  evidence_expectations:
+  - Quarterly ops health report
+  - Chaos engineering results tracked
+  - On-call satisfaction score > 7/10
+  short_description: Operations is metrics-driven
+- id: L3
+  ordinal: 3
+  name: Adaptive
+  definition: Metrics-driven; organisation senses and responds
+  characteristics:
+  - Predictive incident detection
+  - Auto-remediation for known failure modes
+  - Capacity planning is data-driven
+  - Cost of operations tracked per workload
+  expected_practices:
+  - Auto-remediation > 30% of incidents
+  - Predictive alerts > 50% of sev-1
+  - Cost per workload tracked weekly
+  evidence_expectations:
+  - ML-based anomaly detection deployed
+  - Auto-remediation playbook library
+  - Capacity headroom dashboards
+  short_description: Operations is optimised
+- id: L4
+  ordinal: 4
+  name: Self-Optimising
+  definition: Continuous improvement is autonomous, not programme-driven
+  characteristics:
+  - Reliability is a product feature
+  - Operations practice contributes to industry
+  - Cross-team operational excellence programs
+  - Internal SRE training academy
+  expected_practices:
+  - None — continuous improvement is the practice
+  evidence_expectations:
+  - External conference talks on ops
+  - Open-source observability contributions
+  - Internal SRE certification programme
+  short_description: Operations as competitive advantage

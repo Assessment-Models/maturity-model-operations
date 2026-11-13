@@ -1,0 +1,27 @@
+id: maturity-model-operations
+type: maturity-model
+name: Operations Maturity Model
+description: Operations Maturity Model — assesses incident response, observability, deployment automation,
+  SLOs and SRE practice.
+version: 1.0.0
+conformance:
+  contract:
+    id: maturity-scale-contract
+  source:
+    organization: technehub-labs
+    repository: dea-metamodel
+  version: '1.0'
+dependencies:
+- id: dea-maturity-bands-v2
+  reference: v1.0.0
+compatibility:
+  metamodel:
+    minimum: 1.0.0
+    maximum: <2.0.0
+  contracts:
+  - id: maturity-scale-contract
+    version: ^1.0
+  - id: maturity-model-contract
+    version: ^1.0
+  - id: conformance-contract
+    version: ^1.0

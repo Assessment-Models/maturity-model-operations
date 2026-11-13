@@ -1,0 +1,37 @@
+id: dea:maturity-operations
+repo_id: maturity-model-operations
+type: maturity-model
+name: Operations Maturity Model
+domain: operations
+version: 1.0.0
+metamodel_version: 1.0.0
+status: stable
+owner: Head of Operations / SRE Lead
+steward: Head of Operations / SRE Lead
+effective_date: 2026-08-21
+review_date: 2027-02-21
+description: Operations Maturity Model — assesses incident response, observability, deployment automation,
+  SLOs and SRE practice.
+score_scheme: dea-maturity-v2
+band_reference:
+  id: dea:maturity-bands-v2
+  version: 1.0.0
+  organization: technehub-labs
+  repository: dea-metamodel
+scale_levels:
+- L0
+- L1
+- L2
+- L3
+- L4
+relationships:
+- source_id: dea:maturity-operations
+  target_id: dea:maturity-bands-v2
+  relationship_type: scored-by-v2-bands
+- source_id: dea:maturity-operations
+  target_id: dea:pattern-circuit-breaker
+  relationship_type: references
+tags:
+- maturity-model
+- operations
+- v2-canonical
