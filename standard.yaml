@@ -1,0 +1,22 @@
+# CR-AM-ORG-RES-000 repository-standard declaration.
+#
+# Declares this repository's adoption of the Assessment-Models maturity-model
+# repository standard (AM-MODEL-REPOSITORY-STANDARD v1.0.0) at conformance
+# level `structural`.
+#
+# model.yaml remains the authoritative identity manifest (CR-AM-11 §15
+# contract handshake); this declaration restates model identity for
+# cross-checking only and is validated by the reusable conformance workflow
+# (.github/workflows/repository-standard.yml), which also enforces version
+# coherence across standard.yaml, model.yaml, VERSION and the README status
+# line.
+repository:
+  type: maturity-model
+standard:
+  id: AM-MODEL-REPOSITORY-STANDARD
+  version: "1.0.0"
+  conformance: structural
+model:
+  id: maturity-model-operations
+  name: Operations Maturity Model
+  version: "1.0.0"
