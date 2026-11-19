@@ -1,0 +1,179 @@
+# =============================================================================
+# maturity/assessment-questionnaire.yaml — CR-AM-13 Phase 1 DRAFT
+# One entry per criterion in the v2 register (dea:maturity-operations-register-v2).
+# Scoring: response level L0..L4 = (level/4)*100, then multiplied by evidence
+# confidence (observed 1.0 / evidenced 0.85 / self-reported 0.6 / unverified 0.3).
+# =============================================================================
+id: dea:operations-questionnaire-v2
+repo_id: maturity-model-operations
+model: dea:maturity-operations
+model_version: 2.0.0-draft
+version: 0.1.0-draft
+status: draft
+instrument: full-assessment
+entries:
+
+# --- D1 Value-Stream & Daily Operations --------------------------------------
+- criterion: OPS-D1-SD1-C01
+  question: Are your value streams mapped end-to-end, and is the flow of work visible to the teams executing it?
+  evidence_prompts: [Current-state value-stream maps, Live flow boards]
+- criterion: OPS-D1-SD1-C02
+  question: Are flow, work-in-progress and throughput measured for your key value streams?
+  evidence_prompts: [Flow metrics dashboards, WIP limits configured in tooling]
+- criterion: OPS-D1-SD1-C03
+  question: Are bottlenecks in your value streams identified and actively managed?
+  evidence_prompts: [Impediment logs, Bottleneck review records]
+- criterion: OPS-D1-SD2-C04
+  question: Does a defined daily operating cadence exist (huddles, stand-ups, tiered meetings) with clear decision rights?
+  evidence_prompts: [Cadence schedule, Escalation matrix]
+- criterion: OPS-D1-SD2-C05
+  question: Are daily commitments set explicitly and tracked for delivery reliability?
+  evidence_prompts: [Commitment/attainment records]
+- criterion: OPS-D1-SD3-C07
+  question: Is demand triaged through a single intake with visible prioritization rules?
+  evidence_prompts: [Intake records, Prioritization policy]
+- criterion: OPS-D1-SD3-C08
+  question: Is work right-sized and classified (standard vs exception) before execution?
+  evidence_prompts: [Work item taxonomy and sample data]
+- criterion: OPS-D1-SD3-C09
+  question: Is work-in-flight balanced against available capacity?
+  evidence_prompts: [Capacity plans, Utilization trends]
+
+# --- D2 Capability Orchestration ---------------------------------------------
+- criterion: OPS-D2-SD1-C01
+  question: Does a consistently described inventory of key organizational capabilities exist?
+  evidence_prompts: [Capability inventory]
+- criterion: OPS-D2-SD1-C02
+  question: Are capabilities mapped to the outcomes and value streams they serve?
+  evidence_prompts: [Capability-to-outcome maps]
+- criterion: OPS-D2-SD1-C03
+  question: Is capability health and gap status assessed on a regular cadence?
+  evidence_prompts: [Capability review reports]
+- criterion: OPS-D2-SD2-C04
+  question: Do day-to-day activities leverage the capabilities you have identified as key?
+  evidence_prompts: [Activities-to-capability mapping]
+- criterion: OPS-D2-SD2-C05
+  question: Do capability gaps drive operational investment decisions?
+  evidence_prompts: [Investment decisions traceable to gaps]
+- criterion: OPS-D2-SD3-C06
+  question: Does cross-functional work have identified owners and coordination mechanisms?
+  evidence_prompts: [RACI/interaction registers, Cross-team charters]
+- criterion: OPS-D2-SD3-C07
+  question: Are dependencies across teams and functions managed proactively?
+  evidence_prompts: [Dependency boards]
+- criterion: OPS-D2-SD3-C08
+  question: Are shared services and platforms reused before new equivalents are built?
+  evidence_prompts: [Reuse policy and metrics]
+
+# --- D3 Service & Process Management -----------------------------------------
+- criterion: OPS-D3-SD1-C01
+  question: Are core operational processes documented to a standard with named owners?
+  evidence_prompts: [Process repository, Ownership register]
+- criterion: OPS-D3-SD1-C02
+  question: Is process compliance monitored, with deviations visible to owners?
+  evidence_prompts: [Compliance dashboards]
+- criterion: OPS-D3-SD1-C03
+  question: Are process exceptions granted explicitly with an expiry, rather than tolerated silently?
+  evidence_prompts: [Exception register]
+- criterion: OPS-D3-SD2-C04
+  question: Does a service catalogue define services, their owners and their consumers?
+  evidence_prompts: [Published service catalogue]
+- criterion: OPS-D3-SD2-C05
+  question: Do SLAs/OLAs exist for core services, and are they measured?
+  evidence_prompts: [SLA/OLA reports]
+- criterion: OPS-D3-SD2-C06
+  question: Do service performance reviews occur on a defined cadence with actions tracked to closure?
+  evidence_prompts: [Review minutes, Action logs]
+- criterion: OPS-D3-SD3-C07
+  question: Does a continual-improvement mechanism (Lean/Kaizen) operate with a live backlog?
+  evidence_prompts: [Improvement kanban]
+- criterion: OPS-D3-SD3-C08
+  question: Is the impact of improvement work measured (cycle time, quality, cost)?
+  evidence_prompts: [Before/after improvement metrics]
+
+# --- D4 Workforce & Ways of Working -----------------------------------------
+- criterion: OPS-D4-SD1-C01
+  question: Are operational roles and responsibilities defined for the operating model?
+  evidence_prompts: [Role definitions, Role-activity mapping]
+- criterion: OPS-D4-SD1-C02
+  question: Are skills for key operational capabilities assessed and developed?
+  evidence_prompts: [Skills matrix, Training plans]
+- criterion: OPS-D4-SD1-C03
+  question: Is onboarding into operational roles structured and repeatable?
+  evidence_prompts: [Onboarding playbooks]
+- criterion: OPS-D4-SD2-C04
+  question: Do team boundaries follow an explicit team-topology design (stream-aligned/platform/enabling)?
+  evidence_prompts: [Operating-model team design]
+- criterion: OPS-D4-SD2-C05
+  question: Are team interaction modes defined and reviewed, including cognitive load?
+  evidence_prompts: [Interaction model, Cognitive-load reviews]
+- criterion: OPS-D4-SD3-C06
+  question: Are on-call/exception rotas sustainable, with load and satisfaction tracked?
+  evidence_prompts: [Rota load data, Satisfaction scores]
+- criterion: OPS-D4-SD3-C07
+  question: Is operational knowledge (runbooks, playbooks) captured and demonstrably current?
+  evidence_prompts: [Runbook currency checks]
+
+# --- D5 Technology & Infrastructure Operations -------------------------------
+- criterion: OPS-D5-SD1-C01
+  question: Is telemetry (logs, metrics, traces) centralised and actively used in daily operations?
+  evidence_prompts: [Observability coverage report]
+- criterion: OPS-D5-SD1-C02
+  question: Does monitoring cover user-facing journeys, not just individual components?
+  evidence_prompts: [Journey dashboards, SLI coverage]
+- criterion: OPS-D5-SD2-C03
+  question: Does an incident command system operate, with defined roles and records?
+  evidence_prompts: [ICS documents, Incident records]
+- criterion: OPS-D5-SD2-C04
+  question: Are post-mortems blameless, timely and producing tracked actions?
+  evidence_prompts: [PIR records within 7 days for sev-1/2]
+- criterion: OPS-D5-SD2-C05
+  question: Are root causes eliminated through problem management rather than just closing incidents?
+  evidence_prompts: [Problem records, Recurrence trends]
+- criterion: OPS-D5-SD3-C06
+  question: Are deployments automated with full audit trails?
+  evidence_prompts: [Deployment automation rate, Change records]
+- criterion: OPS-D5-SD3-C07
+  question: Does predictive incident detection flag issues before users report them?
+  evidence_prompts: [Predictive alert share of sev-1]
+- criterion: OPS-D5-SD3-C08
+  question: Is change automation scored against the shared operations-modernization component?
+  evidence_prompts: [Component scoring record]
+- criterion: OPS-D5-SD4-C09
+  question: Does auto-remediation handle known failure modes within defined guardrails?
+  evidence_prompts: [Auto-remediation rate, Playbook library]
+- criterion: OPS-D5-SD4-C10
+  question: Do SLOs exist for customer-facing services with enforced error budgets?
+  evidence_prompts: [SLO/error-budget reports]
+- criterion: OPS-D5-SD4-C11
+  question: Is operating cost per workload tracked and optimized?
+  evidence_prompts: [Cost dashboards, Unit-economics trends]
+- criterion: OPS-D5-SD4-C12
+  question: Is capacity planning data-driven, with headroom tracked?
+  evidence_prompts: [Capacity headroom dashboards]
+
+# --- D6 Strategy Alignment & Operating Blueprint ------------------------------
+- criterion: OPS-D6-SD1-C01
+  question: Is strategy translated into measurable operational objectives, with operational insight flowing back into strategy?
+  evidence_prompts: [OKR cascades, Balanced scorecards]
+- criterion: OPS-D6-SD1-C02
+  question: Do operations reports flow upward into business reviews framed as outcomes?
+  evidence_prompts: [Ops-to-exec review packs]
+- criterion: OPS-D6-SD1-C03
+  question: Does operations surface risks and opportunities that feed strategy adjustment?
+  evidence_prompts: [Risk registers, Strategy input memos]
+- criterion: OPS-D6-SD2-C04
+  question: Is the operating model (blueprint) documented, versioned and owned?
+  evidence_prompts: [Operating-model artifact with named owner]
+- criterion: OPS-D6-SD2-C05
+  question: Are operating-model changes governed with impact assessment?
+  evidence_prompts: [Change decisions, Impact records]
+- criterion: OPS-D6-SD3-C06
+  question: Are digital nexus forces (AI, automation, data, platforms) adopted deliberately in operations?
+  evidence_prompts: [Adoption roadmap, Deployment records]
+- criterion: OPS-D6-SD3-C07
+  question: Do new technologies entering operations go through a value/risk/lifecycle assessment?
+  evidence_prompts: [Technology-assessment records]
+- criterion: OPS-D6-SD3-C08
+  question: Does operations participate in industry practice exchange?
+  evidence_prompts: [External contributions]
