@@ -1,13 +1,13 @@
 # =============================================================================
-# maturity/evaluation.yaml — CR-AM-13 Phase 3 DRAFT
+# maturity/evaluation.yaml — RELEASE 2.0.0 (CR-AM-13)
 # Scoring model + assessment method for dea:maturity-operations v2.
 # =============================================================================
 id: dea:operations-evaluation-v2
 repo_id: maturity-model-operations
 model: dea:maturity-operations
-model_version: 2.0.0-draft
-version: 0.1.0-draft
-status: draft
+model_version: 2.0.0
+version: 1.0.0
+status: stable
 method:
   name: weighted-mean-with-evidence-confidence
   steps:
