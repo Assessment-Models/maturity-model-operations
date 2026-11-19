@@ -1,0 +1,42 @@
+# =============================================================================
+# maturity/evidence/schema.yaml — CR-AM-13 Phase 3 DRAFT
+# Evidence-item and assessment-record schemas for dea:maturity-operations v2.
+# =============================================================================
+id: dea:operations-evidence-schema-v1
+repo_id: maturity-model-operations
+model: dea:maturity-operations
+version: 0.1.0-draft
+status: draft
+confidence_levels:
+  observed: 1.0
+  evidenced: 0.85
+  self-reported: 0.6
+  unverified: 0.3
+evidence_item:
+  required: [criterion, artifact_ref, collected_at, collected_by, confidence]
+  fields:
+    criterion: { type: string, pattern: OPS-D[1-6]-SD[1-4]-C[0-9]+ }
+    artifact_ref: { type: string, description: url | repo/path | document id }
+    collected_at: { type: date }
+    collected_by: { type: string, description: role name }
+    confidence: { type: enum, values: [observed, evidenced, self-reported, unverified] }
+    notes: { type: string, required: false }
+assessment_record:
+  required: [id, model, date, assessor, scores]
+  fields:
+    id: { type: string, pattern: ops-assessment-[a-z0-9-]+ }
+    model: { type: string, example: dea:maturity-operations@2.0.0 }
+    date: { type: date }
+    assessor: { type: string }
+    scores: { type: map, description: criterion id -> { score: 0-100, evidence: [evidence_item] } }
+    derived: { type: object, description: operations-index, band, effort-adjusted, per-dimension scores }
+campaign_record:
+  required: [baseline, target, deltas, benchmark]
+  fields:
+    baseline: { type: ref, description: assessment-record reference }
+    target: { type: ref, description: assessment-record reference + target date }
+    deltas: { type: object, description: per-dimension and criterion-level, baseline minus target }
+    benchmark: { type: object, required: false, description: anonymized sector/cohort/period }
+compatibility_rule: >-
+  Assessment records carry the model version used. Criterion IDs are permanent
+  keys; records remain benchmarkable across 1.x/2.x via migrations/v1-to-v2-map.yaml.

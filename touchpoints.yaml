@@ -1,0 +1,234 @@
+# =============================================================================
+# touchpoints.yaml — CR-AM-13 Phase 2 DRAFT
+# Handshake & Touchpoint Model for dea:maturity-operations
+# Contract: maturity-touchpoint-contract v0.1.0-draft (to be published in
+#           technehub-labs/dea-metamodel; records below are written against it)
+# =============================================================================
+id: dea:touchpoints-operations-v1
+repo_id: maturity-model-operations
+version: 0.1.0-draft
+status: draft
+metamodel_version: 1.0.0
+description: >-
+  Declared handshakes and touchpoints between the Operations Maturity Model
+  and its ecosystem peers, per CR-AM-13 §5. A handshake is the pinned
+  contract-level linkage; a touchpoint is the semantic seam where two models
+  meet during an assessment. Every touchpoint requires a mirrored record in
+  the peer repository (reciprocity), validated by ecosystem CI.
+
+handshakes:
+  - id: hs-scoring-v2-bands
+    kind: scored-by
+    contract:
+      id: maturity-scale-contract
+      version: '1.0'
+    asset:
+      id: dea:maturity-bands-v2
+      organization: technehub-labs
+      repository: dea-metamodel
+      reference: v1.0.0
+  - id: hs-touchpoint-contract
+    kind: touchpoints-declared-by
+    contract:
+      id: maturity-touchpoint-contract
+      version: 0.1.0-draft
+    source:
+      organization: technehub-labs
+      repository: dea-metamodel
+
+# Mapping types: feeds (our evidence informs their criteria), consumes
+# (their maturity informs our criteria), shared-component (both import the
+# same component), boundary (explicit non-overlap declaration).
+touchpoints:
+
+  # --- Autonomous Operations -------------------------------------------------
+  - id: tp-ops-x-autonomous-operations
+    peer_asset: dea:maturity-autonomous-operations
+    peer_repo: maturity-model-autonomous-operations
+    peer_contract_version: '^1.0'
+    direction: feeds
+    mapping_type: feeds
+    summary: >-
+      Operations D5 reliability evidence (observability, predictive detection,
+      auto-remediation, SLO enforcement, MTTR) feeds the peer's Technology/Operations
+      dimensions; the peer owns closed-loop autonomy (OODA ownership) and this
+      model owns human/assisted operations.
+    overlap_resolution: >-
+      Automation of known failure modes is assessed HERE (D5-SD3/D5-SD4 up to
+      auto-remediation). Closed-loop, intent-driven autonomy is ASSESSED BY THE
+      PEER. Boundary: who owns the OODA stages.
+    criteria_mapping:
+      - ours: OPS-D5-SD1-C01
+        theirs: 3.3.8            # Observability & Event Intelligence
+        note: >-
+          Peer criterion was added in their revamp explicitly sourced from this
+          model's observability stack; evidence is single-assessable, both
+          models reuse it.
+      - ours: OPS-D5-SD3-C07
+        theirs: 4.1.1            # Detect Anomaly Event (peer gated criterion)
+        note: peer may cite our evidence without re-assessing
+      - ours: OPS-D5-SD2-C03
+        theirs: 4.1.2            # Demarcate and locate root-cause
+        note: closed-loop spine (4.1.1-4.1.4) gates the peer org level
+      - ours: OPS-D5-SD4-C09
+        theirs: 3.1.3            # Intelligent Closed Loop Orchestration
+        note: same evidence, different level semantics
+      - ours: OPS-D5-SD4-C10
+        theirs: 4.2.5            # SLO & Error Budget Management
+        note: peer criterion sourced from this model's L2-L3 practice
+      - ours: OPS-D5-SD4-C11
+        theirs: 3.3.6            # Resource Optimization
+        note: shared economic telemetry
+    peer_declared_relationship: >-
+      The peer's register already declares derived-from (extends) toward
+      dea:maturity-operations; reciprocity is pre-established at the
+      relationship level and the mirrored touchpoint record formalizes it.
+    reciprocity: required
+    peer_status: pending-mirror-record
+
+  # --- Services Delivery -----------------------------------------------------
+  - id: tp-ops-x-services-delivery
+    peer_asset: dea:maturity-services-delivery
+    peer_repo: maturity-model-services-delivery
+    peer_contract_version: '^1.0'
+    direction: feeds
+    mapping_type: feeds
+    summary: >-
+      Operations D1 daily-operating evidence (flow visibility, WIP, throughput,
+      commitment reliability) feeds the peer's flow-efficiency and time-to-market
+      criteria. The peer owns customer-visible delivery outcomes.
+    overlap_resolution: >-
+      Internal flow health is assessed HERE (D1). Customer-facing outcome
+      metrics (T2M, quality, satisfaction) are ASSESSED BY THE PEER.
+    criteria_mapping:
+      - ours: OPS-D1-SD1-C01
+        theirs: pending-peer-register
+        note: >-
+          Peer v1.0.0 is metadata-only (no criteria register published yet);
+          mapping is anchored at dimension level (flow efficiency,
+          time-to-market criteria of the peer) and is seeded with real IDs
+          when the peer adopts a criteria register. Reciprocal mirror record
+          triggers it.
+      - ours: OPS-D1-SD2-C04
+        theirs: pending-peer-register
+        note: peer derives delivery predictability from this
+    reciprocity: required
+    peer_status: blocked-on-peer-register
+
+  # --- Technology ------------------------------------------------------------
+  - id: tp-ops-x-technology
+    peer_asset: dea:maturity-technology
+    peer_repo: maturity-model-technology
+    peer_contract_version: '^1.0'
+    direction: consumes
+    mapping_type: consumes
+    summary: >-
+      The peer's platform/tooling capability maturity is assumed, not
+      re-assessed. Operations D5 scores EFFECTIVENESS of tool use, not tool
+      capability.
+    overlap_resolution: >-
+      Platform and tool CAPABILITY is ASSESSED BY THE PEER. Effectiveness of
+      tool use in live operations is assessed HERE (D5).
+    criteria_mapping:
+      - ours: OPS-D5-SD1-C01
+        theirs: pending-peer-register
+        note: >-
+          Peer v1.0.0 is metadata-only (stack fitness, technical debt,
+          lifecycle, skill coverage); consume its platform-capability scores
+          once its register publishes; assess only tool-use effectiveness here.
+    reciprocity: required
+    peer_status: blocked-on-peer-register
+
+  # --- Digital Transformation (composite) --------------------------------------
+  - id: tp-ops-x-digital-transformation
+    peer_asset: dea:maturity-digital-transformation
+    peer_repo: maturity-model-digital-transformation
+    peer_contract_version: '^1.0'
+    direction: consumes
+    mapping_type: consumes
+    summary: >-
+      Strategy and transformation-roadmap maturity informs D6 criteria. This
+      model assesses STRATEGY-TO-OPERATIONS LINKAGE, not the strategy itself.
+    overlap_resolution: >-
+      Transformation strategy is ASSESSED BY THE PEER. Operations' role in
+      executing the strategy is assessed HERE (D6).
+    criteria_mapping:
+      - ours: OPS-D6-SD1-C01
+        theirs: pending-peer-register
+        note: >-
+          Composite model keeps its register under maturity/components/
+          (per-component criteria); strategy-state mapping is anchored at the
+          strategy dimension and resolved to component criterion IDs at the
+          reciprocity merge.
+    reciprocity: required
+    peer_status: pending-mirror-record
+
+  # --- Digital Transformation Operationalized ----------------------------------
+  - id: tp-ops-x-dt-operationalized
+    peer_asset: dea:maturity-digital-transformation-operationalized
+    peer_repo: maturity-model-digital-transformation-operationalized
+    peer_contract_version: '^1.0'
+    direction: consumes
+    mapping_type: consumes
+    summary: >-
+      The peer's operationalization register (six dimensions, 72 criteria,
+      ids d1c1..d6c12) publishes an Operations dimension (d4) that overlaps
+      our D5 and a TOM criterion (d5c2) that overlaps our D6-SD2. This
+      touchpoint makes the overlap explicit and single-owner.
+    overlap_resolution: >-
+      Transformation strategy, business model and TOM DESIGN are ASSESSED BY
+      THE PEER (d2, d5c2). Human/assisted operations EXECUTION is assessed
+      HERE. Where the peer's d4 criteria restate operations evidence
+      (d4c2, d4c10, d4c11), evidence is single-assessed once and cited by
+      both models; the autonomy-ladder criteria (d4s2) remain the peer's and
+      autonomous-operations' domain.
+    criteria_mapping:
+      - ours: OPS-D6-SD1-C01
+        theirs: d2c1              # Customer/ecosystem-centric digital strategy
+        note: we consume strategy state; peer does not assess ops execution
+      - ours: OPS-D6-SD2-C04
+        theirs: d5c2              # Target operating model & org design
+        note: TOM design owned by peer; ops execution of TOM owned here
+      - ours: OPS-D5-SD2-C03
+        theirs: d4c10             # Incident response & resilience testing
+        note: shared evidence, single assessment
+      - ours: OPS-D5-SD4-C10
+        theirs: d4c2              # Closed-loop assurance & SLOs
+        note: shared evidence, single assessment
+      - ours: OPS-D1-SD1-C02
+        theirs: d4c11             # Performance & flow management
+        note: >-
+          DORA/flow telemetry shared; internal flow assessed here, customer-
+          visible delivery outcomes assessed by services-delivery.
+    reciprocity: required
+    peer_status: pending-mirror-record
+
+  # --- Modernization ----------------------------------------------------------
+  - id: tp-ops-x-modernization
+    peer_asset: dea:maturity-modernization
+    peer_repo: maturity-model-modernization
+    peer_contract_version: '^1.0'
+    direction: shared-component
+    mapping_type: shared-component
+    summary: >-
+      Both models import the operations-modernization dimension package from
+      maturity-components. Scoring and scale semantics remain owned by each
+      model (component is kind: import, per model.yaml).
+    overlap_resolution: >-
+      Shared component content is SINGLE-SOURCED in maturity-components; each
+      model owns only its scoring of it. Duplicated criteria are prohibited.
+    criteria_mapping:
+      - ours: OPS-D5-SD3-C08
+        theirs: execution-operations  # peer practice area (15-criterion catalog)
+        note: >-
+          Peer catalog ids are practice-area scoped (modernization_metrics,
+          pattern_reuse, lessons_learned, readiness_assessment) and concern
+          modernisation execution, not deployment automation. The shared
+          operations-modernization component carries the overlap; criteria
+          ids differ by owner.
+    component:
+      repository: Assessment-Models/maturity-components
+      id: operations-modernization
+      reference: v1.0.0
+    reciprocity: required
+    peer_status: pending-mirror-record

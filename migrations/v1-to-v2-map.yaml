@@ -1,0 +1,33 @@
+# =============================================================================
+# migrations/v1-to-v2-map.yaml — CR-AM-13 Phase 1 DRAFT
+# Maps every v1.0.0 scale item (maturity/scale.yaml) to v2 criterion IDs so
+# assessments remain comparable across model versions.
+# =============================================================================
+id: dea:operations-migration-v1-to-v2
+from_model: dea:maturity-operations@1.0.0
+to_model: dea:maturity-operations@2.0.0
+status: draft
+criterion_map:
+  centralised-logging-deployed: OPS-D5-SD1-C01
+  incident-response-runbook-exists: OPS-D5-SD2-C03
+  deployment-automation-50-to-80-percent: OPS-D5-SD3-C06
+  incident-command-system-documented: OPS-D5-SD2-C03
+  observability-stack-deployed: OPS-D5-SD1-C01
+  post-mortem-culture-started: OPS-D5-SD2-C04
+  slos-defined-top-services: OPS-D5-SD4-C10
+  error-budgets-enforced: OPS-D5-SD4-C10
+  post-mortems-within-7-days: OPS-D5-SD2-C04
+  slos-all-customer-facing: OPS-D5-SD4-C10
+  error-budgets-influence-releases: OPS-D5-SD4-C10
+  chaos-engineering-experiments: OPS-D5-SD2-C05
+  on-call-rotations-sustainable: OPS-D4-SD3-C06
+  predictive-incident-detection: OPS-D5-SD3-C07
+  auto-remediation-known-failure-modes: OPS-D5-SD4-C09
+  capacity-planning-data-driven: OPS-D5-SD4-C12
+  cost-of-operations-per-workload: OPS-D5-SD4-C11
+  contributes-to-industry: OPS-D6-SD3-C08
+  reliability-as-product-feature: OPS-D4-SD3-C07
+  internal-sre-training-academy: OPS-D4-SD1-C02
+rules:
+  - v1 items map into D5 (and, where human-centred, D4/D6); D1-D3 are additive and score only from v2.0.0 campaigns.
+  - A v1.0.0 assessment converts by re-projecting its D5 score onto the mapped criteria; the legacy 0-100 aggregated score remains valid for band comparison under the same v2 bands.
