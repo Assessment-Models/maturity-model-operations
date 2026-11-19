@@ -1,9 +1,15 @@
 id: maturity-model-operations
 type: maturity-model
 name: Operations Maturity Model
-description: Operations Maturity Model — assesses incident response, observability, deployment automation,
-  SLOs and SRE practice.
-version: 1.0.0
+description: >-
+  Operations Maturity Model — assesses enterprise operations: how day-to-day
+  activities leverage key organizational capabilities to deliver outcomes.
+  Covers value-stream and daily operations, capability orchestration, service
+  and process management, workforce and ways of working, technology and
+  infrastructure operations, and strategy alignment with the operating
+  blueprint. Includes the Handshake & Touchpoint Model linking sibling
+  assessment models in the ecosystem.
+version: 2.0.0
 conformance:
   contract:
     id: maturity-scale-contract
@@ -22,6 +28,8 @@ components:
     repository: Assessment-Models/maturity-components
   version: 1.0.0
   reference: v1.0.0
+touchpoints:
+  declaration: touchpoints.yaml
 compatibility:
   metamodel:
     minimum: 1.0.0
