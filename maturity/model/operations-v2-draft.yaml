@@ -1,17 +1,19 @@
 # =============================================================================
-# maturity/model/operations-v2-draft.yaml — CR-AM-13 Phase 1 DRAFT
+# maturity/model/operations-v2-draft.yaml — RELEASE 2.0.0 (CR-AM-13)
 # Criteria register for dea:maturity-operations v2 (enterprise expansion).
-# Authoritative target for maturity/model/operations.yaml at release 2.0.0.
+# Filename retains the -draft suffix from CR-AM-13 Phase 1; a later rename to
+# maturity/model/operations.yaml is owner cleanup and does not affect any
+# contract, criterion ID or assessment record.
 # Criterion IDs are permanent benchmarking keys (CR-AM-13 §6).
 # =============================================================================
 id: dea:maturity-operations-register-v2
 repo_id: maturity-model-operations
 type: maturity-model
-name: Operations Maturity Model — criteria register (v2 draft)
+name: Operations Maturity Model — criteria register (v2)
 domain: operations
-version: 2.0.0-draft
+version: 2.0.0
 metamodel_version: 1.0.0
-status: draft
+status: stable
 owner: Head of Operations / SRE Lead
 score_scheme: dea-maturity-v2
 band_reference:

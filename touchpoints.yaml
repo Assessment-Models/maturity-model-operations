@@ -1,12 +1,14 @@
 # =============================================================================
-# touchpoints.yaml — CR-AM-13 Phase 2 DRAFT
+# touchpoints.yaml — CR-AM-13 v0.2.0 (ships with model release 2.0.0)
 # Handshake & Touchpoint Model for dea:maturity-operations
-# Contract: maturity-touchpoint-contract v0.1.0-draft (to be published in
-#           technehub-labs/dea-metamodel; records below are written against it)
+# Contract: maturity-touchpoint-contract v0.1.0-draft (publication tracked in
+#           technehub-labs/dea-metamodel issue #213; records below are written
+#           against it). This file remains status: draft until the contract
+#           publishes; the handshake pins the contract version explicitly.
 # =============================================================================
 id: dea:touchpoints-operations-v1
 repo_id: maturity-model-operations
-version: 0.1.0-draft
+version: 0.2.0
 status: draft
 metamodel_version: 1.0.0
 description: >-
@@ -84,7 +86,7 @@ touchpoints:
       dea:maturity-operations; reciprocity is pre-established at the
       relationship level and the mirrored touchpoint record formalizes it.
     reciprocity: required
-    peer_status: pending-mirror-record
+    peer_status: mirror-merged-tag-pending
 
   # --- Services Delivery -----------------------------------------------------
   - id: tp-ops-x-services-delivery
@@ -102,18 +104,18 @@ touchpoints:
       metrics (T2M, quality, satisfaction) are ASSESSED BY THE PEER.
     criteria_mapping:
       - ours: OPS-D1-SD1-C01
-        theirs: pending-peer-register
+        theirs: DLV-D4-SD1-C01
         note: >-
-          Peer v1.0.0 is metadata-only (no criteria register published yet);
-          mapping is anchored at dimension level (flow efficiency,
-          time-to-market criteria of the peer) and is seeded with real IDs
-          when the peer adopts a criteria register. Reciprocal mirror record
-          triggers it.
+          Seeded from the peer register draft (Assessment-Models/
+          maturity-model-services-delivery PR #4, flow-efficiency criterion
+          in their Delivery dimension). Binding is seed-pending-release:
+          it becomes citable evidence once the peer register merges and
+          the peer release is tagged.
       - ours: OPS-D1-SD2-C04
-        theirs: pending-peer-register
+        theirs: DLV-D4-SD2-C03
         note: peer derives delivery predictability from this
     reciprocity: required
-    peer_status: blocked-on-peer-register
+    peer_status: seeded-pending-peer-release
 
   # --- Technology ------------------------------------------------------------
   - id: tp-ops-x-technology
@@ -131,13 +133,15 @@ touchpoints:
       tool use in live operations is assessed HERE (D5).
     criteria_mapping:
       - ours: OPS-D5-SD1-C01
-        theirs: pending-peer-register
+        theirs: TEC-D5-SD1-C01
         note: >-
-          Peer v1.0.0 is metadata-only (stack fitness, technical debt,
-          lifecycle, skill coverage); consume its platform-capability scores
-          once its register publishes; assess only tool-use effectiveness here.
+          Seeded from the peer register draft (Assessment-Models/
+          maturity-model-technology PR #4, telemetry & observability
+          tooling criterion). Binding is seed-pending-release; consume the
+          peer's platform-capability scores once their register merges and
+          their release is tagged; assess only tool-use effectiveness here.
     reciprocity: required
-    peer_status: blocked-on-peer-register
+    peer_status: seeded-pending-peer-release
 
   # --- Digital Transformation (composite) --------------------------------------
   - id: tp-ops-x-digital-transformation
@@ -161,7 +165,7 @@ touchpoints:
           strategy dimension and resolved to component criterion IDs at the
           reciprocity merge.
     reciprocity: required
-    peer_status: pending-mirror-record
+    peer_status: mirror-merged-tag-pending
 
   # --- Digital Transformation Operationalized ----------------------------------
   - id: tp-ops-x-dt-operationalized
@@ -201,7 +205,7 @@ touchpoints:
           DORA/flow telemetry shared; internal flow assessed here, customer-
           visible delivery outcomes assessed by services-delivery.
     reciprocity: required
-    peer_status: pending-mirror-record
+    peer_status: mirror-merged-tag-pending
 
   # --- Modernization ----------------------------------------------------------
   - id: tp-ops-x-modernization
@@ -231,4 +235,4 @@ touchpoints:
       id: operations-modernization
       reference: v1.0.0
     reciprocity: required
-    peer_status: pending-mirror-record
+    peer_status: mirror-merged-tag-pending
