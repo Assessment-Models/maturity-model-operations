@@ -1,12 +1,12 @@
 # =============================================================================
-# maturity/evidence/schema.yaml — CR-AM-13 Phase 3 DRAFT
+# maturity/evidence/schema.yaml — RELEASE 2.0.0 (CR-AM-13)
 # Evidence-item and assessment-record schemas for dea:maturity-operations v2.
 # =============================================================================
 id: dea:operations-evidence-schema-v1
 repo_id: maturity-model-operations
 model: dea:maturity-operations
-version: 0.1.0-draft
-status: draft
+version: 1.0.0
+status: stable
 confidence_levels:
   observed: 1.0
   evidenced: 0.85
