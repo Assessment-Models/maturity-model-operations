@@ -1,0 +1,292 @@
+# =============================================================================
+# maturity/model/operations-v2-draft.yaml — CR-AM-13 Phase 1 DRAFT
+# Criteria register for dea:maturity-operations v2 (enterprise expansion).
+# Authoritative target for maturity/model/operations.yaml at release 2.0.0.
+# Criterion IDs are permanent benchmarking keys (CR-AM-13 §6).
+# =============================================================================
+id: dea:maturity-operations-register-v2
+repo_id: maturity-model-operations
+type: maturity-model
+name: Operations Maturity Model — criteria register (v2 draft)
+domain: operations
+version: 2.0.0-draft
+metamodel_version: 1.0.0
+status: draft
+owner: Head of Operations / SRE Lead
+score_scheme: dea-maturity-v2
+band_reference:
+  id: dea:maturity-bands-v2
+  version: 1.0.0
+  organization: technehub-labs
+  repository: dea-metamodel
+scale_levels: [L0, L1, L2, L3, L4]
+scoring:
+  method: weighted-mean
+  index: operations-index
+  criterion_scale: questionnaire response (L0-L4) x evidence confidence, 0-100
+  dimension_weights: { D1: 0.20, D2: 0.18, D3: 0.18, D4: 0.14, D5: 0.20, D6: 0.10 }
+dimensions:
+
+- id: D1
+  name: Value-Stream & Daily Operations
+  weight: 0.20
+  sub_dimensions:
+  - id: D1-SD1
+    name: Flow visibility
+    criteria:
+    - id: OPS-D1-SD1-C01
+      statement: Value streams are mapped end-to-end with the flow of work visible to the teams executing it.
+      evidence: [Value-stream maps, Live flow boards]
+    - id: OPS-D1-SD1-C02
+      statement: Flow, work-in-progress and throughput are measured for key value streams.
+      evidence: [Flow metrics dashboards, WIP limits in tooling]
+      touchpoints: [tp-ops-x-dt-operationalized]   # mapped to d4c11
+    - id: OPS-D1-SD1-C03
+      statement: Bottlenecks are identified and actively managed.
+      evidence: [Impediment logs, Bottleneck review records]
+  - id: D1-SD2
+    name: Operating cadence
+    criteria:
+    - id: OPS-D1-SD2-C04
+      statement: A daily operating cadence exists (huddles, stand-ups, tiered meetings) with clear decision rights.
+      evidence: [Cadence schedule, Escalation matrices]
+    - id: OPS-D1-SD2-C05
+      statement: Daily commitments are set and their delivery reliability is tracked.
+      evidence: [Commitment/attainment records]
+  - id: D1-SD3
+    name: Demand & work management
+    criteria:
+    - id: OPS-D1-SD3-C07
+      statement: Demand is triaged through a single intake with visible prioritization rules.
+      evidence: [Intake records, Prioritization policy]
+    - id: OPS-D1-SD3-C08
+      statement: Work is right-sized and classified (standard vs exception) before execution.
+      evidence: [Work item taxonomy data]
+    - id: OPS-D1-SD3-C09
+      statement: Work-in-flight is balanced against available capacity.
+      evidence: [Capacity plans, Utilization trends]
+
+- id: D2
+  name: Capability Orchestration
+  weight: 0.18
+  sub_dimensions:
+  - id: D2-SD1
+    name: Capability inventory & mapping
+    criteria:
+    - id: OPS-D2-SD1-C01
+      statement: Key organizational capabilities are inventoried and described consistently.
+      evidence: [Capability inventory]
+    - id: OPS-D2-SD1-C02
+      statement: Capabilities are mapped to the outcomes and value streams they serve.
+      evidence: [Capability-to-outcome maps]
+    - id: OPS-D2-SD1-C03
+      statement: Capability health and gaps are assessed on a regular cadence.
+      evidence: [Capability review reports]
+  - id: D2-SD2
+    name: Capability-to-outcome leverage
+    criteria:
+    - id: OPS-D2-SD2-C04
+      statement: Day-to-day activities leverage the capabilities identified as key.
+      evidence: [Activities-to-capability mapping]
+    - id: OPS-D2-SD2-C05
+      statement: Capability gaps drive operational investment decisions.
+      evidence: [Investment decisions traceable to gaps]
+  - id: D2-SD3
+    name: Cross-functional coordination
+    criteria:
+    - id: OPS-D2-SD3-C06
+      statement: Cross-functional work has identified owners and coordination mechanisms.
+      evidence: [RACI/interaction registers, Cross-team charters]
+    - id: OPS-D2-SD3-C07
+      statement: Dependencies across teams and functions are managed proactively.
+      evidence: [Dependency boards]
+    - id: OPS-D2-SD3-C08
+      statement: Shared services and platforms are reused before new equivalents are built.
+      evidence: [Reuse policy and metrics]
+
+- id: D3
+  name: Service & Process Management
+  weight: 0.18
+  sub_dimensions:
+  - id: D3-SD1
+    name: Process standardization & ownership
+    criteria:
+    - id: OPS-D3-SD1-C01
+      statement: Core operational processes are documented to a standard with named owners.
+      evidence: [Process repository, Ownership register]
+    - id: OPS-D3-SD1-C02
+      statement: Process compliance is monitored and deviations are visible.
+      evidence: [Compliance dashboards]
+    - id: OPS-D3-SD1-C03
+      statement: Exceptions are granted explicitly with expiry, never tolerated silently.
+      evidence: [Exception registers]
+  - id: D3-SD2
+    name: SLAs/OLAs & service catalogue
+    criteria:
+    - id: OPS-D3-SD2-C04
+      statement: A service catalogue defines services, owners and consumers.
+      evidence: [Published service catalogue]
+    - id: OPS-D3-SD2-C05
+      statement: SLAs/OLAs exist for core services and are measured.
+      evidence: [SLA/OLA reports]
+    - id: OPS-D3-SD2-C06
+      statement: Service performance reviews occur on a defined cadence with actions tracked.
+      evidence: [Review minutes, Action logs]
+  - id: D3-SD3
+    name: Continual improvement
+    criteria:
+    - id: OPS-D3-SD3-C07
+      statement: A continual-improvement mechanism (Lean/Kaizen) operates with a live backlog.
+      evidence: [Improvement kanban]
+    - id: OPS-D3-SD3-C08
+      statement: Improvement impact is measured (cycle time, quality, cost).
+      evidence: [Before/after improvement metrics]
+
+- id: D4
+  name: Workforce & Ways of Working
+  weight: 0.14
+  sub_dimensions:
+  - id: D4-SD1
+    name: Roles & skills
+    criteria:
+    - id: OPS-D4-SD1-C01
+      statement: Operational roles and responsibilities are defined for the operating model.
+      evidence: [Role definitions, Role-activity mapping]
+    - id: OPS-D4-SD1-C02
+      statement: Skills for key operational capabilities are assessed and developed.
+      evidence: [Skills matrices, Training plans]
+    - id: OPS-D4-SD1-C03
+      statement: Onboarding to operational roles is structured and repeatable.
+      evidence: [Onboarding playbooks]
+  - id: D4-SD2
+    name: Team topologies
+    criteria:
+    - id: OPS-D4-SD2-C04
+      statement: Team boundaries follow an explicit team-topology design (stream-aligned/platform/enabling).
+      evidence: [Operating-model team design]
+    - id: OPS-D4-SD2-C05
+      statement: Team interaction modes are defined and reviewed, including cognitive load.
+      evidence: [Interaction model, Cognitive-load reviews]
+  - id: D4-SD3
+    name: Sustainable cadence
+    criteria:
+    - id: OPS-D4-SD3-C06
+      statement: On-call/exception rotas are sustainable, with load and satisfaction tracked.
+      evidence: [Rota load data, Satisfaction scores]
+      v1_lineage: 'L2 characteristic: on-call rotations are sustainable'
+    - id: OPS-D4-SD3-C07
+      statement: Operational knowledge (runbooks, playbooks) is captured and demonstrably current.
+      evidence: [Runbook currency checks]
+
+- id: D5
+  name: Technology & Infrastructure Operations
+  weight: 0.20
+  sub_dimensions:
+  - id: D5-SD1
+    name: Observability
+    criteria:
+    - id: OPS-D5-SD1-C01
+      statement: Telemetry (logs, metrics, traces) is centralised and actively used.
+      evidence: [Observability coverage reports]
+      v1_lineage: 'L0-L1: centralised logging; observability stack deployed'
+      touchpoints: [tp-ops-x-autonomous-operations, tp-ops-x-technology]
+    - id: OPS-D5-SD1-C02
+      statement: Monitoring covers user-facing journeys, not just components.
+      evidence: [Journey dashboards, SLI coverage]
+  - id: D5-SD2
+    name: Incident & problem management
+    criteria:
+    - id: OPS-D5-SD2-C03
+      statement: An incident command system operates with defined roles.
+      evidence: [ICS documents, Incident records]
+      v1_lineage: 'L1: incident command system documented'
+      touchpoints: [tp-ops-x-autonomous-operations, tp-ops-x-dt-operationalized]
+    - id: OPS-D5-SD2-C04
+      statement: Post-mortems are blameless, timely and produce tracked actions.
+      evidence: [PIR records within 7 days for sev-1/2]
+      v1_lineage: 'L1-L2: post-mortem culture'
+    - id: OPS-D5-SD2-C05
+      statement: Root causes are eliminated via problem management, not just incidents closed.
+      evidence: [Problem records, Recurrence trends]
+  - id: D5-SD3
+    name: Deployment & change automation
+    criteria:
+    - id: OPS-D5-SD3-C06
+      statement: Deployments are automated with audit trails.
+      evidence: [Deployment automation rate, Change records]
+      v1_lineage: 'L0 manual to L1 >80% deployment automation'
+    - id: OPS-D5-SD3-C07
+      statement: Predictive incident detection flags issues before users report them.
+      evidence: [Predictive alert share of sev-1]
+      v1_lineage: 'L3: predictive incident detection'
+      touchpoints: [tp-ops-x-autonomous-operations]
+    - id: OPS-D5-SD3-C08
+      statement: Change automation is scored against the shared operations-modernization component.
+      evidence: [Component scoring record]
+      touchpoints: [tp-ops-x-modernization]
+  - id: D5-SD4
+    name: Reliability (SLO/SRE)
+    criteria:
+    - id: OPS-D5-SD4-C09
+      statement: Auto-remediation handles known failure modes within guardrails.
+      evidence: [Auto-remediation rate, Playbook library]
+      v1_lineage: 'L3: auto-remediation >30% of incidents'
+      touchpoints: [tp-ops-x-autonomous-operations]
+    - id: OPS-D5-SD4-C10
+      statement: SLOs exist for customer-facing services with enforced error budgets.
+      evidence: [SLO/error-budget reports]
+      v1_lineage: 'L2: SLOs for all customer-facing services; error budgets influence releases'
+      touchpoints: [tp-ops-x-autonomous-operations, tp-ops-x-dt-operationalized]
+    - id: OPS-D5-SD4-C11
+      statement: Operating cost per workload is tracked and optimized.
+      evidence: [Cost dashboards, Unit-economics trends]
+      v1_lineage: 'L3: cost of operations tracked per workload'
+    - id: OPS-D5-SD4-C12
+      statement: Capacity planning is data-driven with tracked headroom.
+      evidence: [Capacity headroom dashboards]
+      v1_lineage: 'L3: capacity planning is data-driven'
+
+- id: D6
+  name: Strategy Alignment & Operating Blueprint
+  weight: 0.10
+  sub_dimensions:
+  - id: D6-SD1
+    name: Strategy-to-ops linkage
+    criteria:
+    - id: OPS-D6-SD1-C01
+      statement: Strategy is translated into measurable operational objectives, and ops insight flows back to strategy.
+      evidence: [OKR cascades, Balanced scorecards]
+      touchpoints: [tp-ops-x-digital-transformation, tp-ops-x-dt-operationalized]
+    - id: OPS-D6-SD1-C02
+      statement: Operations reports flow upward into business reviews with outcome framing.
+      evidence: [Ops-to-exec review packs]
+    - id: OPS-D6-SD1-C03
+      statement: Operations surfaces risks and opportunities that feed strategy adjustment.
+      evidence: [Risk registers, Strategy input memos]
+  - id: D6-SD2
+    name: Operating-model governance
+    criteria:
+    - id: OPS-D6-SD2-C04
+      statement: The operating model (blueprint) is documented, versioned and owned.
+      evidence: [Operating-model artifact with owner]
+      touchpoints: [tp-ops-x-dt-operationalized]   # TOM design owned by peer (d5c2)
+    - id: OPS-D6-SD2-C05
+      statement: Operating-model changes are governed with impact assessment.
+      evidence: [Change decisions, Impact records]
+  - id: D6-SD3
+    name: Digital nexus adoption
+    criteria:
+    - id: OPS-D6-SD3-C06
+      statement: Digital nexus forces (AI, automation, data, platforms) are adopted deliberately in operations.
+      evidence: [Adoption roadmap, Deployment records]
+    - id: OPS-D6-SD3-C07
+      statement: New technologies entering operations go through assessment (value, risk, lifecycle).
+      evidence: [Technology-assessment records]
+    - id: OPS-D6-SD3-C08
+      statement: Operations participates in industry practice exchange.
+      evidence: [External contributions]
+      v1_lineage: 'L4: contributes to industry'
+
+migration:
+  map: migrations/v1-to-v2-map.yaml
+  rule: v1.0.0 scale items map to D5/D4/D6 criteria; D1-D3 are additive and score only from v2.0.0 campaigns
