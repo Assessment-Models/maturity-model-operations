@@ -1,5 +1,5 @@
 # =============================================================================
-# touchpoints.yaml — CR-AM-13 v0.2.0 (ships with model release 2.0.0)
+# touchpoints.yaml — CR-AM-13 v0.2.1 (model release 2.0.0; peer-release status update)
 # Handshake & Touchpoint Model for dea:maturity-operations
 # Contract: maturity-touchpoint-contract v0.1.0-draft (publication tracked in
 #           technehub-labs/dea-metamodel issue #213; records below are written
@@ -8,7 +8,7 @@
 # =============================================================================
 id: dea:touchpoints-operations-v1
 repo_id: maturity-model-operations
-version: 0.2.0
+version: 0.2.1
 status: draft
 metamodel_version: 1.0.0
 description: >-
@@ -108,14 +108,14 @@ touchpoints:
         note: >-
           Seeded from the peer register draft (Assessment-Models/
           maturity-model-services-delivery PR #4, flow-efficiency criterion
-          in their Delivery dimension). Binding is seed-pending-release:
-          it becomes citable evidence once the peer register merges and
-          the peer release is tagged.
+          in their Delivery dimension). The peer register and its 1.1.0
+          release are merged (PR #5, merge commit 63466ed1); the binding
+          becomes citable once the peer tags v1.1.0.
       - ours: OPS-D1-SD2-C04
         theirs: DLV-D4-SD2-C03
         note: peer derives delivery predictability from this
     reciprocity: required
-    peer_status: seeded-pending-peer-release
+    peer_status: peer-release-merged-tag-pending
 
   # --- Technology ------------------------------------------------------------
   - id: tp-ops-x-technology
@@ -137,11 +137,12 @@ touchpoints:
         note: >-
           Seeded from the peer register draft (Assessment-Models/
           maturity-model-technology PR #4, telemetry & observability
-          tooling criterion). Binding is seed-pending-release; consume the
-          peer's platform-capability scores once their register merges and
-          their release is tagged; assess only tool-use effectiveness here.
+          tooling criterion). The peer register and its 1.1.0 release are
+          merged (PR #5, merge commit a7a40cd3); consume the peer's
+          platform-capability scores once the peer tags v1.1.0; assess only
+          tool-use effectiveness here.
     reciprocity: required
-    peer_status: seeded-pending-peer-release
+    peer_status: peer-release-merged-tag-pending
 
   # --- Digital Transformation (composite) --------------------------------------
   - id: tp-ops-x-digital-transformation
