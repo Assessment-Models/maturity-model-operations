@@ -1,5 +1,5 @@
 # =============================================================================
-# maturity/assessment-questionnaire.yaml — CR-AM-13 Phase 1 DRAFT
+# maturity/assessment-questionnaire.yaml — RELEASE 2.0.0 (CR-AM-13)
 # One entry per criterion in the v2 register (dea:maturity-operations-register-v2).
 # Scoring: response level L0..L4 = (level/4)*100, then multiplied by evidence
 # confidence (observed 1.0 / evidenced 0.85 / self-reported 0.6 / unverified 0.3).
@@ -7,9 +7,9 @@
 id: dea:operations-questionnaire-v2
 repo_id: maturity-model-operations
 model: dea:maturity-operations
-model_version: 2.0.0-draft
-version: 0.1.0-draft
-status: draft
+model_version: 2.0.0
+version: 1.0.0
+status: stable
 instrument: full-assessment
 entries:
 
