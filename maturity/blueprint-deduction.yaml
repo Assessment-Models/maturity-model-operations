@@ -1,0 +1,72 @@
+# =============================================================================
+# maturity/blueprint-deduction.yaml — CR-AM-13 Phase 3 DRAFT
+# Rule map: criterion gap patterns -> recommended operational-blueprint
+# elements. Deduction runs on the assessment record to produce an actionable
+# target state, not just a score.
+# =============================================================================
+id: dea:operations-blueprint-deduction-v1
+repo_id: maturity-model-operations
+version: 0.1.0-draft
+status: draft
+input: assessment_record (derived per-dimension and per-criterion scores)
+output: deduced blueprint elements with rationale and expected band impact
+rules:
+
+- id: bp-flow-cadence
+  when: { dims: { D1-SD1: '<70', D1-SD3: '<70' }, all: true }
+  prescribe: >-
+    Tiered daily huddle design (team -> value-stream -> ops review) plus a
+    single demand intake with right-sizing rules and visible WIP limits.
+  expected_impact: raises D1 toward Systematic; improves commitment reliability.
+
+- id: bp-capability-anchoring
+  when: { dims: { D2-SD1: '<70', D2-SD2: '<70' }, all: true }
+  prescribe: >-
+    Capability-to-outcome blueprint workshop: inventory key capabilities,
+    map them to value streams, and route operational investment through
+    capability gaps.
+  expected_impact: closes the day-to-day vs key-capability leverage gap (D2).
+
+- id: bp-service-management
+  when: { dims: { D3-SD1: '<70', D3-SD2: '<60' }, all: true }
+  prescribe: >-
+    Process ownership program (standard, named owners, exception register)
+    followed by a minimal service catalogue with SLAs/OLAs for core services.
+  expected_impact: moves D3 from Structured toward Systematic.
+
+- id: bp-sustainability
+  when: { dims: { D4-SD3: '<70' }, any: true }
+  prescribe: >-
+    Rota load balancing and runbook currency program; target satisfaction
+    above 7/10 within two quarters.
+  expected_impact: D4-SD3 to Systematic; reduces attrition and escalation load.
+
+- id: bp-slo-program
+  when: { dims: { 'D5-SD4': '<70', 'D5-SD2': '<70' }, all: true }
+  prescribe: >-
+    SLO program: define SLOs for top customer journeys, publish error
+    budgets, enforce release gating, and close the PIR loop within 7 days.
+  expected_impact: raises D5; prerequisite evidence for the autonomous-
+    operations touchpoint (AO 4.2.5).
+
+- id: bp-observability-first
+  when: { dims: { 'D5-SD1': '<60' }, any: true }
+  prescribe: >-
+    Centralised telemetry with journey-level SLIs before further automation
+    investment; automation without observability destabilises L3+.
+  expected_impact: D5-SD1 foundations; unblocks predictive detection (D5-SD3-C07).
+
+- id: bp-strategy-loop
+  when: { dims: { 'D6-SD1': '<70', 'D6-SD2': '<70' }, all: true }
+  prescribe: >-
+    Operations objective cascade (OKR/scorecard) plus a versioned operating-
+    model artifact with governance cadence; connect ops review packs to
+    business reviews.
+  expected_impact: activates D6; makes day-to-day objectives traceable to goals.
+
+- id: bp-nexus-adoption
+  when: { dims: { 'D6-SD3': '<70', 'D5-SD4': '>=70' }, all: true }
+  prescribe: >-
+    Deliberate adoption track for AI/automation/data/platforms in operations,
+    each through the technology-assessment gate (OPS-D6-SD3-C07).
+  expected_impact: D6-SD3 rise without destabilising a strong D5.
