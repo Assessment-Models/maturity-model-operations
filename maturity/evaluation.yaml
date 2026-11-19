@@ -1,0 +1,40 @@
+# =============================================================================
+# maturity/evaluation.yaml — CR-AM-13 Phase 3 DRAFT
+# Scoring model + assessment method for dea:maturity-operations v2.
+# =============================================================================
+id: dea:operations-evaluation-v2
+repo_id: maturity-model-operations
+model: dea:maturity-operations
+model_version: 2.0.0-draft
+version: 0.1.0-draft
+status: draft
+method:
+  name: weighted-mean-with-evidence-confidence
+  steps:
+  - Criterion raw score: questionnaire response level (L0..L4) mapped to 0-100
+    as (level/4)*100.
+  - Evidence confidence multiplier: observed 1.0, evidenced 0.85,
+    self-reported 0.6, unverified 0.3; a criterion with only unverified
+    evidence floors until re-assessed.
+  - Sub-dimension score: mean of its criteria.
+  - Dimension score: mean of its sub-dimensions.
+  - Operations Index: sum of dimension score x dimension weight (0-100).
+  - Band: resolve Operations Index against dea:maturity-bands-v2@v1.0.0
+    (0-20 Emergent, 21-45 Structured, 46-70 Systematic, 71-88 Adaptive,
+    89-100 Self-Optimising).
+  - Effort-adjusted value: Operations Index x band effort multiplier
+    (1.0/1.5/2.5/4.0/6.0). Measures improvement effort, not maturity.
+dimension_weights: { D1: 0.20, D2: 0.18, D3: 0.18, D4: 0.14, D5: 0.20, D6: 0.10 }
+instruments:
+  full-assessment: maturity/assessment-questionnaire.yaml
+evidence_schema: maturity/evidence/schema.yaml
+records:
+  assessment: per maturity/evidence/schema.yaml (assessment_record)
+  campaign: per maturity/evidence/schema.yaml (campaign_record)
+benchmarking:
+  criterion_ids_are_permanent: true
+  cross_version_rule: >-
+    Assessment records carry the model version; 1.x records convert via
+    migrations/v1-to-v2-map.yaml. Breaking criterion-ID changes require a
+    minor-model-version bump and a published migration map.
+touchpoints: touchpoints.yaml
