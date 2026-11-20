@@ -1,0 +1,25 @@
+{
+  "id": "maturity-model-operations",
+  "title": "Operations Maturity Model",
+  "layer": "maturity-model",
+  "architectural_concern": "Operations",
+  "version": "v2.0.0",
+  "license": "MIT",
+  "conformance_status": "structural",
+  "standards_alignment": [
+    "OpenDEA",
+    "AM-MODEL-REPOSITORY-STANDARD"
+  ],
+  "locales": [
+    "en"
+  ],
+  "dimensions": [
+    "Value-Stream & Daily Operations",
+    "Capability Orchestration",
+    "Service & Process Management",
+    "Workforce & Ways of Working",
+    "Technology & Infrastructure Operations",
+    "Strategy Alignment & Operating Blueprint"
+  ],
+  "description": "Operations Maturity Model — assesses enterprise operations: how day-to-day activities leverage key organizational capabilities to deliver outcomes. Covers value-stream and daily operations, capability orchestration, service and process management, workforce and ways of working, technology and infrastructure operations, and strategy alignment with the operating blueprint."
+}
