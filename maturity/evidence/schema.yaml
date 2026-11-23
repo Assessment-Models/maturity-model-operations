@@ -15,7 +15,7 @@ confidence_levels:
 evidence_item:
   required: [criterion, artifact_ref, collected_at, collected_by, confidence]
   fields:
-    criterion: { type: string, pattern: OPS-D[1-6]-SD[1-4]-C[0-9]+ }
+    criterion: { type: string, pattern: 'OPS-D[1-6]-SD[1-4]-C[0-9]+' }
     artifact_ref: { type: string, description: url | repo/path | document id }
     collected_at: { type: date }
     collected_by: { type: string, description: role name }
