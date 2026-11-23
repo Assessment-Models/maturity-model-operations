@@ -1,41 +1,1287 @@
-id: dea:maturity-operations
+# =============================================================================
+# maturity/model/operations.yaml — RELEASE 3.0.0 (CR-OM-01)
+# Criteria register for dea:maturity-operations v3 (enterprise operations).
+#
+# Supersedes the v2 criteria register (operations-v2-draft.yaml, removed —
+# the -draft filename rename is the owner cleanup recorded in the 2.0.0
+# CHANGELOG) and the v1.0.0 identity register that previously occupied this
+# path; both files' 2.1.x updates (scale_reference, unassessed_level, scale
+# crosswalk pointer) are folded in here. v2 criterion IDs map to v3 IDs via
+# migrations/v2-to-v3-map.yaml; criterion IDs are permanent benchmarking keys
+# (CR-AM-13 §6) and v2 keys remain resolvable through the migration map.
+#
+# Adopted from main's approved CRs: CR-AM-17 scale identity migration
+# (L-0 sentinel + L-1..L-5, criterion scores preserved at 0/25/50/75/100)
+# and CR-AM-19 marginal-band EAV. Level-semantics evolution to enterprise
+# operations is this release's deliberate MAJOR-boundary decision (see
+# docs/cr/CR-OM-01-enterprise-operations-v3.md §5a), superseding CR-AM-17's
+# preserve-verbatim choice for v3 only.
+#
+# Architecture (CR-OM-01, from CR-Operations-00000 and
+# CR-Model-Assessment-Operations-0001):
+#   - Nine enterprise-operations dimensions (D01..D09), 44 sub-dimensions,
+#     132 criteria.
+#   - Every criterion carries TWO assessment perspectives on the same identity:
+#     current_expectation (Current Operational Realization) and
+#     future_expectation (Future Operational Readiness). The perspectives are
+#     never collapsed into a single score.
+# =============================================================================
+id: dea:maturity-operations-register-v3
 repo_id: maturity-model-operations
 type: maturity-model
-name: Operations Maturity Model
+name: Operations Maturity Model — criteria register (v3)
 domain: operations
-version: 2.1.0
+version: 3.0.0
 metamodel_version: 1.0.0
 status: stable
-owner: Head of Operations / SRE Lead
-steward: Head of Operations / SRE Lead
-effective_date: 2026-08-21
-review_date: 2027-02-21
-description: Operations Maturity Model — assesses incident response, observability, deployment automation,
-  SLOs and SRE practice.
+owner: Head of Operations / Operations Excellence Lead
 score_scheme: dea-maturity-v2
 band_reference:
   id: dea:maturity-bands-v2
   version: 1.0.0
   organization: technehub-labs
   repository: dea-metamodel
+scale_levels: [L-1, L-2, L-3, L-4, L-5]
+unassessed_level: L-0
 scale_reference:
   id: dea:scale-operations-v2
-  version: 2.0.0
-scale_levels:
-- L-1
-- L-2
-- L-3
-- L-4
-- L-5
-unassessed_level: L-0
-relationships:
-- source_id: dea:maturity-operations
-  target_id: dea:maturity-bands-v2
-  relationship_type: scored-by-v2-bands
-- source_id: dea:maturity-operations
-  target_id: dea:pattern-circuit-breaker
-  relationship_type: references
-tags:
-- maturity-model
-- operations
-- v2-canonical
+  version: 3.0.0
+# Additive model-specific progression vocabulary (CR-Operations-00000 §4),
+# keyed by capability ordinal. Metadata only — never a second level ladder.
+ops_stage_by_ordinal:
+  1: Absent
+  2: Initial
+  3: Defined & Managed
+  4: Integrated
+  5: Adaptive
+perspectives:
+- id: current-realization
+  name: Current Operational Realization
+  field: current_expectation
+  description: >-
+    Present-state assessment: how effectively the enterprise operates today —
+    existing operational capabilities, actual execution and delivery,
+    operational efficiency and effectiveness, governance and control, current
+    performance and value realization.
+- id: future-readiness
+  name: Future Operational Readiness
+  field: future_expectation
+  description: >-
+    Future-state assessment: the enterprise's preparedness to operate in
+    accordance with its future strategic direction — required future
+    capabilities, target operating model readiness, emerging operational
+    requirements, modernization and transformation readiness, future
+    performance and value realization potential.
+scoring:
+  method: weighted-mean
+  index: operations-index
+  criterion_scale: >-
+    assessed response L-1..L-5 mapped to 0/25/50/75/100 ((ordinal - 1) / 4 x
+    100), then evidence confidence; scores are preserved across the CR-AM-17
+    scale identity migration. L-0 is Not Assessed: it is recorded distinctly
+    with assessment_status not-assessed, contributes zero, carries unverified
+    evidence confidence (0.3) and is never interpreted as L-1 Emergent.
+  perspective_scores: >-
+    current-realization and future-readiness perspectives are scored on the
+    same criteria, weights and score mapping; the transformation gap is the
+    readiness score minus the current score (negative = readiness deficit).
+  dimension_weights: { D01: 0.12, D02: 0.12, D03: 0.12, D04: 0.11, D05: 0.10, D06: 0.09, D07: 0.12, D08: 0.11, D09: 0.11 }
+  views:
+  - operations-index — current operational maturity
+  - performance-and-value-view — from D09 sub-dimension scores (efficiency/effectiveness vs enterprise value realization are read separately)
+  - readiness-index — future operational readiness
+  - transformation-gap — readiness minus current, per dimension and overall
+dimensions:
+
+# ── D01 Operating Model ──────────────────────────────────────────────────────
+- id: D01
+  name: Operating Model
+  weight: 0.12
+  description: How the enterprise structures, organizes and coordinates its operations.
+  sub_dimensions:
+  - id: D01-SD01
+    name: Operating model definition
+    criteria:
+    - id: OPS-D01-SD01-C01
+      statement: The operating model is documented, versioned and owned.
+      intent: The operating model is the structural arrangement through which the enterprise executes; it cannot be assessed or improved while implicit.
+      current_expectation: A current-state operating model artifact exists with a named owner and reflects how the enterprise actually organizes operations today.
+      future_expectation: The target operating model required by the future strategic direction is defined, with the delta from the current state planned and owned.
+      evidence: [Operating-model artifact with named owner, Operating-model version history]
+      indicators: [compliance]
+      touchpoints: [tp-ops-x-dt-operationalized]   # peer d5c2 — TOM design owned by peer
+      v2_lineage: 'OPS-D6-SD2-C04'
+    - id: OPS-D01-SD01-C02
+      statement: The operating model defines how operations create and deliver value — value streams, capabilities, organization, resources, technology and governance.
+      intent: An operating model that covers only structure (org charts) cannot coordinate execution.
+      current_expectation: The documented operating model covers the structural and execution elements of operations, not only reporting lines.
+      future_expectation: The operating model explicitly expresses future-state requirements — new channels, products, partners and increasingly intelligent execution.
+      evidence: [Operating-model content inventory, Architecture review records]
+      indicators: [compliance]
+    - id: OPS-D01-SD01-C03
+      statement: The operating model is communicated and understood by the leaders and teams that must operate it.
+      intent: A design that is not understood is not realized; understanding is the first test of the design-vs-actual gap.
+      current_expectation: Operating-model artifacts are accessible, and operational leaders can describe their unit's role within the model.
+      future_expectation: Operating-model literacy is built into leadership development and change programmes ahead of operating-model change.
+      evidence: [Communication records, Leadership briefing packs]
+      indicators: [effectiveness]
+  - id: D01-SD02
+    name: Organizational structure & responsibilities
+    criteria:
+    - id: OPS-D01-SD02-C01
+      statement: Organizational structures and operational responsibilities are designed to support the operating model.
+      intent: Structure is an operational choice, not an accident; misaligned structure shows up as coordination cost.
+      current_expectation: Unit boundaries, sizing and reporting lines are justified against the operating model.
+      future_expectation: Structural changes required by the target operating model are sequenced into transformation plans.
+      evidence: [Organization design documents, Structure-to-operating-model mapping]
+      indicators: [effectiveness]
+    - id: OPS-D01-SD02-C02
+      statement: Team boundaries follow an explicit team design (stream-aligned, platform, enabling) consistent with the operating model.
+      intent: Team topology determines how work flows and where coordination cost lands.
+      current_expectation: A deliberate team design exists and team boundaries are reviewable against it.
+      future_expectation: Team design is re-evaluated as products, channels and platforms evolve.
+      evidence: [Team-topology design, Team catalogue]
+      indicators: [effectiveness, agility]
+      v2_lineage: 'OPS-D4-SD2-C04'
+    - id: OPS-D01-SD02-C03
+      statement: Accountability for operational outcomes is assigned at every level of the operating model.
+      intent: Unowned outcomes are the root of most execution failures.
+      current_expectation: Every value stream, service and key capability has an accountable owner.
+      future_expectation: The accountability model anticipates the operating units the future strategy will require.
+      evidence: [Accountability register]
+      indicators: [compliance]
+  - id: D01-SD03
+    name: Decision rights & accountability
+    criteria:
+    - id: OPS-D01-SD03-C01
+      statement: Operational decision rights are explicit — who decides, who is consulted and who executes, for each major decision class.
+      intent: Decision latency and escalation thrash are symptoms of undefined decision rights.
+      current_expectation: Decision rights are documented (RACI/escalation matrices) for major operational decision classes.
+      future_expectation: Decision rights are defined for emerging decision classes, including automated and AI-assisted decisions.
+      evidence: [Decision-rights matrices, Escalation matrices]
+      indicators: [compliance, responsiveness]
+    - id: OPS-D01-SD03-C02
+      statement: Operational decisions are made at the lowest competent level, with escalation paths that operate in practice.
+      intent: Centralized bottlenecks and routine escalations both signal broken delegation.
+      current_expectation: Escalation is the exception; decision latency is tolerable and known.
+      future_expectation: Decision latency is measured and delegation adjusts with demonstrated capability.
+      evidence: [Escalation records, Decision logs]
+      indicators: [responsiveness]
+    - id: OPS-D01-SD03-C03
+      statement: Decision-making during disruption is pre-authorised through delegated authority and emergency playbooks.
+      intent: Disruption compresses decision time; authority must exist before the event.
+      current_expectation: Incident and emergency decision authority is defined in advance.
+      future_expectation: Pre-authorisation covers novel disruption classes and intervention in automated decision systems.
+      evidence: [Delegation-of-authority documents, Incident decision records]
+      indicators: [resilience]
+  - id: D01-SD04
+    name: Operating model alignment
+    criteria:
+    - id: OPS-D01-SD04-C01
+      statement: Strategy is translated into measurable operational objectives, and operational insight flows back into strategy.
+      intent: Operations realizes strategy; the translation and the feedback loop are both first-class concerns.
+      current_expectation: A strategy-to-operations cascade exists with measurable operational objectives.
+      future_expectation: Translation refreshes at strategy cadence and future operational requirements are identified before execution depends on them.
+      evidence: [OKR cascades, Balanced scorecards]
+      indicators: [effectiveness, value-realization]
+      touchpoints: [tp-ops-x-digital-transformation, tp-ops-x-dt-operationalized]   # peer d2c1
+      v2_lineage: 'OPS-D6-SD1-C01'
+    - id: OPS-D01-SD04-C02
+      statement: The operating model is aligned with the business model — what operations must produce and deliver is explicit.
+      intent: The business model defines what operations must support; misalignment makes execution strategically irrelevant.
+      current_expectation: The linkage between the business model and the operating model is documented and used in design decisions.
+      future_expectation: Business-model evolution (new revenue models, segments, channels) is translated into operating-model change deliberately.
+      evidence: [Business-model-to-operating-model linkage artifacts]
+      indicators: [effectiveness]
+    - id: OPS-D01-SD04-C03
+      statement: Operations surfaces risks, constraints and opportunities that feed strategy adjustment.
+      intent: Operations holds the enterprise's most granular signal about what is achievable.
+      current_expectation: Operational risk and opportunity signals reach strategic review.
+      future_expectation: Operations contributes quantified scenario input to strategic planning.
+      evidence: [Risk registers, Strategy input memos]
+      indicators: [innovation, value-realization]
+      v2_lineage: 'OPS-D6-SD1-C03'
+  - id: D01-SD05
+    name: Operating model evolution & realization
+    criteria:
+    - id: OPS-D01-SD05-C01
+      statement: Operating-model changes are governed with impact assessment.
+      intent: The operating model is the enterprise's largest lever; changing it ad hoc destabilizes execution.
+      current_expectation: Operating-model changes pass through assessment and a decision record.
+      future_expectation: Operating-model evolution is continuous, monitored through realization metrics rather than one-off programmes.
+      evidence: [Change decisions, Impact assessment records]
+      indicators: [compliance, agility]
+      v2_lineage: 'OPS-D6-SD2-C05'
+    - id: OPS-D01-SD05-C02
+      statement: The realized operating model is compared against the designed operating model on a defined cadence.
+      intent: The operating model describes how the enterprise is designed to operate; operations is how it actually operates. The gap between them is the assessment's raw material.
+      current_expectation: Design-vs-actual gap reviews occur and their findings are owned.
+      future_expectation: Realization metrics are continuous; divergence triggers corrective design or execution action.
+      evidence: [Operating-model realization reviews]
+      indicators: [effectiveness, quality]
+    - id: OPS-D01-SD05-C03
+      statement: Lessons from operating-model realization feed its next revision.
+      intent: An operating model that never learns ossifies; one that learns compounds.
+      current_expectation: Revision histories reference realization lessons.
+      future_expectation: The revision cycle is institutionalized with explicit triggers.
+      evidence: [Revision histories, Retrospective records]
+      indicators: [innovation]
+
+# ── D02 Operational Capabilities ─────────────────────────────────────────────
+- id: D02
+  name: Operational Capabilities
+  weight: 0.12
+  description: What the enterprise must be able to do to execute its business.
+  sub_dimensions:
+  - id: D02-SD01
+    name: Capability architecture & definition
+    criteria:
+    - id: OPS-D02-SD01-C01
+      statement: Key operational capabilities are inventoried and described consistently.
+      intent: Capabilities are the stable vocabulary of what the enterprise can do; without them, gaps and investments cannot be reasoned about.
+      current_expectation: An enterprise capability map exists with consistent definitions.
+      future_expectation: The capability architecture covers the capabilities the future strategy requires, not only those in use today.
+      evidence: [Enterprise capability map, Capability definitions]
+      indicators: [compliance]
+      v2_lineage: 'OPS-D2-SD1-C01'
+    - id: OPS-D02-SD01-C02
+      statement: Capabilities are mapped to the outcomes and value streams they serve.
+      intent: Capability relevance is established by contribution to outcomes, not by existence.
+      current_expectation: Capability-to-outcome maps connect key capabilities to value streams and outcomes.
+      future_expectation: Mapping covers target-state value streams so future capability needs are derivable.
+      evidence: [Capability-to-outcome maps]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D2-SD1-C02'
+    - id: OPS-D02-SD01-C03
+      statement: Capability definitions distinguish the capability from the processes, people and technology that realize it.
+      intent: Conflating capability with its realizations blocks reconfiguration analysis and duplicates assessment.
+      current_expectation: A definition convention separates capability from realization across the map.
+      future_expectation: The model supports reconfiguration analysis (what changes if a realization changes).
+      evidence: [Capability modelling conventions]
+      indicators: [compliance]
+  - id: D02-SD02
+    name: Capability ownership
+    criteria:
+    - id: OPS-D02-SD02-C01
+      statement: Every key operational capability has a named owner accountable for its health and performance.
+      intent: Capability ownership prevents the diffusion of accountability across process and technology owners.
+      current_expectation: The capability ownership register is complete for key capabilities.
+      future_expectation: Ownership is assigned for future capabilities as they are defined, before they are needed.
+      evidence: [Capability ownership register]
+      indicators: [compliance]
+    - id: OPS-D02-SD02-C02
+      statement: Capability owners have the authority and information to manage their capabilities.
+      intent: Accountability without authority or information is theatre.
+      current_expectation: Owner mandates and capability performance information exist.
+      future_expectation: Owner decision rights scale with the capability's maturity and criticality.
+      evidence: [Owner mandates, Capability review records]
+      indicators: [effectiveness]
+    - id: OPS-D02-SD02-C03
+      statement: Capability health and performance are assessed on a regular cadence.
+      intent: Capability decay is silent until it disrupts delivery.
+      current_expectation: Capability reviews occur on a defined cadence with recorded outcomes.
+      future_expectation: Assessments include projected capability needs under the future operating requirements.
+      evidence: [Capability review reports]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D2-SD1-C03'
+  - id: D02-SD03
+    name: Capability availability & capacity
+    criteria:
+    - id: OPS-D02-SD03-C01
+      statement: Key capabilities are available at the level required by current operations.
+      intent: A capability that exists on paper but not in practice is a gap, not an asset.
+      current_expectation: Capability availability is measured against current operational requirements.
+      future_expectation: Availability is planned against projected demand, including growth scenarios.
+      evidence: [Capability availability reports]
+      indicators: [reliability]
+    - id: OPS-D02-SD03-C02
+      statement: Capability capacity — people, resources, throughput — is planned against operational demand.
+      intent: Capacity shortfalls convert capability potential into delivery failure.
+      current_expectation: Capacity plans exist for key capabilities and are used in commitment-setting.
+      future_expectation: Capacity models cover growth and surge scenarios for the target operating state.
+      evidence: [Capability capacity plans]
+      indicators: [efficiency, resilience]
+    - id: OPS-D02-SD03-C03
+      statement: Capability shortfalls are detected before they disrupt delivery.
+      intent: Leading indicators of capability strain buy response time.
+      current_expectation: Shortfall detection relies on defined thresholds and review.
+      future_expectation: Capability risk monitoring is predictive and tied to demand signals.
+      evidence: [Capability risk reports]
+      indicators: [reliability, resilience]
+  - id: D02-SD04
+    name: Capability orchestration & mobilization
+    criteria:
+    - id: OPS-D02-SD04-C01
+      statement: Day-to-day activities mobilize the capabilities identified as key.
+      intent: The gap between key capabilities and daily work is where strategy dissolves into routine.
+      current_expectation: Activities-to-capability mapping demonstrates daily leverage of key capabilities.
+      future_expectation: Mobilization extends to newly established capabilities quickly and by design.
+      evidence: [Activities-to-capability mapping]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D2-SD2-C04'
+    - id: OPS-D02-SD04-C02
+      statement: Cross-functional work has identified owners and coordination mechanisms.
+      intent: Cross-boundary work fails at the seams, not inside the units.
+      current_expectation: Interaction registers and charters govern cross-functional work.
+      future_expectation: Coordination mechanisms adapt as the operating model and its boundaries evolve.
+      evidence: [RACI/interaction registers, Cross-team charters]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D2-SD3-C06'
+    - id: OPS-D02-SD04-C03
+      statement: Capabilities can be reconfigured — scaled, combined, redeployed — as business requirements change.
+      intent: Reconfiguration ability is the operational expression of agility.
+      current_expectation: Reconfiguration happens with known, manageable effort.
+      future_expectation: Reconfiguration is designed for and exercised, not improvised.
+      evidence: [Reconfiguration records, Exercise reports]
+      indicators: [agility]
+  - id: D02-SD05
+    name: Capability dependencies, gaps & investment
+    criteria:
+    - id: OPS-D02-SD05-C01
+      statement: Dependencies across capabilities and teams are understood and managed proactively.
+      intent: Capability interdependence is the norm; unmanaged dependencies turn local failure into systemic failure.
+      current_expectation: Dependency maps or boards exist and are used in planning.
+      future_expectation: Dependency intelligence extends to planned change, not only current state.
+      evidence: [Dependency maps, Dependency boards]
+      indicators: [reliability]
+      v2_lineage: 'OPS-D2-SD3-C07'
+    - id: OPS-D02-SD05-C02
+      statement: Capability gaps against current and future requirements are identified and tracked.
+      intent: Gap visibility is the precondition for capability investment.
+      current_expectation: A capability gap register is maintained against current requirements.
+      future_expectation: Gap analysis is strategy-triggered as well as periodic, covering target requirements.
+      evidence: [Capability gap register]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D2-SD1-C03'
+    - id: OPS-D02-SD05-C03
+      statement: Capability gaps drive operational investment decisions.
+      intent: Investment unanchored from gaps is spend, not capability building.
+      current_expectation: Investment decisions are traceable to identified gaps.
+      future_expectation: Investment is prioritized by expected contribution to enterprise outcomes.
+      evidence: [Investment decisions traceable to gaps, Capability investment roadmap]
+      indicators: [value-realization]
+      v2_lineage: 'OPS-D2-SD2-C05'
+
+# ── D03 Value Streams & Processes ────────────────────────────────────────────
+- id: D03
+  name: Value Streams & Processes
+  weight: 0.12
+  description: How work is structured, coordinated and executed to produce outcomes.
+  sub_dimensions:
+  - id: D03-SD01
+    name: Value stream management
+    criteria:
+    - id: OPS-D03-SD01-C01
+      statement: Value streams are mapped end-to-end with the flow of work visible to the teams executing it.
+      intent: Value streams are the operational unit of outcome production; invisibility makes them unmanageable.
+      current_expectation: Current-state value-stream maps exist and are used by the executing teams.
+      future_expectation: Target-state value streams are designed for the future product and channel portfolio.
+      evidence: [Value-stream maps, Live flow boards]
+      indicators: [effectiveness]
+      touchpoints: [tp-ops-x-services-delivery]   # peer DLV-D4-SD1-C01
+      v2_lineage: 'OPS-D1-SD1-C01'
+    - id: OPS-D03-SD01-C02
+      statement: Flow, work-in-progress and throughput are measured for key value streams.
+      intent: Flow measurement converts anecdote into management.
+      current_expectation: Flow metrics dashboards and WIP limits are in place for key value streams.
+      future_expectation: Flow intelligence is predictive — bottlenecks and delays are anticipated.
+      evidence: [Flow metrics dashboards, WIP limits in tooling]
+      indicators: [efficiency, responsiveness]
+      touchpoints: [tp-ops-x-dt-operationalized]   # peer d4c11
+      v2_lineage: 'OPS-D1-SD1-C02'
+    - id: OPS-D03-SD01-C03
+      statement: Bottlenecks are identified and actively managed.
+      intent: Unmanaged bottlenecks cap throughput regardless of effort elsewhere.
+      current_expectation: Impediment and bottleneck records drive active management.
+      future_expectation: Bottleneck prevention is designed into value-stream change.
+      evidence: [Impediment logs, Bottleneck review records]
+      indicators: [efficiency]
+      v2_lineage: 'OPS-D1-SD1-C03'
+  - id: D03-SD02
+    name: Process architecture & ownership
+    criteria:
+    - id: OPS-D03-SD02-C01
+      statement: Core operational processes are documented to a standard with named owners.
+      intent: Ownership is what turns documentation into management.
+      current_expectation: The process repository covers core processes with an ownership register.
+      future_expectation: The process architecture covers the processes the target operating requirements demand.
+      evidence: [Process repository, Ownership register]
+      indicators: [compliance]
+      v2_lineage: 'OPS-D3-SD1-C01'
+    - id: OPS-D03-SD02-C02
+      statement: The process architecture shows how processes relate to value streams, capabilities and services.
+      intent: Process-in-isolation documentation prevents impact analysis and duplicate design.
+      current_expectation: Process hierarchy and linkage to value streams and services is maintained.
+      future_expectation: The architecture supports change impact analysis across the execution estate.
+      evidence: [Process architecture models]
+      indicators: [compliance]
+    - id: OPS-D03-SD02-C03
+      statement: Process design standards — entry/exit criteria, controls, handoffs — are defined and applied.
+      intent: Standards make processes comparable, teachable and improvable.
+      current_expectation: Design standards exist and new process work applies them.
+      future_expectation: Standards evolve to govern automated and human-automated hybrid execution.
+      evidence: [Process design standards]
+      indicators: [quality]
+  - id: D03-SD03
+    name: Process execution & consistency
+    criteria:
+    - id: OPS-D03-SD03-C01
+      statement: Process compliance is monitored and deviations are visible to owners.
+      intent: Consistency is the difference between a process and a suggestion.
+      current_expectation: Compliance dashboards surface deviations to process owners.
+      future_expectation: Consistency is measured across units and regions, not assumed.
+      evidence: [Compliance dashboards]
+      indicators: [quality, compliance]
+      v2_lineage: 'OPS-D3-SD1-C02'
+    - id: OPS-D03-SD03-C02
+      statement: Process exceptions are granted explicitly with expiry, never tolerated silently.
+      intent: Silent exceptions are undocumented process change.
+      current_expectation: Exception registers control and time-bound deviations.
+      future_expectation: Exception patterns feed deliberate process redesign.
+      evidence: [Exception registers]
+      indicators: [compliance, innovation]
+      v2_lineage: 'OPS-D3-SD1-C03'
+    - id: OPS-D03-SD03-C03
+      statement: Work is right-sized and classified (standard vs exception) before execution.
+      intent: Unright-sized work destroys flow and masks true demand.
+      current_expectation: Work item taxonomy and classification are applied at intake.
+      future_expectation: Classification drives differentiated execution paths automatically.
+      evidence: [Work item taxonomy data]
+      indicators: [efficiency]
+      v2_lineage: 'OPS-D1-SD3-C08'
+  - id: D03-SD04
+    name: Workflow coordination & demand management
+    criteria:
+    - id: OPS-D03-SD04-C01
+      statement: A daily operating cadence exists — huddles, tiered meetings — with clear decision rights.
+      intent: Cadence is the heartbeat of coordinated execution; without it, work coordinates by interruption.
+      current_expectation: The cadence schedule and escalation matrices operate daily.
+      future_expectation: Cadence integrates cross-unit and partner coordination as the operating scope grows.
+      evidence: [Cadence schedule, Escalation matrices]
+      indicators: [responsiveness]
+      touchpoints: [tp-ops-x-services-delivery]   # peer DLV-D4-SD2-C03
+      v2_lineage: 'OPS-D1-SD2-C04'
+    - id: OPS-D03-SD04-C02
+      statement: Daily commitments are set explicitly and their delivery reliability is tracked.
+      intent: Commitment reliability is the operational unit of trust, internal and external.
+      current_expectation: Commitment and attainment records are kept and reviewed.
+      future_expectation: Commitment reliability is benchmarked and targeted like a service level.
+      evidence: [Commitment/attainment records]
+      indicators: [reliability]
+      v2_lineage: 'OPS-D1-SD2-C05'
+    - id: OPS-D03-SD04-C03
+      statement: Demand is triaged through a single intake with visible prioritization rules.
+      intent: Multi-channel unmanaged demand makes capacity unknowable and priorities negotiable.
+      current_expectation: Intake records and prioritization policy govern demand entry.
+      future_expectation: Demand forecasting informs capacity and commitment-setting ahead of arrival.
+      evidence: [Intake records, Prioritization policy]
+      indicators: [responsiveness]
+      v2_lineage: 'OPS-D1-SD3-C07'
+  - id: D03-SD05
+    name: Process effectiveness & improvement
+    criteria:
+    - id: OPS-D03-SD05-C01
+      statement: A continual-improvement mechanism operates with a live improvement backlog.
+      intent: Improvement that is not mechanized decays into initiative-ism.
+      current_expectation: The improvement kanban is live and worked.
+      future_expectation: The improvement portfolio is aligned to strategy and enterprise outcomes.
+      evidence: [Improvement kanban]
+      indicators: [innovation]
+      v2_lineage: 'OPS-D3-SD3-C07'
+    - id: OPS-D03-SD05-C02
+      statement: Improvement impact is measured — cycle time, quality, cost.
+      intent: Unmeasured improvement consumes the capacity it claims to release.
+      current_expectation: Before/after improvement metrics are recorded.
+      future_expectation: Improvement benefits are tracked through to value realization.
+      evidence: [Before/after improvement metrics]
+      indicators: [effectiveness, value-realization]
+      v2_lineage: 'OPS-D3-SD3-C08'
+    - id: OPS-D03-SD05-C03
+      statement: Processes are redesigned — not only patched — when performance indicates structural weakness.
+      intent: Patching structurally weak processes institutionalizes waste.
+      current_expectation: Redesign decisions are distinguishable from tweaks in improvement records.
+      future_expectation: Performance intelligence triggers process re-engineering candidates.
+      evidence: [Process redesign records]
+      indicators: [innovation, effectiveness]
+
+# ── D04 Service & Delivery Management ────────────────────────────────────────
+- id: D04
+  name: Service & Delivery Management
+  weight: 0.11
+  description: How operational services and products are fulfilled and delivered to consumers.
+  sub_dimensions:
+  - id: D04-SD01
+    name: Service portfolio & catalogue
+    criteria:
+    - id: OPS-D04-SD01-C01
+      statement: A service catalogue defines services, their owners and their consumers.
+      intent: Services that are not named, owned and addressed cannot be committed to.
+      current_expectation: The service catalogue is published and current.
+      future_expectation: The portfolio reflects planned services for future products and channels.
+      evidence: [Published service catalogue]
+      indicators: [compliance]
+      v2_lineage: 'OPS-D3-SD2-C04'
+    - id: OPS-D04-SD01-C02
+      statement: The service portfolio is managed — services are introduced, retired and reprioritized deliberately.
+      intent: Unmanaged portfolios accumulate legacy service obligations that tax execution.
+      current_expectation: Portfolio review records show deliberate introduction and retirement.
+      future_expectation: Portfolio decisions are tied to business-model and strategy change.
+      evidence: [Portfolio review records]
+      indicators: [effectiveness]
+    - id: OPS-D04-SD01-C03
+      statement: Internal services are managed with the same discipline as customer-facing services.
+      intent: Internal service debt eventually surfaces as external service failure.
+      current_expectation: An internal service catalogue exists with owners.
+      future_expectation: Internal service experience is measured with the same rigour as external.
+      evidence: [Internal service catalogue]
+      indicators: [effectiveness]
+  - id: D04-SD02
+    name: Service delivery management
+    criteria:
+    - id: OPS-D04-SD02-C01
+      statement: Service performance reviews occur on a defined cadence with actions tracked to closure.
+      intent: Reviews without tracked actions are ritual.
+      current_expectation: Review minutes and action logs demonstrate closure.
+      future_expectation: Delivery management spans partner-delivered services with the same cadence.
+      evidence: [Review minutes, Action logs]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D3-SD2-C06'
+    - id: OPS-D04-SD02-C02
+      statement: Fulfilment and delivery of services is orchestrated end-to-end across contributing functions.
+      intent: Consumers experience the whole delivery, not the contributing functions.
+      current_expectation: Delivery workflow records show coordinated handoffs across functions.
+      future_expectation: Orchestration extends to ecosystem and partner-delivered steps.
+      evidence: [Delivery workflow records]
+      indicators: [responsiveness]
+    - id: OPS-D04-SD02-C03
+      statement: Delivery issues are visible in real time and trigger coordinated response.
+      intent: Late discovery converts small delivery failures into broken commitments.
+      current_expectation: Delivery dashboards make issues visible and response is coordinated.
+      future_expectation: Delivery-risk prediction alerts before commitments are missed.
+      evidence: [Delivery dashboards]
+      indicators: [responsiveness, reliability]
+  - id: D04-SD03
+    name: Service quality & experience
+    criteria:
+    - id: OPS-D04-SD03-C01
+      statement: Service quality is defined through explicit quality criteria and measured for key services.
+      intent: Quality undefined is quality undeliverable.
+      current_expectation: Quality frameworks and reports exist for key services.
+      future_expectation: Quality criteria anticipate evolving customer expectations, not only historic ones.
+      evidence: [Quality frameworks, Quality reports]
+      indicators: [quality]
+    - id: OPS-D04-SD03-C02
+      statement: Customer and user experience of services is measured and acted upon.
+      intent: Experience is the consumer-side truth about operational effectiveness.
+      current_expectation: Experience and satisfaction data are collected and reviewed.
+      future_expectation: Experience telemetry drives service design ahead of complaints.
+      evidence: [Experience/satisfaction data]
+      indicators: [quality, value-realization]
+    - id: OPS-D04-SD03-C03
+      statement: Complaints, defects and rework are tracked to root cause across the delivery chain.
+      intent: Quality defects replay until their systemic causes are removed.
+      current_expectation: Complaint and defect records trace to root cause with actions.
+      future_expectation: Defect prevention is designed into services, reducing defect classes at source.
+      evidence: [Complaint/defect records]
+      indicators: [quality]
+  - id: D04-SD04
+    name: Service-level management
+    criteria:
+    - id: OPS-D04-SD04-C01
+      statement: SLAs/OLAs exist for core services and are measured.
+      intent: Service levels convert expectations into managed commitments.
+      current_expectation: SLA/OLA reports demonstrate measurement for core services.
+      future_expectation: Service levels are renegotiated ahead of business-model and demand shifts.
+      evidence: [SLA/OLA reports]
+      indicators: [reliability, compliance]
+      v2_lineage: 'OPS-D3-SD2-C05'
+    - id: OPS-D04-SD04-C02
+      statement: Service-level objectives with enforced error budgets govern reliability-critical services.
+      intent: Error budgets make the reliability-versus-change tradeoff explicit and governable.
+      current_expectation: SLO/error-budget reports show enforcement for reliability-critical services.
+      future_expectation: SLO coverage extends to new services by default, per criticality.
+      evidence: [SLO/error-budget reports]
+      indicators: [reliability]
+      touchpoints: [tp-ops-x-autonomous-operations, tp-ops-x-dt-operationalized]   # AO 4.2.5; peer d4c2
+      v2_lineage: 'OPS-D5-SD4-C10'
+    - id: OPS-D04-SD04-C03
+      statement: Service-level breaches trigger analysis and corrective action, not just logging.
+      intent: A breach without consequence is a forecast of the next breach.
+      current_expectation: Breach analysis records exist with corrective actions.
+      future_expectation: Breach patterns inform reliability investment decisions.
+      evidence: [Breach analysis records]
+      indicators: [reliability, effectiveness]
+  - id: D04-SD05
+    name: Delivery reliability & continuity
+    criteria:
+    - id: OPS-D04-SD05-C01
+      statement: Delivery of commitments is reliable under normal conditions — on time and first-time-right.
+      intent: Reliability is the baseline promise; everything else in this model adjusts it.
+      current_expectation: On-time and first-time-right metrics are measured for key deliveries.
+      future_expectation: Reliability is sustained through demand surges, not only averages.
+      evidence: [On-time/first-time-right metrics]
+      indicators: [reliability, quality]
+    - id: OPS-D04-SD05-C02
+      statement: Continuity mechanisms — failover, alternate paths — exist for critical services.
+      intent: Continuity is designed or it does not exist.
+      current_expectation: Continuity plans and test records exist for critical services.
+      future_expectation: Continuity is exercised against plausible future disruption scenarios.
+      evidence: [Continuity plans, Test records]
+      indicators: [resilience]
+    - id: OPS-D04-SD05-C03
+      statement: Delivery performance during disruption is preserved or recovered within defined tolerances.
+      intent: Disruption performance is the honest measure of delivery reliability.
+      current_expectation: Recovery records and disruption reviews show managed recovery.
+      future_expectation: Recovery objectives are set per service criticality and validated empirically.
+      evidence: [Recovery records, Disruption reviews]
+      indicators: [resilience]
+
+# ── D05 People & Organization ────────────────────────────────────────────────
+- id: D05
+  name: People & Organization
+  weight: 0.10
+  description: How people, roles, skills and organizational arrangements enable operations.
+  sub_dimensions:
+  - id: D05-SD01
+    name: Workforce planning
+    criteria:
+    - id: OPS-D05-SD01-C01
+      statement: Workforce needs for operations are planned — numbers, roles, locations — against operational demand.
+      intent: Workforce is the first constraint operations hits; planning it after commitment-setting is too late.
+      current_expectation: Workforce plans exist and connect to operational demand.
+      future_expectation: The workforce plan includes the skills the future operating requirements demand.
+      evidence: [Workforce plans]
+      indicators: [efficiency]
+    - id: OPS-D05-SD01-C02
+      statement: Workforce capacity is monitored against load and imbalances are corrected.
+      intent: Chronic overload converts into quality failure and attrition.
+      current_expectation: Capacity and utilization reports trigger rebalancing.
+      future_expectation: Scenario-based workforce modelling covers growth and contraction.
+      evidence: [Capacity/utilization reports]
+      indicators: [efficiency, resilience]
+    - id: OPS-D05-SD01-C03
+      statement: Critical-role risk — single points of human dependency — is identified and mitigated.
+      intent: Person-dependent operations are fragile operations, whatever the process documentation says.
+      current_expectation: A key-role risk register exists with mitigations.
+      future_expectation: Succession and knowledge redundancy cover critical operational knowledge.
+      evidence: [Key-role risk register]
+      indicators: [resilience]
+  - id: D05-SD02
+    name: Roles & responsibility management
+    criteria:
+    - id: OPS-D05-SD02-C01
+      statement: Operational roles and responsibilities are defined for the operating model.
+      intent: Role clarity precedes accountability; both precede performance.
+      current_expectation: Role definitions and role-activity mapping exist for the operating model.
+      future_expectation: The role architecture supports the target operating model.
+      evidence: [Role definitions, Role-activity mapping]
+      indicators: [compliance]
+      v2_lineage: 'OPS-D4-SD1-C01'
+    - id: OPS-D05-SD02-C02
+      statement: Responsibilities are unambiguous across functions — no unowned operational activities.
+      intent: Unowned activities are where risk accumulates silently.
+      current_expectation: Responsibility matrices show complete coverage of operational activity.
+      future_expectation: Responsibility mapping refreshes with structural change as a controlled step.
+      evidence: [Responsibility matrices]
+      indicators: [compliance]
+    - id: OPS-D05-SD02-C03
+      statement: Operational workload is humane and sustainable — rotas, after-hours load and satisfaction are tracked.
+      intent: Sustainable cadence is a resilience mechanism, not a welfare nicety; exhausted operations fail predictably.
+      current_expectation: Rota load data and satisfaction scores are tracked and acted on.
+      future_expectation: Workload sustainability is a managed objective with targets, per unit.
+      evidence: [Rota load data, Satisfaction scores]
+      indicators: [resilience, quality]
+      v2_lineage: 'OPS-D4-SD3-C06'
+  - id: D05-SD03
+    name: Skills & competency management
+    criteria:
+    - id: OPS-D05-SD03-C01
+      statement: Skills for key operational capabilities are assessed and developed.
+      intent: Capability realization rests on skills; unassessed skills are assumed skills.
+      current_expectation: Skills matrices and training plans cover key operational capabilities.
+      future_expectation: Skill strategy anticipates automation and AI-driven role shifts.
+      evidence: [Skills matrices, Training plans]
+      indicators: [innovation]
+      v2_lineage: 'OPS-D4-SD1-C02'
+    - id: OPS-D05-SD03-C02
+      statement: Competency pathways exist for key operational roles.
+      intent: Pathways make capability growth systematic rather than accidental.
+      current_expectation: Competency frameworks define progression for key roles.
+      future_expectation: Pathways are updated as operations modernize and roles change.
+      evidence: [Competency frameworks]
+      indicators: [effectiveness]
+    - id: OPS-D05-SD03-C03
+      statement: Onboarding into operational roles is structured and repeatable.
+      intent: Onboarding quality predicts time-to-competence and error rates.
+      current_expectation: Onboarding playbooks exist and are used.
+      future_expectation: Onboarding scales with growth without quality loss.
+      evidence: [Onboarding playbooks]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D4-SD1-C03'
+  - id: D05-SD04
+    name: Organizational collaboration & culture
+    criteria:
+    - id: OPS-D05-SD04-C01
+      statement: Team interaction modes are defined and reviewed, including cognitive load.
+      intent: Interaction design determines coordination cost; unmanaged cognitive load predicts error.
+      current_expectation: Interaction models and cognitive-load reviews exist and are used.
+      future_expectation: Collaboration design is reviewed against new operating arrangements before adoption.
+      evidence: [Interaction model, Cognitive-load reviews]
+      indicators: [effectiveness]
+      v2_lineage: 'OPS-D4-SD2-C05'
+    - id: OPS-D05-SD04-C02
+      statement: Operational culture supports accountability, candour and continuous improvement.
+      intent: Culture determines whether signals (bad news, near misses) travel or hide.
+      current_expectation: Culture and engagement signals are measured for operational units.
+      future_expectation: Culture is deliberately shaped for adaptive operations, with tracked interventions.
+      evidence: [Culture/engagement surveys]
+      indicators: [innovation]
+    - id: OPS-D05-SD04-C03
+      statement: Operations participates in internal and industry practice exchange.
+      intent: Practice exchange imports maturity the enterprise has not yet paid for.
+      current_expectation: Internal guilds and external participation exist.
+      future_expectation: The enterprise contributes practice back to the industry.
+      evidence: [External contributions, Internal guild records]
+      indicators: [innovation]
+      v2_lineage: 'OPS-D6-SD3-C08'
+  - id: D05-SD05
+    name: Operational knowledge & ways of working
+    criteria:
+    - id: OPS-D05-SD05-C01
+      statement: Ways of working — cadences, ceremonies, working agreements — are explicit and consistently applied.
+      intent: Explicit ways of working make collaboration inspectable and improvable.
+      current_expectation: Working agreements and team charters exist and are followed.
+      future_expectation: Ways of working evolve deliberately with operating-model change.
+      evidence: [Working agreements, Team charters]
+      indicators: [compliance]
+    - id: OPS-D05-SD05-C02
+      statement: Operational knowledge — runbooks, playbooks — is captured and demonstrably current.
+      intent: Stale knowledge is more dangerous than no knowledge; it is trusted.
+      current_expectation: Runbook currency checks are performed and recorded.
+      future_expectation: Knowledge is discoverable at the point of need, with usage-driven currency.
+      evidence: [Runbook currency checks, Knowledge base metrics]
+      indicators: [effectiveness, reliability]
+      v2_lineage: 'OPS-D4-SD3-C07'
+    - id: OPS-D05-SD05-C03
+      statement: Knowledge transfer happens before key people move, not after they leave.
+      intent: Departure-driven knowledge loss is a self-inflicted resilience failure.
+      current_expectation: Handover records exist for key-role transitions.
+      future_expectation: Knowledge continuity is an institutionalized practice with triggers.
+      evidence: [Handover records]
+      indicators: [resilience]
+
+# ── D06 Resources & Assets ───────────────────────────────────────────────────
+- id: D06
+  name: Resources & Assets
+  weight: 0.09
+  description: How resources and assets are acquired, allocated, utilized and sustained.
+  sub_dimensions:
+  - id: D06-SD01
+    name: Resource planning & allocation
+    criteria:
+    - id: OPS-D06-SD01-C01
+      statement: Operational resources — financial, physical, human — are planned and allocated against operational priorities.
+      intent: Resource allocation is where operational intent is funded or quietly unfunded.
+      current_expectation: Resource plans and allocation records align with operational priorities.
+      future_expectation: Allocation responds dynamically to demand shifts within governed limits.
+      evidence: [Resource plans, Allocation records]
+      indicators: [efficiency]
+    - id: OPS-D06-SD01-C02
+      statement: Resource allocation decisions are visible and justified against outcomes.
+      intent: Invisible allocation drifts toward incumbency; outcome-justified allocation drifts toward value.
+      current_expectation: Allocation decisions are recorded with their rationale.
+      future_expectation: Allocation is outcome-linked and benchmarked (cost-to-serve).
+      evidence: [Allocation decisions, Cost-to-serve data]
+      indicators: [value-realization, efficiency]
+    - id: OPS-D06-SD01-C03
+      statement: Shared resources and platforms are reused before new equivalents are acquired or built.
+      intent: Duplicative acquisition is the quiet tax on operational economics.
+      current_expectation: Reuse policy and metrics govern build-vs-reuse decisions.
+      future_expectation: Reuse is the default with explicit, governed exceptions.
+      evidence: [Reuse policy and metrics]
+      indicators: [efficiency]
+      v2_lineage: 'OPS-D2-SD3-C08'
+  - id: D06-SD02
+    name: Asset lifecycle management
+    criteria:
+    - id: OPS-D06-SD02-C01
+      statement: Operational assets — facilities, equipment, tooling — are inventoried with lifecycle state.
+      intent: Uninventoried assets fail unmanaged.
+      current_expectation: Asset registers record lifecycle state for operational asset classes.
+      future_expectation: Lifecycle data supports renewal forecasting tied to operational plans.
+      evidence: [Asset registers]
+      indicators: [compliance]
+    - id: OPS-D06-SD02-C02
+      statement: Asset maintenance and renewal are planned rather than reactive.
+      intent: Reactive maintenance converts asset risk directly into operational disruption.
+      current_expectation: Maintenance plans and renewal schedules exist and are followed.
+      future_expectation: Predictive maintenance is applied to critical assets.
+      evidence: [Maintenance plans, Renewal schedules]
+      indicators: [reliability]
+    - id: OPS-D06-SD02-C03
+      statement: Asset performance — availability, cost, utilization — is tracked per asset class.
+      intent: Asset performance data turns the estate into a manageable portfolio.
+      current_expectation: Asset performance reports exist for major classes.
+      future_expectation: Asset intelligence informs investment and retirement decisions.
+      evidence: [Asset performance reports]
+      indicators: [efficiency, reliability]
+  - id: D06-SD03
+    name: Capacity & utilization management
+    criteria:
+    - id: OPS-D06-SD03-C01
+      statement: Work-in-flight is balanced against available capacity.
+      intent: Overload is the root cause pattern behind missed commitments and quality failure.
+      current_expectation: Capacity plans and utilization trends inform work acceptance.
+      future_expectation: Capacity balancing is continuous and forward-looking across units.
+      evidence: [Capacity plans, Utilization trends]
+      indicators: [efficiency]
+      v2_lineage: 'OPS-D1-SD3-C09'
+    - id: OPS-D06-SD03-C02
+      statement: Capacity planning is data-driven with tracked headroom.
+      intent: Headroom is the operational margin that absorbs surprise; untracked headroom is spent invisibly.
+      current_expectation: Capacity headroom dashboards exist for critical operations.
+      future_expectation: Headroom is managed per service criticality and demand scenario.
+      evidence: [Capacity headroom dashboards]
+      indicators: [reliability, efficiency]
+      v2_lineage: 'OPS-D5-SD4-C12'
+    - id: OPS-D06-SD03-C03
+      statement: Surge and contingency capacity arrangements exist for predictable peaks.
+      intent: Predictable peaks planned as exceptions are operationalized as crises.
+      current_expectation: Surge plans exist for known peak periods.
+      future_expectation: Surge capacity is exercised, not just documented.
+      evidence: [Surge plans, Exercise records]
+      indicators: [resilience]
+  - id: D06-SD04
+    name: Supplier & partner management
+    criteria:
+    - id: OPS-D06-SD04-C01
+      statement: Suppliers and partners critical to operations are identified with managed relationships.
+      intent: Extended-enterprise operations fail at unmanaged supplier seams.
+      current_expectation: Supplier register and contract records cover critical suppliers.
+      future_expectation: The dependency map covers the full supply chain to critical inputs.
+      evidence: [Supplier register, Contract records]
+      indicators: [compliance]
+    - id: OPS-D06-SD04-C02
+      statement: Supplier performance is measured against agreed commitments.
+      intent: Supplier performance invisible is supplier risk unpriced.
+      current_expectation: Supplier performance reports exist against commitments.
+      future_expectation: Supplier risk is monitored continuously, not at renewal only.
+      evidence: [Supplier performance reports]
+      indicators: [reliability, compliance]
+    - id: OPS-D06-SD04-C03
+      statement: Supplier failure scenarios are assessed and mitigated for critical inputs.
+      intent: Concentration risk in critical inputs is an operational resilience exposure.
+      current_expectation: Supplier risk assessments cover critical inputs.
+      future_expectation: Multi-sourcing or exit strategies exist for critical dependencies.
+      evidence: [Supplier risk assessments]
+      indicators: [resilience]
+  - id: D06-SD05
+    name: Resource efficiency & sustainability
+    criteria:
+    - id: OPS-D06-SD05-C01
+      statement: Resource waste — idle capacity, spoilage, rework, over-provisioning — is measured and reduced.
+      intent: Waste is operational cost without operational outcome.
+      current_expectation: Waste and efficiency metrics are tracked with reduction actions.
+      future_expectation: Efficiency targets are embedded in operational objectives per unit.
+      evidence: [Waste/efficiency metrics]
+      indicators: [efficiency]
+    - id: OPS-D06-SD05-C02
+      statement: Resource and asset decisions account for sustainability obligations.
+      intent: Sustainability is shifting from disclosure to operational constraint.
+      current_expectation: Sustainability obligations are considered in resource decisions.
+      future_expectation: Sustainability is a managed operational performance dimension.
+      evidence: [Sustainability reports]
+      indicators: [compliance, value-realization]
+    - id: OPS-D06-SD05-C03
+      statement: Cost-to-serve is understood per product, service or customer segment.
+      intent: Cost-to-serve connects operational consumption to enterprise economics.
+      current_expectation: Cost-to-serve analyses exist for major segments.
+      future_expectation: Cost-to-serve drives portfolio and pricing decisions.
+      evidence: [Cost-to-serve analyses]
+      indicators: [value-realization, efficiency]
+
+# ── D07 Information & Technology ─────────────────────────────────────────────
+- id: D07
+  name: Information & Technology
+  weight: 0.12
+  description: How information, data and technology enable and support operational execution.
+  sub_dimensions:
+  - id: D07-SD01
+    name: Operational information & observability
+    criteria:
+    - id: OPS-D07-SD01-C01
+      statement: Telemetry — logs, metrics, traces — is centralised and actively used in daily operations.
+      intent: Observability is the sensory system of operations; without it, operations guess.
+      current_expectation: Observability coverage reports show centralised, used telemetry.
+      future_expectation: Observability extends to end-to-end operational flows beyond IT services.
+      evidence: [Observability coverage reports]
+      indicators: [effectiveness]
+      touchpoints: [tp-ops-x-autonomous-operations, tp-ops-x-technology]   # AO 3.3.8; TEC-D5-SD1-C01
+      v2_lineage: 'OPS-D5-SD1-C01'
+    - id: OPS-D07-SD01-C02
+      statement: Monitoring covers user-facing journeys and operational outcomes, not just components.
+      intent: Component health does not sum to outcome health; consumers experience journeys.
+      current_expectation: Journey dashboards and SLI coverage exist.
+      future_expectation: Observability is anticipatory — leading indicators precede consumer impact.
+      evidence: [Journey dashboards, SLI coverage]
+      indicators: [quality, reliability]
+      v2_lineage: 'OPS-D5-SD1-C02'
+    - id: OPS-D07-SD01-C03
+      statement: Operational information beyond technical telemetry — schedules, status, commitments, inventories — is accurate, timely and accessible.
+      intent: Operations runs on more than logs; a broken operational information spine breaks coordination first.
+      current_expectation: An operational information audit shows accuracy and accessibility.
+      future_expectation: A coherent operational information spine serves decisions at every level.
+      evidence: [Operational information audit]
+      indicators: [effectiveness, compliance]
+  - id: D07-SD02
+    name: Data availability & quality
+    criteria:
+    - id: OPS-D07-SD02-C01
+      statement: Data required for operations is available where and when needed.
+      intent: Data unavailability silently degrades decisions into assumptions.
+      current_expectation: Data availability reports cover operationally critical data.
+      future_expectation: Data availability meets the requirements of future operating models.
+      evidence: [Data availability reports]
+      indicators: [reliability]
+    - id: OPS-D07-SD02-C02
+      statement: Operational data quality — accuracy, completeness, timeliness — is measured and managed.
+      intent: Decisions on poor data are confident, wrong and expensive.
+      current_expectation: Data quality metrics are measured for operational datasets.
+      future_expectation: Data quality gates operational processes automatically.
+      evidence: [Data quality metrics]
+      indicators: [quality]
+    - id: OPS-D07-SD02-C03
+      statement: Operational data is governed — ownership, definitions and lineage are established.
+      intent: Ungoverned data cannot be trusted at scale or automated upon.
+      current_expectation: Data ownership registers and dictionaries exist.
+      future_expectation: Governance extends to data feeding automated and AI-assisted decisions.
+      evidence: [Data ownership register, Data dictionaries]
+      indicators: [compliance]
+  - id: D07-SD03
+    name: Application & platform operations
+    criteria:
+    - id: OPS-D07-SD03-C01
+      statement: Deployments and changes to operational systems are automated with audit trails.
+      intent: Manual change is slow, inconsistent and unauditable; it caps operational agility.
+      current_expectation: Deployment automation rate and change records demonstrate automation.
+      future_expectation: Change automation extends across the operational systems estate, not only IT services.
+      evidence: [Deployment automation rate, Change records]
+      indicators: [agility, reliability]
+      v2_lineage: 'OPS-D5-SD3-C06'
+    - id: OPS-D07-SD03-C02
+      statement: Operational applications and platforms are operated to defined standards — support, patching, lifecycle.
+      intent: Platform operating discipline is the difference between an enabler and an incident factory.
+      current_expectation: Operational runbooks and support records meet defined standards.
+      future_expectation: Platform operations scale with the growing system estate without discipline loss.
+      evidence: [Operational runbooks, Support records]
+      indicators: [reliability]
+    - id: OPS-D07-SD03-C03
+      statement: Change automation is scored against the shared operations-modernization component.
+      intent: The shared component keeps modernization scoring comparable with the peer model without duplicating criteria.
+      current_expectation: Component scoring records exist for the shared dimension package.
+      future_expectation: The modernization roadmap sustains improvement of the scored component.
+      evidence: [Component scoring record]
+      indicators: [agility, innovation]
+      touchpoints: [tp-ops-x-modernization]   # peer practice area execution-operations
+      v2_lineage: 'OPS-D5-SD3-C08'
+  - id: D07-SD04
+    name: Infrastructure & technology reliability
+    criteria:
+    - id: OPS-D07-SD04-C01
+      statement: Auto-remediation handles known failure modes within defined guardrails.
+      intent: Guarded automation of known failure modes frees human attention for unknown ones.
+      current_expectation: Auto-remediation rate and playbook libraries demonstrate guarded operation.
+      future_expectation: Remediation scope grows under governed constraints with verified outcomes.
+      evidence: [Auto-remediation rate, Playbook library]
+      indicators: [reliability, resilience]
+      touchpoints: [tp-ops-x-autonomous-operations]   # AO 3.1.3
+      v2_lineage: 'OPS-D5-SD4-C09'
+    - id: OPS-D07-SD04-C02
+      statement: Infrastructure reliability meets the requirements of the services it underpins.
+      intent: Service commitments cannot exceed the reliability of their technical foundations.
+      current_expectation: Availability reports show infrastructure meeting service requirements.
+      future_expectation: Reliability engineering effort is allocated by criticality, not uniformly.
+      evidence: [Availability reports]
+      indicators: [reliability]
+    - id: OPS-D07-SD04-C03
+      statement: Technology risks to operations — capacity, obsolescence, dependency — are identified and managed.
+      intent: Technology risk becomes operational disruption on its own schedule.
+      current_expectation: A technology risk register covers operational exposure.
+      future_expectation: Technology risk horizon scanning is routine and connected to investment.
+      evidence: [Technology risk register]
+      indicators: [resilience]
+  - id: D07-SD05
+    name: Technology integration & enablement
+    criteria:
+    - id: OPS-D07-SD05-C01
+      statement: Digital nexus forces — AI, automation, data, platforms — are adopted deliberately in operations.
+      intent: Deliberate adoption compounds; drift adoption accumulates risk without value.
+      current_expectation: Adoption roadmap and deployment records show deliberate adoption.
+      future_expectation: The adoption portfolio is strategy-aligned and value-tracked.
+      evidence: [Adoption roadmap, Deployment records]
+      indicators: [innovation]
+      v2_lineage: 'OPS-D6-SD3-C06'
+    - id: OPS-D07-SD05-C02
+      statement: Predictive detection flags issues before users report them.
+      intent: Prediction converts operational response from reaction to anticipation.
+      current_expectation: Predictive alerts cover a measured share of severe incidents.
+      future_expectation: Prediction spans operational outcomes beyond incidents — demand, quality, capacity.
+      evidence: [Predictive alert share of severe incidents]
+      indicators: [innovation, reliability]
+      touchpoints: [tp-ops-x-autonomous-operations]   # AO 4.1.1
+      v2_lineage: 'OPS-D5-SD3-C07'
+    - id: OPS-D07-SD05-C03
+      statement: New technologies entering operations pass a value, risk and lifecycle assessment.
+      intent: The assessment gate keeps the technology estate deliberate and supportable.
+      current_expectation: Technology-assessment records precede adoption.
+      future_expectation: The gate includes autonomy- and AI-specific criteria (oversight, explainability, fail-safe).
+      evidence: [Technology-assessment records]
+      indicators: [compliance, innovation]
+      v2_lineage: 'OPS-D6-SD3-C07'
+
+# ── D08 Operational Governance & Resilience ──────────────────────────────────
+- id: D08
+  name: Operational Governance & Resilience
+  weight: 0.11
+  description: How operations are directed, controlled, assured and sustained under disruption.
+  sub_dimensions:
+  - id: D08-SD01
+    name: Operational policies & standards
+    criteria:
+    - id: OPS-D08-SD01-C01
+      statement: Operational policies and standards exist, are current and are followed where applicable.
+      intent: Policy is the codified minimum of operational conduct; stale or ignored policy is noise.
+      current_expectation: Policy register and attestations show currency and adherence.
+      future_expectation: The policy estate stays coherent as operations modernize.
+      evidence: [Policy register, Attestation records]
+      indicators: [compliance]
+    - id: OPS-D08-SD01-C02
+      statement: Policies are proportionate — they enable execution while managing risk.
+      intent: Disproportionate policy drives workarounds, which are ungoverned execution.
+      current_expectation: Policy reviews assess burden as well as coverage.
+      future_expectation: Policy burden is measured and reduced where risk allows.
+      evidence: [Policy review records]
+      indicators: [effectiveness]
+    - id: OPS-D08-SD01-C03
+      statement: Standards for how operational work is performed — quality, safety, service — are defined per domain.
+      intent: Standards encode what good execution means, domain by domain.
+      current_expectation: The standards library covers operational domains.
+      future_expectation: Standards absorb new work classes, including automated work outputs.
+      evidence: [Standards library]
+      indicators: [quality]
+  - id: D08-SD02
+    name: Risk & compliance management
+    criteria:
+    - id: OPS-D08-SD02-C01
+      statement: Operational risks are identified, assessed, owned and treated.
+      intent: Operational risk management is the standing defence against predictable failure.
+      current_expectation: Risk register and treatment records are live and owned.
+      future_expectation: Risk horizon includes emerging operating models (automation, ecosystem).
+      evidence: [Risk register, Treatment records]
+      indicators: [compliance, resilience]
+    - id: OPS-D08-SD02-C02
+      statement: Regulatory and contractual obligations binding operations are known and compliance is evidenced.
+      intent: Obligations define the non-negotiable boundaries of operational design.
+      current_expectation: Obligation register and compliance reports are current.
+      future_expectation: Obligation change is traced to operational impact quickly.
+      evidence: [Obligation register, Compliance reports]
+      indicators: [compliance]
+    - id: OPS-D08-SD02-C03
+      statement: Operational risk appetite is explicit and decision-making respects it.
+      intent: Risk appetite turns governance from veto into calibrated empowerment.
+      current_expectation: A risk appetite statement exists and is referenced in decisions.
+      future_expectation: Appetite is calibrated per decision class, including automated decisions.
+      evidence: [Risk appetite statement, Decision records]
+      indicators: [compliance]
+  - id: D08-SD03
+    name: Operational controls & assurance
+    criteria:
+    - id: OPS-D08-SD03-C01
+      statement: Key operational processes operate under defined controls.
+      intent: Controls are how execution stays inside acceptable risk parameters.
+      current_expectation: Control frameworks cover key operational processes.
+      future_expectation: Control design adapts to automated execution without losing assurance.
+      evidence: [Control frameworks]
+      indicators: [compliance]
+    - id: OPS-D08-SD03-C02
+      statement: Control effectiveness is tested and assured independently.
+      intent: Untested controls are assumptions with paperwork.
+      current_expectation: Audit reports and control tests evidence effectiveness.
+      future_expectation: Assurance extends to algorithmic controls and automated decisions.
+      evidence: [Audit reports, Control test records]
+      indicators: [compliance]
+    - id: OPS-D08-SD03-C03
+      statement: Control failures and near-misses are analysed and fed back into design.
+      intent: Near-misses are free lessons; unanalysed, they are deferred failures.
+      current_expectation: Control incident records drive design feedback.
+      future_expectation: Control learning is systemic across the operations estate.
+      evidence: [Control incident records]
+      indicators: [innovation, resilience]
+  - id: D08-SD04
+    name: Business continuity & resilience
+    criteria:
+    - id: OPS-D08-SD04-C01
+      statement: Business continuity plans exist for critical operations and are current.
+      intent: Continuity planned in calm is the only continuity available in crisis.
+      current_expectation: BC plans exist and review records show currency.
+      future_expectation: Continuity planning covers plausible future disruption classes.
+      evidence: [BC plans, Review records]
+      indicators: [resilience]
+    - id: OPS-D08-SD04-C02
+      statement: Continuity and disruption scenarios are exercised, with findings actioned.
+      intent: Unexercised plans are untested assumptions bound in documents.
+      current_expectation: Exercise records and action logs demonstrate the loop.
+      future_expectation: Exercises include cascading and ecosystem-wide disruption.
+      evidence: [Exercise records, Action logs]
+      indicators: [resilience]
+    - id: OPS-D08-SD04-C03
+      statement: The enterprise recovers from disruption within stated recovery objectives.
+      intent: Recovery objectives make resilience measurable rather than aspirational.
+      current_expectation: Recovery records show objectives met or exceedances explained.
+      future_expectation: Recovery objectives are validated empirically through exercises and events.
+      evidence: [Recovery records, Disruption reviews]
+      indicators: [resilience, reliability]
+  - id: D08-SD05
+    name: Incident & problem management
+    criteria:
+    - id: OPS-D08-SD05-C01
+      statement: An incident command system operates with defined roles and records.
+      intent: Incident command converts chaos into roles, priorities and traceable action.
+      current_expectation: ICS documents and incident records demonstrate operation.
+      future_expectation: Incident management covers non-IT operational disruption with equal discipline.
+      evidence: [ICS documents, Incident records]
+      indicators: [responsiveness, resilience]
+      touchpoints: [tp-ops-x-autonomous-operations, tp-ops-x-dt-operationalized]   # AO 4.1.2; peer d4c10
+      v2_lineage: 'OPS-D5-SD2-C03'
+    - id: OPS-D08-SD05-C02
+      statement: Post-incident reviews are blameless, timely and produce tracked actions.
+      intent: Blame stops information flow; untracked actions stop learning.
+      current_expectation: PIR records exist within defined timelines for severe incidents.
+      future_expectation: Incident learning reaches design and investment, not only fixes.
+      evidence: [PIR records within 7 days for sev-1/2]
+      indicators: [innovation]
+      v2_lineage: 'OPS-D5-SD2-C04'
+    - id: OPS-D08-SD05-C03
+      statement: Root causes are eliminated through problem management, not just incidents closed.
+      intent: Incident closure without cause elimination guarantees recurrence.
+      current_expectation: Problem records and recurrence trends show elimination.
+      future_expectation: Recurring-problem elimination is measured as an outcome, not an activity.
+      evidence: [Problem records, Recurrence trends]
+      indicators: [quality, resilience]
+      v2_lineage: 'OPS-D5-SD2-C05'
+
+# ── D09 Operational Performance & Value ──────────────────────────────────────
+- id: D09
+  name: Operational Performance & Value
+  weight: 0.11
+  description: How operational performance is measured and how operational activity realizes enterprise value.
+  sub_dimensions:
+  - id: D09-SD01
+    name: Operational performance management
+    criteria:
+    - id: OPS-D09-SD01-C01
+      statement: Operations reports flow upward into business reviews framed as outcomes.
+      intent: Operations must be legible to enterprise leadership in outcome language, not activity language.
+      current_expectation: Ops-to-exec review packs frame delivery as outcomes.
+      future_expectation: The performance narrative connects operations explicitly to enterprise strategy.
+      evidence: [Ops-to-exec review packs]
+      indicators: [effectiveness, value-realization]
+      v2_lineage: 'OPS-D6-SD1-C02'
+    - id: OPS-D09-SD01-C02
+      statement: A balanced operational performance framework is measured — efficiency, effectiveness, quality, responsiveness, reliability, resilience.
+      intent: Single-metric operations optimize the metric and sacrifice the rest.
+      current_expectation: The performance framework and KPI catalogue cover the balance.
+      future_expectation: The framework includes forward-looking indicators, not only lagging ones.
+      evidence: [Performance framework, KPI catalogue]
+      indicators: [effectiveness]
+    - id: OPS-D09-SD01-C03
+      statement: Performance review drives decisions — escalation, intervention, investment — not just reporting.
+      intent: Reporting without consequence is measurement theatre.
+      current_expectation: Review decision records show actions taken on performance.
+      future_expectation: Review cadence matches decision cadence per performance tier.
+      evidence: [Review decision records]
+      indicators: [effectiveness]
+  - id: D09-SD02
+    name: Operational efficiency & effectiveness
+    criteria:
+    - id: OPS-D09-SD02-C01
+      statement: Operational efficiency — cost per transaction, resource utilization, productivity — is measured and managed.
+      intent: Efficiency is the operational contribution to enterprise economics.
+      current_expectation: Efficiency metrics and unit-cost trends are tracked and managed.
+      future_expectation: Efficiency gains are reinvested deliberately into capability and value.
+      evidence: [Efficiency metrics, Unit-cost trends]
+      indicators: [efficiency]
+    - id: OPS-D09-SD02-C02
+      statement: Operating cost per workload is tracked and optimized.
+      intent: Unit economics make efficiency local, comparable and actionable.
+      current_expectation: Cost dashboards and unit-economics trends exist.
+      future_expectation: Cost intelligence spans the full operations estate including ecosystem steps.
+      evidence: [Cost dashboards, Unit-economics trends]
+      indicators: [efficiency, value-realization]
+      touchpoints: [tp-ops-x-autonomous-operations]   # AO 3.3.6
+      v2_lineage: 'OPS-D5-SD4-C11'
+    - id: OPS-D09-SD02-C03
+      statement: Operational effectiveness — outcome achievement, first-time-right, service success — is measured alongside efficiency.
+      intent: Efficiency without effectiveness optimizes the wrong thing; both must be visible to balance decisions.
+      current_expectation: Outcome and first-time-right metrics are measured.
+      future_expectation: Effectiveness is weighted appropriately against efficiency in operational decisions.
+      evidence: [Outcome/first-time-right metrics]
+      indicators: [effectiveness, quality]
+  - id: D09-SD03
+    name: Enterprise value realization
+    criteria:
+    - id: OPS-D09-SD03-C01
+      statement: Operations' contribution to enterprise outcomes — customer value, business performance — is explicit and assessed.
+      intent: An enterprise can operate efficiently and still realize little value; the contribution must be its own measurement.
+      current_expectation: Value realization reports connect operational execution to enterprise outcomes.
+      future_expectation: Value contribution is quantified per value stream against business-model promises.
+      evidence: [Value realization reports]
+      indicators: [value-realization]
+    - id: OPS-D09-SD03-C02
+      statement: Operational investments generate their expected business benefits.
+      intent: The benefits ledger is where operational spending earns its justification.
+      current_expectation: Benefits realization records track expected versus realized benefits.
+      future_expectation: Benefits tracking spans the investment lifecycle, from business case to retirement.
+      evidence: [Benefits realization records]
+      indicators: [value-realization]
+    - id: OPS-D09-SD03-C03
+      statement: Operational execution sustains stakeholder trust — customers, regulators, partners.
+      intent: Trust is the compounding asset operations produces or destroys daily.
+      current_expectation: Trust indicators — satisfaction, compliance standing, partner metrics — are monitored.
+      future_expectation: Trust indicators are managed as operational outcomes with owners.
+      evidence: [Trust/satisfaction/compliance indicators]
+      indicators: [value-realization, compliance]
+  - id: D09-SD04
+    name: Performance intelligence & improvement
+    criteria:
+    - id: OPS-D09-SD04-C01
+      statement: Operational performance data is analysed into intelligence — trends, benchmarks, prediction.
+      intent: Data without analysis informs nobody; intelligence is the decision-grade product of measurement.
+      current_expectation: Analytics products and benchmark reports are produced and used.
+      future_expectation: Intelligence is predictive and prescriptive for operational decisions.
+      evidence: [Analytics products, Benchmark reports]
+      indicators: [innovation]
+    - id: OPS-D09-SD04-C02
+      statement: Improvement priorities are set by performance intelligence and enterprise outcomes.
+      intent: Priority by anecdote optimizes the loudest, not the weakest.
+      current_expectation: Improvement portfolio records trace priorities to intelligence.
+      future_expectation: Portfolio optimization is continuous against outcome contribution.
+      evidence: [Improvement portfolio records]
+      indicators: [effectiveness, innovation]
+    - id: OPS-D09-SD04-C03
+      statement: Modernization priorities for operations are identified from performance and capability evidence.
+      intent: Modernization targeted by evidence changes what the enterprise can do, not just how fast.
+      current_expectation: A modernization backlog exists, evidence-linked.
+      future_expectation: The modernization roadmap addresses future operating requirements, not only current pain.
+      evidence: [Modernization backlog, Roadmap]
+      indicators: [innovation, agility]
+
+migration:
+  map: migrations/v2-to-v3-map.yaml
+  scale_map: migrations/scale-v1-to-v2-map.yaml
+  rule: >-
+    v2 criterion IDs map into the v3 D01..D09 taxonomy via the migration map;
+    criterion response scores are preserved at 0/25/50/75/100 (CR-AM-17 score
+    preservation), and legacy scale identifiers translate only through the
+    scale crosswalk (legacy L0 -> L-1, never L-0). v3-only criteria score only
+    from v3.0.0 campaigns. Assessment records carry the model version used.
