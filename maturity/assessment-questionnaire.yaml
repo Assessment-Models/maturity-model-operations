@@ -1,5 +1,5 @@
 # =============================================================================
-# maturity/assessment-questionnaire.yaml — RELEASE 2.0.0 (CR-AM-13)
+# maturity/assessment-questionnaire.yaml — RELEASE 2.1.0 (CR-AM-13)
 # One entry per criterion in the v2 register (dea:maturity-operations-register-v2).
 # Scoring: assessed capability levels L-1..L-5 map to 0/25/50/75/100; L-0 is Not Assessed. Evidence
 # confidence (observed 1.0 / evidenced 0.85 / self-reported 0.6 / unverified 0.3).
