@@ -51,7 +51,7 @@ EAV remains supplementary. It is not a maturity score, does not determine the re
 | 59.10 | 20/1.0 + 25/1.5 + 14.1/2.5 | 42.27 |
 | 67.90 | 20/1.0 + 25/1.5 + 22.9/2.5 | 45.83 |
 
-The campaign example's EAV delta is 3.56. The Operations Index values and resolved levels remain unchanged.
+The campaign example's EAV delta is 3.52. The Operations Index values and resolved levels remain unchanged.
 
 ## 5. Validation
 
