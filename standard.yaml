@@ -19,4 +19,4 @@ standard:
 model:
   id: maturity-model-operations
   name: Operations Maturity Model
-  version: "2.1.0"
+  version: "2.1.1"
