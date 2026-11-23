@@ -1,34 +1,63 @@
-id: operations-worked-example
+# =============================================================================
+# examples/operations-2026.yaml — RELEASE 3.0.0 (CR-OM-01)
+# Worked scoring example for the operations maturity model v3.
+# Illustrative only — not a real organisation's assessment. Demonstrates the
+# nine-dimension weighted aggregation, canonical L-1..L-5 level resolution,
+# marginal-band effort-adjusted value (CR-AM-19 formula), the dual
+# perspectives and the transformation gap, and the L-0 Not Assessed rule.
+# =============================================================================
+id: operations-worked-example-v3
 model: dea:maturity-operations
-version: 2.1.0
+version: 3.0.0
 description: >-
-  Illustrative scoring example, not a real organisation assessment. Demonstrates canonical
-  L-1..L-5 level resolution and marginal-band effort-adjusted value.
-aggregated_score: 62
+  Illustrative scoring example, not a real organisation assessment. Shows the
+  nine-dimension weighted aggregation, canonical level resolution, marginal-band
+  EAV, the dual perspectives and the transformation gap.
+dimension_scores:
+  D01: 64
+  D02: 58
+  D03: 70
+  D04: 62
+  D05: 66
+  D06: 52
+  D07: 75
+  D08: 60
+  D09: 63
+operations_index: 63.7
 resolved_band: level-3-systematic
 resolved_level: L-3
-effort_adjusted_value: 43.47
+effort_adjusted_value: 44.15
 eav_calculation:
   band_contributions:
-    - { band: level-1-emergent, points: 20, multiplier: 1.0, contribution: 20.00 }
-    - { band: level-2-structured, points: 25, multiplier: 1.5, contribution: 16.67 }
-    - { band: level-3-systematic, points: 17, multiplier: 2.5, contribution: 6.80 }
-  total: 43.47
-criterion_scores:
-- criterion: example-criterion-1
-  level_id: L-3
-  assessment_status: assessed
-  score: 58
-- criterion: example-criterion-2
-  level_id: L-3
-  assessment_status: assessed
-  score: 64
-- criterion: example-criterion-3
-  level_id: L-3
-  assessment_status: assessed
-  score: 62
-- criterion: example-criterion-4
-  level_id: L-3
-  assessment_status: assessed
-  score: 66
-aggregation: mean of criterion scores (illustrative weights omitted)
+  - { band: level-1-emergent, points: 20, multiplier: 1.0, contribution: 20.00 }
+  - { band: level-2-structured, points: 25, multiplier: 1.5, contribution: 16.67 }
+  - { band: level-3-systematic, points: 18.7, multiplier: 2.5, contribution: 7.48 }
+  total: 44.15
+readiness_index: 57.4
+transformation_gap: -6.3
+criterion_score_samples:
+- criterion: OPS-D01-SD01-C01        # documented, versioned operating model
+  current: { level_id: L-3, assessment_status: assessed, score: 50, evidence_confidence: evidenced }
+  future: { level_id: L-3, assessment_status: assessed, score: 50, evidence_confidence: evidenced }
+- criterion: OPS-D07-SD01-C01        # centralised, used telemetry
+  current: { level_id: L-4, assessment_status: assessed, score: 75, evidence_confidence: observed }
+  future: { level_id: L-3, assessment_status: assessed, score: 50, evidence_confidence: observed }
+- criterion: OPS-D06-SD02-C01        # asset inventory
+  current: { level_id: L-0, assessment_status: not-assessed, score: 0, evidence_confidence: unverified }
+  future: { level_id: L-0, assessment_status: not-assessed, score: 0, evidence_confidence: unverified }
+  note: no evidence examined — contributes zero, never inflates either index
+- criterion: OPS-D09-SD03-C01        # value contribution explicit
+  current: { level_id: L-2, assessment_status: assessed, score: 25, evidence_confidence: self-reported }
+  future: { level_id: L-2, assessment_status: assessed, score: 25, evidence_confidence: self-reported }
+aggregation: >-
+  Operations Index = sum of current dimension score x dimension weight
+  (.12 D01 + .12 D02 + .12 D03 + .11 D04 + .10 D05 + .09 D06 + .12 D07 +
+  .11 D08 + .11 D09) = 63.67 ~= 63.7 -> band level-3-systematic, resolved
+  level L-3. Marginal EAV(63.7) = 20/1.0 + 25/1.5 + 18.7/2.5 = 44.15
+  (CR-AM-19 formula; criterion scores are 0/25/50/75/100, not band edges).
+  Readiness Index aggregates the same criteria against their
+  future_expectation fields (57.4 here); the transformation gap is readiness
+  minus current (57.4 - 63.7 = -6.3, a readiness deficit concentrated in D06
+  and D09). Full aggregation runs over all 132 criteria of the register; the
+  samples above illustrate per-perspective level/status records and the L-0
+  rule.
