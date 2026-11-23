@@ -5,29 +5,30 @@
 # under the canonical v2 bands.
 # =============================================================================
 id: ops-campaign-example-2026
-model: dea:maturity-operations@2.0.0-draft
+model: dea:maturity-operations@2.1.0
 assessor: Operations Excellence Office (illustrative)
 period: { baseline: 2026-11, target: 2027-11 }
 baseline:
   dimension_scores: { D1: 58, D2: 52, D3: 60, D4: 66, D5: 63, D6: 55 }
   operations_index: 59.1
   resolved_band: level-3-systematic
-  effort_adjusted_value: 147.75
+  resolved_level: L-3
+  effort_adjusted_value: 42.31
 target:
   dimension_scores: { D1: 68, D2: 62, D3: 70, D4: 72, D5: 70, D6: 65 }
   operations_index: 67.9
   resolved_band: level-3-systematic
-  effort_adjusted_value: 169.85
+  resolved_level: L-3
+  effort_adjusted_value: 45.83
 deltas:
   dimensions: { D1: 10, D2: 10, D3: 10, D4: 6, D5: 7, D6: 10 }
   operations_index: 8.8
-  effort_adjusted_value: 22.1
+  effort_adjusted_value: 3.52
   band_transition: none
 notes: >-
-  Index math: baseline = .20(58)+.18(52)+.18(60)+.14(66)+.20(63)+.10(55) = 59.1
-  (Systematic, 2.5x -> 147.75). Target = .20(68)+.18(62)+.18(70)+.14(72)+.20(70)
-  +.10(65) = 67.9 (Systematic, 2.5x -> 169.85). The effort-adjusted delta
-  (22.1) shows the real cost of the climb inside the same band: the last
-  points before Adaptive (71+) carry a 4.0x multiplier. Blueprint deductions
-  bp-flow-cadence, bp-capability-anchoring and bp-strategy-loop apply to the
-  largest gaps (D2, D6).
+  The Operations Index remains the weighted score and resolves to L-3 Systematic
+  under the canonical v2 bands. EAV is the sum of each band's marginal score
+  contribution divided by that band's effort multiplier. Baseline 59.1 =
+  20/1.0 + 25/1.5 + 14.1/2.5 = 42.31. Target 67.9 =
+  20/1.0 + 25/1.5 + 22.9/2.5 = 45.83. The EAV delta is 3.52.
+  EAV is supplementary and does not determine maturity-level resolution.

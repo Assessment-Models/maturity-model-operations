@@ -3,7 +3,7 @@ repo_id: maturity-model-operations
 type: maturity-model
 name: Operations Maturity Model
 domain: operations
-version: 1.0.0
+version: 2.1.0
 metamodel_version: 1.0.0
 status: stable
 owner: Head of Operations / SRE Lead
@@ -18,12 +18,16 @@ band_reference:
   version: 1.0.0
   organization: technehub-labs
   repository: dea-metamodel
+scale_reference:
+  id: dea:scale-operations-v2
+  version: 2.0.0
 scale_levels:
-- L0
-- L1
-- L2
-- L3
-- L4
+- L-1
+- L-2
+- L-3
+- L-4
+- L-5
+unassessed_level: L-0
 relationships:
 - source_id: dea:maturity-operations
   target_id: dea:maturity-bands-v2
