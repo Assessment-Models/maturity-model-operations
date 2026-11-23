@@ -6,6 +6,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **CR-AM-13**: add the explicit reciprocal peer-touchpoint identifier and mirror pointer for Autonomous Operations. Preserve the existing evidence mapping, directional ownership boundary and draft contract status; increment the touchpoint artifact version to 0.2.2.
+
 ## [2.1.0] — 2026-11-23
 
 ### Changed
