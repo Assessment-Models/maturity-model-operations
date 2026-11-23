@@ -14,8 +14,8 @@ on:
 
 jobs:
   contract-conformance:
-    uses: Assessment-Models/assessment-ci/.github/workflows/contract-conformance.yml@1583f615b86a69c30f4537a351f35db1a17e1f96
+    uses: Assessment-Models/assessment-ci/.github/workflows/contract-conformance.yml@fa81288827daed477f0b599a59a670940a6dff72
     with:
       dea-metamodel-ref: v0.1.0-draft
-      assessment-ci-ref: 9c0fb2596f5a2d3bd0b33787feed1ef5861c909a
+      assessment-ci-ref: fa81288827daed477f0b599a59a670940a6dff72
       manifest-path: model.yaml
