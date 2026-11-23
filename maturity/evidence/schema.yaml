@@ -1,5 +1,5 @@
 # =============================================================================
-# maturity/evidence/schema.yaml — RELEASE 2.0.0 (CR-AM-13)
+# maturity/evidence/schema.yaml — RELEASE 2.1.0 (CR-AM-13)
 # Evidence-item and assessment-record schemas for dea:maturity-operations v2.
 # =============================================================================
 id: dea:operations-evidence-schema-v1
@@ -28,10 +28,18 @@ assessment_record:
     model: { type: string, example: dea:maturity-operations@2.1.0 }
     date: { type: date }
     assessor: { type: string }
-    scores: { type: map, description: criterion id -> { level_id: L-0..L-5, assessment_status: assessed|not-assessed, score: 0-100, evidence: [evidence_item] } }
-    level_id: { type: enum, values: [L-0, L-1, L-2, L-3, L-4, L-5], required_for_v2_records: true }
-    assessment_status: { type: enum, values: [assessed, not-assessed], required_for_v2_records: true }
-    unassessed_rule: { type: string, description: L-0 is a distinct not-assessed state; score 0; never map legacy L0 to L-0 }
+    scores: { type: map, value_schema: criterion_score, description: criterion id -> criterion_score }
+  criterion_score:
+    required: [level_id, assessment_status, score, evidence_confidence]
+    fields:
+      level_id: { type: enum, values: [L-0, L-1, L-2, L-3, L-4, L-5] }
+      assessment_status: { type: enum, values: [assessed, not-assessed] }
+      score: { type: number, minimum: 0, maximum: 100 }
+      evidence_confidence: { type: enum, values: [observed, evidenced, self-reported, unverified] }
+      evidence: { type: array, items: evidence_item }
+    rules:
+      - L-0 requires assessment_status not-assessed, score 0 and evidence_confidence unverified.
+      - L-1..L-5 require assessment_status assessed; legacy L0 is translated to L-1, never L-0.
     derived: { type: object, description: operations-index, resolved-level L-1..L-5, band, marginal-band EAV, per-dimension scores }
 campaign_record:
   required: [baseline, target, deltas, benchmark]
@@ -45,3 +53,4 @@ compatibility_rule: >-
   keys; records remain benchmarkable across 1.x/2.x via migrations/v1-to-v2-map.yaml.
   Version 2.1.0 records use canonical scale identifiers and explicit assessment_status;
   legacy 2.0.0 identifiers are translated only through migrations/scale-v1-to-v2-map.yaml.
+  An explicit L-0 score entry uses evidence_confidence unverified (0.3); no evidence item is fabricated.
