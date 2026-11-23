@@ -3,7 +3,7 @@
   "title": "Operations Maturity Model",
   "layer": "maturity-model",
   "architectural_concern": "Operations",
-  "version": "v2.1.0",
+  "version": "v3.0.0",
   "license": "MIT",
   "conformance_status": "structural",
   "standards_alignment": [
@@ -14,12 +14,24 @@
     "en"
   ],
   "dimensions": [
-    "Value-Stream & Daily Operations",
-    "Capability Orchestration",
-    "Service & Process Management",
-    "Workforce & Ways of Working",
-    "Technology & Infrastructure Operations",
-    "Strategy Alignment & Operating Blueprint"
+    "Operating Model",
+    "Operational Capabilities",
+    "Value Streams & Processes",
+    "Service & Delivery Management",
+    "People & Organization",
+    "Resources & Assets",
+    "Information & Technology",
+    "Operational Governance & Resilience",
+    "Operational Performance & Value"
   ],
-  "description": "Operations Maturity Model — assesses enterprise operations: how day-to-day activities leverage key organizational capabilities to deliver outcomes. Covers value-stream and daily operations, capability orchestration, service and process management, workforce and ways of working, technology and infrastructure operations, and strategy alignment with the operating blueprint."
+  "perspectives": [
+    "Current Operational Realization",
+    "Future Operational Readiness"
+  ],
+  "scale": {
+    "id": "dea:scale-operations-v2",
+    "levels": ["L-0", "L-1", "L-2", "L-3", "L-4", "L-5"],
+    "adoption_note": "L-0 + L-1..L-5 numbering per dea-metamodel #214 (adoption pending ratification)"
+  },
+  "description": "Operations Maturity Model — the parent operational assessment for enterprise operations: how the enterprise mobilizes capabilities, processes, services, people, resources, information, technology, governance and performance mechanisms to realize its intent and deliver value. Nine dimensions assessed through two complementary perspectives on every criterion — Current Operational Realization and Future Operational Readiness — with the operational transformation gap as a first-class result."
 }

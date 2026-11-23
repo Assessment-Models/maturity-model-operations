@@ -2,14 +2,17 @@ id: maturity-model-operations
 type: maturity-model
 name: Operations Maturity Model
 description: >-
-  Operations Maturity Model — assesses enterprise operations: how day-to-day
-  activities leverage key organizational capabilities to deliver outcomes.
-  Covers value-stream and daily operations, capability orchestration, service
-  and process management, workforce and ways of working, technology and
-  infrastructure operations, and strategy alignment with the operating
-  blueprint. Includes the Handshake & Touchpoint Model linking sibling
-  assessment models in the ecosystem.
-version: 2.1.1
+  Operations Maturity Model — the parent operational assessment for enterprise
+  operations: how the enterprise mobilizes capabilities, processes, services,
+  people, resources, information, technology, governance and performance
+  mechanisms to realize its intent and deliver value. Nine dimensions
+  (D01..D09) assessed through two complementary perspectives on every
+  criterion — Current Operational Realization and Future Operational
+  Readiness — with the operational transformation gap as a first-class
+  result. Includes the Handshake & Touchpoint Model linking sibling and
+  specialized assessment models (autonomous operations, services delivery,
+  technology, digital transformation, modernization) in the ecosystem.
+version: 3.0.0
 conformance:
   contract:
     id: maturity-scale-contract
