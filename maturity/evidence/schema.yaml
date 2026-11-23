@@ -5,7 +5,7 @@
 id: dea:operations-evidence-schema-v1
 repo_id: maturity-model-operations
 model: dea:maturity-operations
-version: 1.0.0
+version: 1.1.0
 status: stable
 confidence_levels:
   observed: 1.0
@@ -25,11 +25,14 @@ assessment_record:
   required: [id, model, date, assessor, scores]
   fields:
     id: { type: string, pattern: ops-assessment-[a-z0-9-]+ }
-    model: { type: string, example: dea:maturity-operations@2.0.0 }
+    model: { type: string, example: dea:maturity-operations@2.1.0 }
     date: { type: date }
     assessor: { type: string }
-    scores: { type: map, description: criterion id -> { score: 0-100, evidence: [evidence_item] } }
-    derived: { type: object, description: operations-index, band, effort-adjusted, per-dimension scores }
+    scores: { type: map, description: criterion id -> { level_id: L-0..L-5, assessment_status: assessed|not-assessed, score: 0-100, evidence: [evidence_item] } }
+    level_id: { type: enum, values: [L-0, L-1, L-2, L-3, L-4, L-5], required_for_v2_records: true }
+    assessment_status: { type: enum, values: [assessed, not-assessed], required_for_v2_records: true }
+    unassessed_rule: { type: string, description: L-0 is a distinct not-assessed state; score 0; never map legacy L0 to L-0 }
+    derived: { type: object, description: operations-index, resolved-level L-1..L-5, band, marginal-band EAV, per-dimension scores }
 campaign_record:
   required: [baseline, target, deltas, benchmark]
   fields:
@@ -40,3 +43,5 @@ campaign_record:
 compatibility_rule: >-
   Assessment records carry the model version used. Criterion IDs are permanent
   keys; records remain benchmarkable across 1.x/2.x via migrations/v1-to-v2-map.yaml.
+  Version 2.1.0 records use canonical scale identifiers and explicit assessment_status;
+  legacy 2.0.0 identifiers are translated only through migrations/scale-v1-to-v2-map.yaml.
