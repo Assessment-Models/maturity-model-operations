@@ -93,6 +93,17 @@ for label, obj in (("model register", register), ("criteria register", criteria_
     if (obj.get("scale_reference") or {}).get("id") != "dea:scale-operations-v2":
         errors.append(f"{label}: missing canonical Operations scale reference")
 
+# Assessment record semantics.
+record_schema = evidence_schema.get("assessment_record") or {}
+score_entry = record_schema.get("criterion_score") or {}
+if score_entry.get("required") != ["level_id", "assessment_status", "score", "evidence_confidence"]:
+    errors.append("evidence schema: criterion_score required fields are incomplete")
+score_rules = score_entry.get("rules") or []
+if not any("L-0 requires" in str(rule) and "unverified" in str(rule) for rule in score_rules):
+    errors.append("evidence schema: L-0 must require not-assessed, score 0 and unverified confidence")
+if not any("legacy L0" in str(rule) and "L-1" in str(rule) for rule in score_rules):
+    errors.append("evidence schema: legacy L0 must be distinguished from canonical L-0")
+
 # Questionnaire response scale.
 response_scale = questionnaire.get("response_scale") or {}
 if response_scale.get("assessed_levels") != ["L-1", "L-2", "L-3", "L-4", "L-5"]:
