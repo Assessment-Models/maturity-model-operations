@@ -9,7 +9,7 @@ description: >-
   infrastructure operations, and strategy alignment with the operating
   blueprint. Includes the Handshake & Touchpoint Model linking sibling
   assessment models in the ecosystem.
-version: 2.1.0
+version: 2.1.1
 conformance:
   contract:
     id: maturity-scale-contract
