@@ -94,29 +94,44 @@ See the [assessment questionnaire](maturity/assessment-questionnaire.yaml), [evi
 
 ## Maturity progression and scoring
 
-The Operations model uses five capability levels identified **L0–L4**. These identifiers and their meanings are defined by this model's current scale; they should not be confused with the L-0 Not Assessed sentinel used by some other Assessment-Models instruments.
+The Operations Maturity Model uses five assessed capability levels, identified **L-1 through L-5**, and a separate **L-0 Not Assessed** state. L-0 is not a maturity level: it records that a criterion has not been assessed and must never be interpreted as L-1 Emergent.
 
-| Model level | Capability band | Canonical score range | Interpretation |
+| Identifier | Capability level | Canonical score range | Interpretation |
 |---|---|---:|---|
-| L0 | Emergent | 0–20 | Operations is reactive and person-dependent |
-| L1 | Structured | 21–45 | Core practices are documented and becoming consistent |
-| L2 | Systematic | 46–70 | Operations is governed, standardized and metrics-driven |
-| L3 | Adaptive | 71–88 | Operations senses and responds using predictive insight and automation |
-| L4 | Self-Optimising | 89–100 | Continuous improvement is embedded and increasingly autonomous |
+| L-0 | Not Assessed | Not a maturity band | No assessment evidence has been examined; recorded distinctly and contributes zero |
+| L-1 | Emergent | 0–20 | Operations is reactive and person-dependent |
+| L-2 | Structured | 21–45 | Core practices are documented and becoming consistent |
+| L-3 | Systematic | 46–70 | Operations is governed, standardized and metrics-driven |
+| L-4 | Adaptive | 71–88 | Operations senses and responds using predictive insight and automation |
+| L-5 | Self-Optimising | 89–100 | Continuous improvement is embedded and increasingly autonomous |
 
-The evaluation method calculates the result in the following sequence:
+The five assessed level identifiers align with the canonical v2 level-identification convention. The model retains its Operations-specific level names, definitions and evidence expectations. Historical records using the former model-local identifiers are translated through the explicit [scale migration map](migrations/scale-v1-to-v2-map.yaml): legacy L0–L4 map respectively to L-1–L-5. Legacy L0 is **not** the new L-0 Not Assessed state.
 
-1. **Criterion score:** map the questionnaire response level to 0–100 using `(level / 4) × 100`.
-2. **Evidence adjustment:** multiply the criterion score by the evidence-confidence multiplier.
-3. **Subdimension score:** calculate the mean of its criteria.
+The evaluation method calculates results in this sequence:
+
+1. **Criterion score:** select an assessed level L-1–L-5 and map its ordinal to 0, 25, 50, 75 or 100. L-0 is reserved for an unassessed criterion and contributes zero; it is not an assessed capability level.
+2. **Evidence adjustment:** apply the existing evidence-confidence multiplier to assessed criterion scores.
+3. **Subdimension score:** calculate the mean of its criteria, with an unassessed criterion contributing zero rather than being silently omitted.
 4. **Dimension score:** calculate the mean of its subdimensions.
 5. **Operations Index:** calculate the weighted sum of the six dimension scores using the declared dimension weights.
-6. **Maturity band:** resolve the Operations Index against the canonical band ranges.
-7. **Effort-adjusted value:** multiply the Operations Index by the effort multiplier for the resolved band.
+6. **Maturity band and level:** resolve the Operations Index against the canonical v2 score bands. The resolved capability level is L-1–L-5; score-based resolution never returns L-0.
+7. **Effort-adjusted value (EAV):** calculate the marginal score contribution within each band and divide each contribution by that band's effort multiplier:
 
-The effort-adjusted value is a supplementary signal for understanding the relative effort associated with progression. It is not itself a maturity score, a financial valuation or evidence of realized benefits.
+   `EAV(S) = Σ(Pk(S) / Mk)`
 
-The scoring rules and band definitions are maintained in [maturity/evaluation.yaml](maturity/evaluation.yaml) and [maturity/scale.yaml](maturity/scale.yaml).
+   where `Pk(S)` is the number of score points contributed by aggregate score `S` within band `k`, and `Mk` is its multiplier.
+
+| Marginal score interval | Effort multiplier |
+|---|---:|
+| [0, 20] | 1.0 |
+| (20, 45] | 1.5 |
+| (45, 70] | 2.5 |
+| (70, 88] | 4.0 |
+| (88, 100] | 6.0 |
+
+EAV accumulates progressively across the bands. It does **not** multiply the entire Operations Index by the multiplier of the resolved band. Its theoretical maximum is 53.1666666667; reported values are rounded to two decimal places. EAV is a supplementary effort-weighted index, distinct from the 0–100 Operations Index, and does not determine maturity-level resolution.
+
+The worked [Operations scoring example](examples/operations-2026.yaml) and [baseline-versus-target campaign](campaigns/baseline-vs-target-2026.yaml) demonstrate the calculations. The normative rules are maintained in [maturity/evaluation.yaml](maturity/evaluation.yaml) and the level definitions in [maturity/scale.yaml](maturity/scale.yaml).
 
 ## Assessment results and priorities
 
@@ -187,9 +202,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CHANGELOG.md](CHANGELOG.md).
 
 ## Status
 
-**Repository maturity-model release: 2.0.0** · **License:** MIT
+**Repository maturity-model release: 2.1.0** · **License:** MIT
 
-The 2.0.0 model expands the assessment from technology operations to enterprise operations. Its six-dimension criteria register, questionnaire, evaluation method and evidence schema define the current assessment instrument.
+The 2.1.0 model retains the enterprise-wide assessment from technology operations to enterprise operations. Its six-dimension criteria register, questionnaire, evaluation method and evidence schema define the current assessment instrument.
 
 ## License
 
