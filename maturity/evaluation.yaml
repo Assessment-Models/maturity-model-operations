@@ -30,7 +30,8 @@ records:
 benchmarking:
   criterion_ids_are_permanent: true
   cross_version_rule: >-
-    Assessment records carry the model version; 1.x records convert via
-    migrations/v1-to-v2-map.yaml. Breaking criterion-ID changes require a
+    Assessment records carry the model version; criterion identity conversion uses
+    migrations/v1-to-v2-map.yaml and legacy scale identifiers use
+    migrations/scale-v1-to-v2-map.yaml. Breaking criterion-ID changes require a
     minor-model-version bump and a published migration map.
 touchpoints: touchpoints.yaml
