@@ -1,13 +1,17 @@
 #!/usr/bin/env python3
-"""Level 1 local validation for the Operations Maturity Model.
+"""Level 1 local validation for the Operations Maturity Model (v3, CR-OM-01).
 
-Validates canonical scale identity, legacy crosswalk, assessment-status semantics,
-canonical score-band resolution, marginal-band EAV, worked examples and manifest
-handshake. Exits non-zero and lists every detected failure.
+Validates canonical scale identity and legacy crosswalk (CR-AM-17), marginal-band
+EAV (CR-AM-19), the v3 enterprise-operations register (nine dimensions, dual
+perspectives), questionnaire/evidence/touchpoint/migration resolution, version
+coherence, and the worked example + campaign math. Exits non-zero and lists every
+detected failure.
 """
 from __future__ import annotations
 
+import json
 import math
+import re
 import sys
 from pathlib import Path
 
@@ -15,6 +19,9 @@ import yaml
 
 ROOT = Path(__file__).resolve().parent.parent
 errors: list[str] = []
+
+V3_VERSION = "3.0.0"
+CRITERION_ID = re.compile(r"^OPS-D0[1-9]-SD0[1-9]-C[0-9]{2}$")
 
 
 def load(rel: str):
@@ -32,11 +39,13 @@ def load(rel: str):
 manifest = load("model.yaml")
 scale = load("maturity/scale.yaml")
 register = load("maturity/model/operations.yaml")
-criteria_register = load("maturity/model/operations-v2-draft.yaml")
 evaluation = load("maturity/evaluation.yaml")
 questionnaire = load("maturity/assessment-questionnaire.yaml")
 evidence_schema = load("maturity/evidence/schema.yaml")
-migration = load("migrations/scale-v1-to-v2-map.yaml")
+touchpoints = load("touchpoints.yaml")
+blueprint = load("maturity/blueprint-deduction.yaml")
+scale_migration = load("migrations/scale-v1-to-v2-map.yaml")
+register_migration = load("migrations/v2-to-v3-map.yaml")
 example = load("examples/operations-2026.yaml")
 campaign = load("campaigns/baseline-vs-target-2026.yaml")
 
@@ -78,8 +87,8 @@ if actual != EXPECTED:
     errors.append(f"scale: expected canonical levels {EXPECTED!r}, found {actual!r}")
 if scale.get("id") != "dea:scale-operations-v2":
     errors.append("scale: id must be dea:scale-operations-v2")
-if scale.get("version") != "2.0.0":
-    errors.append("scale: version must be 2.0.0")
+if scale.get("version") != V3_VERSION:
+    errors.append(f"scale: version must be {V3_VERSION}")
 if scale.get("ordering") != "ascending":
     errors.append("scale: ordering must be ascending")
 if (scale.get("progression") or {}).get("effort_multiplier") != {
@@ -90,18 +99,51 @@ sentinel = next((x for x in levels if x.get("id") == "L-0"), {})
 if "not a capability level" not in str(sentinel.get("definition", "")).lower():
     errors.append("scale: L-0 must be explicitly defined as a non-capability sentinel")
 
-# Model bindings.
-for label, obj in (("model register", register), ("criteria register", criteria_register)):
-    if obj.get("repo_id") != manifest.get("id"):
-        errors.append(f"{label}: repo_id does not match model manifest")
-    if obj.get("scale_levels") != ["L-1", "L-2", "L-3", "L-4", "L-5"]:
-        errors.append(f"{label}: scale_levels must reference L-1..L-5 only")
-    if obj.get("unassessed_level") != "L-0":
-        errors.append(f"{label}: unassessed_level must be L-0")
-    if (obj.get("scale_reference") or {}).get("id") != "dea:scale-operations-v2":
-        errors.append(f"{label}: missing canonical Operations scale reference")
+# v3 register: identity, nine dimensions, dual perspectives.
+if register.get("repo_id") != manifest.get("id"):
+    errors.append("register: repo_id does not match model manifest")
+if register.get("scale_levels") != ["L-1", "L-2", "L-3", "L-4", "L-5"]:
+    errors.append("register: scale_levels must reference L-1..L-5 only")
+if register.get("unassessed_level") != "L-0":
+    errors.append("register: unassessed_level must be L-0")
+scale_ref = register.get("scale_reference") or {}
+if scale_ref.get("id") != "dea:scale-operations-v2" or scale_ref.get("version") != V3_VERSION:
+    errors.append("register: missing canonical Operations scale reference at the release version")
+perspectives = register.get("perspectives") or []
+if [p.get("id") for p in perspectives if isinstance(p, dict)] != ["current-realization", "future-readiness"]:
+    errors.append("register: perspectives must declare current-realization and future-readiness")
+dims, sds, crits = [], {}, {}
+for dim in register.get("dimensions", []) or []:
+    dims.append(dim.get("id"))
+    for sd in dim.get("sub_dimensions", []) or []:
+        sds[sd.get("id")] = dim.get("id")
+        for c in sd.get("criteria", []) or []:
+            crits[c.get("id")] = c
+if len(dims) != 9:
+    errors.append(f"register: expected 9 dimensions (D01..D09), found {len(dims)}")
+if len(crits) < 120:
+    errors.append(f"register: expected >=120 criteria, found {len(crits)}")
+weights = {d.get("id"): d.get("weight") for d in register.get("dimensions", []) or []}
+if abs(sum(w for w in weights.values() if w is not None) - 1.0) > 0.001:
+    errors.append("register: dimension weights must sum to 1.00")
+for cid, c in crits.items():
+    if not CRITERION_ID.match(cid or ""):
+        errors.append(f"register: criterion id {cid!r} violates the OPS-D0#-SD0#-C## pattern")
+    for field in ("statement", "intent", "current_expectation", "future_expectation", "evidence", "indicators"):
+        if not c.get(field):
+            errors.append(f"register: criterion {cid} missing {field}")
+if len(crits) != len(set(crits)):
+    errors.append("register: duplicate criterion ids")
 
-# Assessment record semantics.
+# Evidence schema: criterion pattern, assessment-status semantics.
+pattern = ((evidence_schema.get("evidence_item") or {}).get("fields", {}).get("criterion", {}) or {}).get("pattern")
+if not pattern:
+    errors.append("evidence schema: evidence_item.fields.criterion.pattern is required")
+else:
+    rx = re.compile(pattern)
+    unmatched = [cid for cid in crits if not rx.match(cid)]
+    if unmatched:
+        errors.append(f"evidence schema: pattern {pattern!r} rejects {len(unmatched)} register ids (e.g. {unmatched[0]})")
 record_schema = evidence_schema.get("assessment_record") or {}
 score_entry = record_schema.get("criterion_score") or {}
 if score_entry.get("required") != ["level_id", "assessment_status", "score", "evidence_confidence"]:
@@ -111,8 +153,11 @@ if not any("L-0 requires" in str(rule) and "unverified" in str(rule) for rule in
     errors.append("evidence schema: L-0 must require not-assessed, score 0 and unverified confidence")
 if not any("legacy L0" in str(rule) and "L-1" in str(rule) for rule in score_rules):
     errors.append("evidence schema: legacy L0 must be distinguished from canonical L-0")
+dual = record_schema.get("dual_perspective_score") or {}
+if dual.get("required") != ["current", "future"]:
+    errors.append("evidence schema: dual_perspective_score must require current and future entries")
 
-# Questionnaire response scale.
+# Questionnaire: response scale, perspectives, coverage identity.
 response_scale = questionnaire.get("response_scale") or {}
 if response_scale.get("assessed_levels") != ["L-1", "L-2", "L-3", "L-4", "L-5"]:
     errors.append("questionnaire: assessed_levels must be L-1..L-5")
@@ -122,16 +167,86 @@ if response_scale.get("score_mapping") != {
     "L-1": 0, "L-2": 25, "L-3": 50, "L-4": 75, "L-5": 100
 }:
     errors.append("questionnaire: score mapping is incorrect")
+for p in ("current-realization", "future-readiness"):
+    if p not in (questionnaire.get("perspectives") or []):
+        errors.append(f"questionnaire: perspectives must include {p}")
+q_ids = [e.get("criterion") for e in questionnaire.get("entries", []) or [] if isinstance(e, dict) and e.get("criterion")]
+if sorted(q_ids) != sorted(crits):
+    missing = set(crits) - set(q_ids)
+    extra = set(q_ids) - set(crits)
+    errors.append(f"questionnaire: ids do not match register (missing {len(missing)}, extra {len(extra)})")
+
+# Touchpoints resolve into the register (one criterion may feed several peers).
+tp_pairs = set()
+declared_count = 0
+for tp in touchpoints.get("touchpoints", []) or []:
+    if not (tp.get("peer_touchpoint_id") and tp.get("mirrors")):
+        errors.append(f"touchpoints: {tp.get('id')} is missing peer_touchpoint_id/mirrors")
+    for m in tp.get("criteria_mapping", []) or []:
+        ours = m.get("ours")
+        declared_count += 1
+        pair = (tp.get("id"), ours)
+        if pair in tp_pairs:
+            errors.append(f"touchpoints: {tp.get('id')} maps {ours!r} more than once")
+        tp_pairs.add(pair)
+        if ours not in crits:
+            errors.append(f"touchpoints: {tp.get('id')} maps unknown criterion {ours!r}")
+
+# Blueprint deduction rules resolve.
+for rule in blueprint.get("rules", []) or []:
+    for sd_id in ((rule.get("when") or {}).get("dims") or {}):
+        if sd_id not in sds:
+            errors.append(f"blueprint: rule {rule.get('id')} references unknown sub-dimension {sd_id!r}")
+    gap_rule = (rule.get("when") or {}).get("gap")
+    if gap_rule and gap_rule.get("rule") != "readiness < current":
+        errors.append(f"blueprint: rule {rule.get('id')} has an unrecognized gap rule")
 
 # Legacy compatibility map: L0 is Emergent, not the new L-0 sentinel.
-legacy = ((migration.get("mapping") or {}).get("legacy_levels") or {})
+legacy = ((scale_migration.get("mapping") or {}).get("legacy_levels") or {})
 if legacy != {"L0": "L-1", "L1": "L-2", "L2": "L-3", "L3": "L-4", "L4": "L-5"}:
-    errors.append(f"migration: unexpected legacy level mapping {legacy!r}")
-unassessed = ((migration.get("mapping") or {}).get("new_unassessed_state") or {})
+    errors.append(f"scale migration: unexpected legacy level mapping {legacy!r}")
+unassessed = ((scale_migration.get("mapping") or {}).get("new_unassessed_state") or {})
 if unassessed.get("id") != "L-0" or unassessed.get("legacy_equivalent") is not None:
-    errors.append("migration: L-0 must have no legacy equivalent")
-if migration.get("status") != "stable":
-    errors.append("migration: scale crosswalk must be stable")
+    errors.append("scale migration: L-0 must have no legacy equivalent")
+if scale_migration.get("status") != "stable":
+    errors.append("scale migration: scale crosswalk must be stable")
+
+# Register migration: all 51 v2 criteria re-homed into the v3 register.
+migration_from = [m.get("from") for m in register_migration.get("criterion_map", []) or [] if not m.get("secondary")]
+migration_to = [m.get("to") for m in register_migration.get("criterion_map", []) or []]
+if len(set(migration_from)) != 51:
+    errors.append(f"register migration: expected 51 primary v2 criterion mappings, found {len(set(migration_from))}")
+for to in migration_to:
+    if to not in crits:
+        errors.append(f"register migration: target {to!r} does not exist in the v3 register")
+
+# Version coherence across the declared artifacts.
+readme_text = (ROOT / "README.md").read_text() if (ROOT / "README.md").is_file() else ""
+std = load("standard.yaml") or {}
+std_version = ((std.get("model") or {}).get("version") or "").strip()
+manifest_version = ""
+try:
+    manifest_version = json.loads((ROOT / "assessment-manifest.json").read_text()).get("version", "")
+except (OSError, ValueError):
+    errors.append("assessment-manifest.json: not valid JSON")
+for where, v in {
+    "standard.yaml": std_version,
+    "assessment-manifest.json": (manifest_version or "").lstrip("v"),
+    "register": register.get("version"),
+    "evaluation.model_version": evaluation.get("model_version"),
+    "questionnaire.model_version": questionnaire.get("model_version"),
+}.items():
+    if v != V3_VERSION:
+        errors.append(f"version coherence: {where} is {v!r}, expected {V3_VERSION!r}")
+if f"release: {V3_VERSION}" not in readme_text:
+    errors.append(f"version coherence: README status line does not state {V3_VERSION!r}")
+if register.get("score_scheme") != "dea-maturity-v2" or (register.get("band_reference") or {}).get("id") != "dea:maturity-bands-v2":
+    errors.append("register: score_scheme/band_reference must bind dea:maturity-bands-v2")
+if evaluation.get("dimension_weights") != weights:
+    errors.append("evaluation: dimension_weights differ from the register weights")
+for p in ("current-realization", "future-readiness"):
+    if p not in (evaluation.get("perspectives") or []):
+        errors.append(f"evaluation: perspectives must include {p}")
 
 # Canonical bands use continuous intervals so fractional Operations Index values
 # resolve without gaps. Each band contributes only the score points within it.
@@ -178,55 +293,98 @@ for score, expected in boundary_expected.items():
 if not math.isclose(eav(100.0), 53.1666666667, abs_tol=1e-9):
     errors.append("EAV: theoretical maximum is not 53.1666666667")
 
-# Worked example.
-score = example.get("aggregated_score")
-if not isinstance(score, (int, float)) or not 0 <= score <= 100:
-    errors.append("example: aggregated_score must be numeric and within [0,100]")
-else:
-    resolved = resolve_band(float(score))
-    if not resolved:
-        errors.append("example: Operations Index does not resolve to a canonical band")
-    else:
-        band_id, level_id = resolved
-        if example.get("resolved_band") != band_id:
-            errors.append(f"example: expected band {band_id}, found {example.get('resolved_band')!r}")
-        if example.get("resolved_level") != level_id:
-            errors.append(f"example: expected level {level_id}, found {example.get('resolved_level')!r}")
-        expected_eav = round(eav(float(score)), 2)
-        if not math.isclose(float(example.get("effort_adjusted_value", -1)), expected_eav, abs_tol=0.01):
-            errors.append(f"example: expected marginal EAV {expected_eav}, found {example.get('effort_adjusted_value')!r}")
-
-# Campaign examples and deltas.
-for key in ("baseline", "target"):
-    record = campaign.get(key) or {}
-    index = record.get("operations_index")
-    if not isinstance(index, (int, float)):
-        errors.append(f"campaign {key}: operations_index must be numeric")
-        continue
-    band = resolve_band(float(index))
-    if not band:
-        errors.append(f"campaign {key}: no canonical band for score {index}")
-        continue
-    if record.get("resolved_band") != band[0] or record.get("resolved_level") != band[1]:
-        errors.append(f"campaign {key}: maturity resolution does not match score {index}")
-    expected = round(eav(float(index)), 2)
-    if not math.isclose(float(record.get("effort_adjusted_value", -1)), expected, abs_tol=0.01):
-        errors.append(f"campaign {key}: expected EAV {expected}, found {record.get('effort_adjusted_value')!r}")
-deltas = campaign.get("deltas") or {}
-expected_delta = round(
-    eav(float((campaign.get("target") or {}).get("operations_index", 0)))
-    - eav(float((campaign.get("baseline") or {}).get("operations_index", 0))), 2
-)
-if not math.isclose(float(deltas.get("effort_adjusted_value", -1)), expected_delta, abs_tol=0.01):
-    errors.append(f"campaign: expected EAV delta {expected_delta}, found {deltas.get('effort_adjusted_value')!r}")
-
-# Ensure scoring contract declares the marginal formula and excludes L-0 from
-# maturity resolution.
+# Ensure the scoring contract declares score preservation, the marginal formula
+# and excludes L-0 from maturity resolution.
 method_text = " ".join((evaluation.get("method") or {}).get("steps") or [])
 if "EAV(S)" not in method_text or "Pk(S) / Mk" not in method_text:
     errors.append("evaluation: marginal-band EAV formula is missing")
 if "L-0 is never returned" not in method_text:
     errors.append("evaluation: L-0 exclusion from score-based maturity resolution is missing")
+if "0, 25, 50, 75, 100" not in method_text:
+    errors.append("evaluation: CR-AM-17 score preservation mapping is missing")
+if "future readiness" not in method_text or "Transformation Gap" not in method_text:
+    errors.append("evaluation: dual-perspective steps are missing")
+
+
+def check_index_view(name, view):
+    """Weighted index, band/level resolution, marginal EAV, readiness/gap fields."""
+    ds = view.get("dimension_scores") or {}
+    if set(ds) != set(dims):
+        errors.append(f"{name}: dimension_scores keys {sorted(ds)} != register dimensions {sorted(dims)}")
+        return None
+    expected_index = sum(float(ds[d]) * float(weights[d]) for d in dims if d in ds)
+    idx = view.get("operations_index")
+    if not isinstance(idx, (int, float)):
+        errors.append(f"{name}: operations_index must be numeric")
+        return None
+    if abs(float(idx) - round(expected_index, 1)) > 0.06:
+        errors.append(f"{name}: operations_index {idx} != weighted dimension sum ({round(expected_index, 2)})")
+    if not (0 <= float(idx) <= 100):
+        errors.append(f"{name}: operations_index {idx} outside [0, 100]")
+        return None
+    resolved = resolve_band(float(idx))
+    if not resolved:
+        errors.append(f"{name}: operations_index {idx} resolves to no canonical band")
+        return None
+    band_id, level_id = resolved
+    if view.get("resolved_band") != band_id:
+        errors.append(f"{name}: resolved_band {view.get('resolved_band')!r} != computed {band_id!r}")
+    if view.get("resolved_level") != level_id:
+        errors.append(f"{name}: resolved_level {view.get('resolved_level')!r} != computed {level_id!r}")
+    expected_eav = round(eav(float(idx)), 2)
+    if not math.isclose(float(view.get("effort_adjusted_value", -1)), expected_eav, abs_tol=0.01):
+        errors.append(f"{name}: expected marginal EAV {expected_eav}, found {view.get('effort_adjusted_value')!r}")
+    readiness = view.get("readiness_index")
+    gap = view.get("transformation_gap")
+    if readiness is not None and gap is not None:
+        if abs(float(gap) - (float(readiness) - float(idx))) > 0.06:
+            errors.append(f"{name}: transformation_gap {gap} != readiness_index - operations_index")
+    return float(idx)
+
+
+# Worked example.
+check_index_view("example", example)
+for sample in example.get("criterion_score_samples", []) or []:
+    for side in ("current", "future"):
+        level_id = ((sample.get(side) or {}).get("level_id"))
+        if level_id not in {b[4] for b in BANDS} | {"L-0"}:
+            errors.append(f"example: sample {sample.get('criterion')} has invalid {side} level {level_id!r}")
+    if ((sample.get("current") or {}).get("level_id") == "L-0") and (
+        (sample.get("current") or {}).get("assessment_status") != "not-assessed"
+        or float((sample.get("current") or {}).get("score", -1)) != 0
+        or (sample.get("current") or {}).get("evidence_confidence") != "unverified"
+    ):
+        errors.append(f"example: sample {sample.get('criterion')} violates the L-0 not-assessed rules")
+
+# Campaign examples and deltas.
+for key in ("baseline", "target"):
+    record = campaign.get(key) or {}
+    if not record:
+        errors.append(f"campaign: missing {key}")
+        continue
+    check_index_view(f"campaign.{key}", record)
+if campaign.get("baseline") and campaign.get("target"):
+    b, t = campaign["baseline"], campaign["target"]
+    for d in dims:
+        bd = (b.get("dimension_scores") or {}).get(d)
+        td = (t.get("dimension_scores") or {}).get(d)
+        delta = ((campaign.get("deltas") or {}).get("dimensions") or {}).get(d)
+        if None not in (bd, td, delta) and abs(float(delta) - (float(td) - float(bd))) > 0.01:
+            errors.append(f"campaign.deltas.dimensions[{d}] is {delta}, expected {float(td) - float(bd):.1f}")
+    for field in ("operations_index", "readiness_index"):
+        d = (campaign.get("deltas") or {}).get(field)
+        if d is not None and abs(float(d) - (float(t[field]) - float(b[field]))) > 0.06:
+            errors.append(f"campaign.deltas.{field} is {d}, expected {float(t[field]) - float(b[field]):.2f}")
+    d_gap = (campaign.get("deltas") or {}).get("transformation_gap")
+    if d_gap is not None:
+        expected_gap_delta = float(t.get("transformation_gap", 0)) - float(b.get("transformation_gap", 0))
+        if abs(float(d_gap) - expected_gap_delta) > 0.06:
+            errors.append(f"campaign.deltas.transformation_gap is {d_gap}, expected {expected_gap_delta:.2f}")
+    d_eav = (campaign.get("deltas") or {}).get("effort_adjusted_value")
+    if d_eav is not None:
+        expected_delta = round(eav(float(t["operations_index"])) - eav(float(b["operations_index"])), 2)
+        if not math.isclose(float(d_eav), expected_delta, abs_tol=0.01):
+            errors.append(f"campaign: expected EAV delta {expected_delta}, found {d_eav!r}")
 
 if errors:
     print(f"FAIL — {len(errors)} error(s):")
@@ -235,6 +393,9 @@ if errors:
     sys.exit(1)
 
 print(
-    "OK — maturity-model-operations: manifest + canonical scale + legacy crosswalk + "
-    "questionnaire + EAV boundaries + worked examples valid"
+    f"OK — maturity-model-operations v{V3_VERSION}: manifest + canonical scale + legacy crosswalk + "
+    f"v3 register ({len(dims)} dimensions, {len(crits)} criteria, dual perspectives) + evaluation "
+    f"(score preservation + marginal EAV) + questionnaire + evidence + touchpoints "
+    f"({declared_count} mappings) + blueprint + register migration (51 v2 criteria) + "
+    f"EAV boundaries + worked examples valid"
 )
