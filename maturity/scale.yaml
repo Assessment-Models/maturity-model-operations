@@ -2,7 +2,7 @@ id: dea:scale-operations-v2
 version: 2.0.0
 metamodel_version: 1.0.0
 name: Operations Maturity Model Scale (5-level plus unassessed sentinel)
-description: 'Model-owned scale for the Operations Maturity Model. Five capability levels (L-1..L-5) plus L-0 Not Assessed scored against
+description: 'Model-owned scale for the Operations Maturity Model. Five capability levels (L-1..L-5) plus the L-0 Not Assessed sentinel; the five assessed levels are scored against
   the canonical v2 band instance (dea:maturity-bands-v2 v1.0.0): non-linear band widths 20/25/25/18/12
   with per-level effort multipliers 1.0 → 6.0. Linear topology, exponential progression. Level semantics
   are carried verbatim from the authoritative source; only the scoring fields differ between the frozen
@@ -22,7 +22,7 @@ levels:
 - id: L-0
   ordinal: 0
   name: Not Assessed
-  definition: 'Criterion not assessed: no evidence examined. Not a capability level. It records an unassessed state and contributes zero points; it must not be interpreted as the lowest assessed maturity level.'
+  definition: 'Criterion not assessed: no evidence examined. Not a capability level. It records an unassessed state, contributes zero points and carries unverified evidence confidence (0.3); it must not be interpreted as the lowest assessed maturity level.'
   characteristics:
   - No evidence collected or verified.
   expected_practices: []
