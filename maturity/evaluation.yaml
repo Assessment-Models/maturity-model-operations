@@ -11,20 +11,37 @@ status: stable
 method:
   name: weighted-mean-with-evidence-confidence
   steps:
-  - Criterion maturity response: select one assessed capability level L-1..L-5; map ordinal 1..5 to raw score 0, 25, 50, 75, 100 using ((ordinal - 1) / 4) * 100. L-0 is reserved for Not Assessed and is not a scored capability level.
-  - Unassessed criterion: record level_id L-0, assessment_status not-assessed and score 0; do not reinterpret it as L-1 Emergent. The unassessed state contributes zero to aggregation, is reported distinctly and carries unverified evidence confidence (0.3).
-  - Evidence confidence multiplier: observed 1.0, evidenced 0.85, self-reported 0.6, unverified 0.3; retain the existing evidence-confidence adjustment for assessed criteria.
-  - Sub-dimension score: mean of its criteria, with an unassessed criterion contributing zero rather than being silently omitted.
-  - Dimension score: mean of its sub-dimensions.
-  - Operations Index: sum of dimension score x dimension weight (0-100).
-  - Maturity band and level: resolve the unrounded Operations Index against dea:maturity-bands-v2@v1.0.0; the band resolves to L-1..L-5. L-0 is never returned by score-based maturity resolution.
   - >-
-    Effort-adjusted value: calculate marginal contributions progressively across the canonical score bands.
-    EAV(S) = sum(Pk(S) / Mk), where Pk(S) is the number of score points contributed by S within band k
-    and Mk is that band's effort multiplier. Band intervals are [0,20], (20,45], (45,70],
-    (70,88], (88,100]; multipliers are 1.0, 1.5, 2.5, 4.0, 6.0. Report to two decimal places.
-    The theoretical maximum is 53.1666666667.
-  - EAV is supplementary; it does not replace, modify or determine the 0-100 Operations Index or maturity-level resolution.
+    Criterion maturity response: select one assessed capability level L-1..L-5; map ordinal 1..5
+    to raw score 0, 25, 50, 75, 100 using ((ordinal - 1) / 4) * 100. L-0 is reserved for
+    Not Assessed and is not a scored capability level.
+  - >-
+    Unassessed criterion: record level_id L-0, assessment_status not-assessed and score 0;
+    do not reinterpret it as L-1 Emergent. The unassessed state contributes zero to aggregation,
+    is reported distinctly and carries unverified evidence confidence (0.3).
+  - >-
+    Evidence confidence multiplier: observed 1.0, evidenced 0.85, self-reported 0.6,
+    unverified 0.3; retain the existing evidence-confidence adjustment for assessed criteria.
+  - >-
+    Sub-dimension score: mean of its criteria, with an unassessed criterion contributing zero
+    rather than being silently omitted.
+  - >-
+    Dimension score: mean of its sub-dimensions.
+  - >-
+    Operations Index: sum of dimension score x dimension weight (0-100).
+  - >-
+    Maturity band and level: resolve the unrounded Operations Index against
+    dea:maturity-bands-v2@v1.0.0; the band resolves to L-1..L-5. L-0 is never returned
+    by score-based maturity resolution.
+  - >-
+    Effort-adjusted value: calculate marginal contributions progressively across the canonical
+    score bands. EAV(S) = sum(Pk(S) / Mk), where Pk(S) is the number of score points contributed
+    by S within band k and Mk is that band's effort multiplier. Band intervals are [0,20],
+    (20,45], (45,70], (70,88], (88,100]; multipliers are 1.0, 1.5, 2.5, 4.0, 6.0.
+    Report to two decimal places. The theoretical maximum is 53.1666666667.
+  - >-
+    EAV is supplementary; it does not replace, modify or determine the 0-100 Operations Index
+    or maturity-level resolution.
 dimension_weights: { D1: 0.20, D2: 0.18, D3: 0.18, D4: 0.14, D5: 0.20, D6: 0.10 }
 instruments:
   full-assessment: maturity/assessment-questionnaire.yaml
