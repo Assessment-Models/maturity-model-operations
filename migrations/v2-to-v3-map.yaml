@@ -1,0 +1,102 @@
+# =============================================================================
+# migrations/v2-to-v3-map.yaml — CR-OM-01
+# Converts dea:maturity-operations@2.x assessment records to @3.0.0:
+# dimension/criterion re-identification (D1..D6 -> D01..D09, all 51 v2
+# criteria re-homed). Scale identifiers and criterion response scores are
+# handled by the approved CR-AM-17 crosswalk and are PRESERVED here:
+# migrations/scale-v1-to-v2-map.yaml translates legacy L0..L4 -> L-1..L-5
+# (legacy L0 is never L-0) with criterion scores unchanged at 0/25/50/75/100.
+# =============================================================================
+id: dea:operations-migration-v2-to-v3
+from_model: dea:maturity-operations@2.1.1
+to_model: dea:maturity-operations@3.0.0
+status: stable
+level_handling: by migrations/scale-v1-to-v2-map.yaml (identity migration; scores preserved)
+score_preservation: >-
+  Criterion response scores are unchanged by this migration: assessed levels
+  L-1..L-5 map to 0/25/50/75/100 before and after. Historical indexes
+  re-aggregate only because dimension weights and criterion homes change
+  (see dimension_map/criterion_map), not because points change.
+dimension_map:
+  D1: D03          # Value-Stream & Daily Operations -> Value Streams & Processes
+  D2: D02          # Capability Orchestration -> Operational Capabilities
+  D3: [D03, D04]   # Service & Process Management splits: processes -> D03, services -> D04
+  D4: D05          # Workforce & Ways of Working -> People & Organization (team topology -> D01-SD02)
+  D5: [D07, D08]   # Technology & Infrastructure Operations splits: platform/reliability -> D07, incident/problem -> D08; SLO -> D04-SD04, capacity -> D06-SD03, cost -> D09-SD02
+  D6: D01          # Strategy Alignment & Operating Blueprint -> Operating Model; tech adoption -> D07-SD05, exchange -> D05-SD04, reporting -> D09-SD01
+criterion_map:
+# --- v2 D1 Value-Stream & Daily Operations → v3 D03 (+ D06 capacity) ---------
+- { from: OPS-D1-SD1-C01, to: OPS-D03-SD01-C01 }
+- { from: OPS-D1-SD1-C02, to: OPS-D03-SD01-C02 }
+- { from: OPS-D1-SD1-C03, to: OPS-D03-SD01-C03 }
+- { from: OPS-D1-SD2-C04, to: OPS-D03-SD04-C01 }
+- { from: OPS-D1-SD2-C05, to: OPS-D03-SD04-C02 }
+- { from: OPS-D1-SD3-C07, to: OPS-D03-SD04-C03 }
+- { from: OPS-D1-SD3-C08, to: OPS-D03-SD03-C03 }
+- { from: OPS-D1-SD3-C09, to: OPS-D06-SD03-C01, note: capacity management re-homed under Resources & Assets }
+# --- v2 D2 Capability Orchestration → v3 D02 ----------------------------------
+- { from: OPS-D2-SD1-C01, to: OPS-D02-SD01-C01 }
+- { from: OPS-D2-SD1-C02, to: OPS-D02-SD01-C02 }
+- { from: OPS-D2-SD1-C03, to: OPS-D02-SD02-C03, note: health-cadence semantics absorbed by ownership review (primary) and gap tracking (secondary) }
+- { from: OPS-D2-SD1-C03, to: OPS-D02-SD05-C02, secondary: true }
+- { from: OPS-D2-SD2-C04, to: OPS-D02-SD04-C01 }
+- { from: OPS-D2-SD2-C05, to: OPS-D02-SD05-C03 }
+- { from: OPS-D2-SD3-C06, to: OPS-D02-SD04-C02 }
+- { from: OPS-D2-SD3-C07, to: OPS-D02-SD05-C01 }
+- { from: OPS-D2-SD3-C08, to: OPS-D06-SD01-C03, note: reuse-before-build re-homed under resource allocation }
+# --- v2 D3 Service & Process Management → v3 D03 processes + D04 services -----
+- { from: OPS-D3-SD1-C01, to: OPS-D03-SD02-C01 }
+- { from: OPS-D3-SD1-C02, to: OPS-D03-SD03-C01 }
+- { from: OPS-D3-SD1-C03, to: OPS-D03-SD03-C02 }
+- { from: OPS-D3-SD2-C04, to: OPS-D04-SD01-C01 }
+- { from: OPS-D3-SD2-C05, to: OPS-D04-SD04-C01 }
+- { from: OPS-D3-SD2-C06, to: OPS-D04-SD02-C01 }
+- { from: OPS-D3-SD3-C07, to: OPS-D03-SD05-C01 }
+- { from: OPS-D3-SD3-C08, to: OPS-D03-SD05-C02 }
+# --- v2 D4 Workforce & Ways of Working → v3 D05 (+ D01 team topology) ---------
+- { from: OPS-D4-SD1-C01, to: OPS-D05-SD02-C01 }
+- { from: OPS-D4-SD1-C02, to: OPS-D05-SD03-C01 }
+- { from: OPS-D4-SD1-C03, to: OPS-D05-SD03-C03 }
+- { from: OPS-D4-SD2-C04, to: OPS-D01-SD02-C02, note: team topology re-homed under Operating Model structure }
+- { from: OPS-D4-SD2-C05, to: OPS-D05-SD04-C01 }
+- { from: OPS-D4-SD3-C06, to: OPS-D05-SD02-C03, note: sustainable cadence re-homed under roles & workload }
+- { from: OPS-D4-SD3-C07, to: OPS-D05-SD05-C02 }
+# --- v2 D5 Technology & Infrastructure Operations → v3 D07 + D08 (+ D04/D06/D09) ---
+- { from: OPS-D5-SD1-C01, to: OPS-D07-SD01-C01 }
+- { from: OPS-D5-SD1-C02, to: OPS-D07-SD01-C02 }
+- { from: OPS-D5-SD2-C03, to: OPS-D08-SD05-C01, note: incident management re-homed under Governance & Resilience }
+- { from: OPS-D5-SD2-C04, to: OPS-D08-SD05-C02 }
+- { from: OPS-D5-SD2-C05, to: OPS-D08-SD05-C03 }
+- { from: OPS-D5-SD3-C06, to: OPS-D07-SD03-C01 }
+- { from: OPS-D5-SD3-C07, to: OPS-D07-SD05-C02 }
+- { from: OPS-D5-SD3-C08, to: OPS-D07-SD03-C03 }
+- { from: OPS-D5-SD4-C09, to: OPS-D07-SD04-C01 }
+- { from: OPS-D5-SD4-C10, to: OPS-D04-SD04-C02, note: SLO/error budgets re-homed under service-level management }
+- { from: OPS-D5-SD4-C11, to: OPS-D09-SD02-C02, note: cost per workload re-homed under performance & value }
+- { from: OPS-D5-SD4-C12, to: OPS-D06-SD03-C02, note: capacity planning re-homed under Resources & Assets }
+# --- v2 D6 Strategy Alignment & Operating Blueprint → v3 D01 (+ D07/D05/D09) --
+- { from: OPS-D6-SD1-C01, to: OPS-D01-SD04-C01 }
+- { from: OPS-D6-SD1-C02, to: OPS-D09-SD01-C01, note: upward reporting re-homed under performance management }
+- { from: OPS-D6-SD1-C03, to: OPS-D01-SD04-C03 }
+- { from: OPS-D6-SD2-C04, to: OPS-D01-SD01-C01 }
+- { from: OPS-D6-SD2-C05, to: OPS-D01-SD05-C01 }
+- { from: OPS-D6-SD3-C06, to: OPS-D07-SD05-C01, note: digital-nexus adoption re-homed under technology integration }
+- { from: OPS-D6-SD3-C07, to: OPS-D07-SD05-C03 }
+- { from: OPS-D6-SD3-C08, to: OPS-D05-SD04-C03, note: practice exchange re-homed under collaboration & culture }
+rules:
+- >-
+  All 51 v2 criterion IDs resolve to exactly one primary v3 home
+  (OPS-D2-SD1-C03 additionally feeds a secondary home). v3-only criteria
+  (81) are additive and score only from v3.0.0 campaigns.
+- >-
+  Convert a 2.x record by mapping each criterion to its v3 home and
+  re-aggregating with the v3 dimension weights. Criterion levels, response
+  scores (0/25/50/75/100) and the canonical band scheme are unchanged, so
+  per-criterion evidence and scores carry over verbatim through
+  migrations/scale-v1-to-v2-map.yaml identity semantics.
+- >-
+  Evidence of absence: evidenced absence of a capability scores L-1
+  (0 points under the response mapping); L-0 is reserved exclusively for
+  "not assessed" (no evidence examined). Do not convert v2 "no evidence"
+  responses to L-0, and never synthesize L-0 entries for missing legacy
+  records — retain missingness unless a new assessment records not-assessed.

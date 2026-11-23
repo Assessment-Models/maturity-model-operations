@@ -1,72 +1,99 @@
 # =============================================================================
-# maturity/blueprint-deduction.yaml — CR-AM-13 Phase 3 DRAFT
-# Rule map: criterion gap patterns -> recommended operational-blueprint
-# elements. Deduction runs on the assessment record to produce an actionable
-# target state, not just a score.
+# maturity/blueprint-deduction.yaml — CR-OM-01 v0.2.0-draft
+# Rule map: criterion/sub-dimension gap patterns -> recommended operational-
+# blueprint elements. Deduction runs on the assessment record to produce an
+# actionable target state, not just a score. v3: sub-dimension keys remapped
+# to the D01..D09 taxonomy; new rules cover resilience, value realization and
+# the transformation gap (future-readiness perspective).
 # =============================================================================
-id: dea:operations-blueprint-deduction-v1
+id: dea:operations-blueprint-deduction-v2
 repo_id: maturity-model-operations
-version: 0.1.0-draft
+version: 0.2.0-draft
 status: draft
-input: assessment_record (derived per-dimension and per-criterion scores)
+input: assessment_record (derived per-dimension and per-criterion scores, both perspectives)
 output: deduced blueprint elements with rationale and expected band impact
 rules:
 
 - id: bp-flow-cadence
-  when: { dims: { D1-SD1: '<70', D1-SD3: '<70' }, all: true }
+  when: { dims: { D03-SD01: '<70', D03-SD04: '<70' }, all: true }
   prescribe: >-
     Tiered daily huddle design (team -> value-stream -> ops review) plus a
     single demand intake with right-sizing rules and visible WIP limits.
-  expected_impact: raises D1 toward Systematic; improves commitment reliability.
+  expected_impact: raises D03 toward Systematic; improves commitment reliability.
 
 - id: bp-capability-anchoring
-  when: { dims: { D2-SD1: '<70', D2-SD2: '<70' }, all: true }
+  when: { dims: { D02-SD01: '<70', D02-SD04: '<70' }, all: true }
   prescribe: >-
     Capability-to-outcome blueprint workshop: inventory key capabilities,
     map them to value streams, and route operational investment through
     capability gaps.
-  expected_impact: closes the day-to-day vs key-capability leverage gap (D2).
+  expected_impact: closes the day-to-day vs key-capability leverage gap (D02).
 
 - id: bp-service-management
-  when: { dims: { D3-SD1: '<70', D3-SD2: '<60' }, all: true }
+  when: { dims: { D03-SD02: '<70', D04-SD04: '<60' }, all: true }
   prescribe: >-
     Process ownership program (standard, named owners, exception register)
     followed by a minimal service catalogue with SLAs/OLAs for core services.
-  expected_impact: moves D3 from Structured toward Systematic.
+  expected_impact: moves D03/D04 from Structured toward Systematic.
 
 - id: bp-sustainability
-  when: { dims: { D4-SD3: '<70' }, any: true }
+  when: { dims: { D05-SD02: '<70', D05-SD05: '<70' }, any: true }
   prescribe: >-
-    Rota load balancing and runbook currency program; target satisfaction
-    above 7/10 within two quarters.
-  expected_impact: D4-SD3 to Systematic; reduces attrition and escalation load.
+    Workload sustainability and knowledge-currency program (rota load
+    balancing, runbook currency checks, pre-departure handovers); target
+    satisfaction above 7/10 within two quarters.
+  expected_impact: raises D05; reduces attrition and escalation load.
 
 - id: bp-slo-program
-  when: { dims: { 'D5-SD4': '<70', 'D5-SD2': '<70' }, all: true }
+  when: { dims: { D04-SD04: '<70', D08-SD05: '<70' }, all: true }
   prescribe: >-
     SLO program: define SLOs for top customer journeys, publish error
     budgets, enforce release gating, and close the PIR loop within 7 days.
-  expected_impact: raises D5; prerequisite evidence for the autonomous-
+  expected_impact: raises D04/D08; prerequisite evidence for the autonomous-
     operations touchpoint (AO 4.2.5).
 
 - id: bp-observability-first
-  when: { dims: { 'D5-SD1': '<60' }, any: true }
+  when: { dims: { D07-SD01: '<60' }, any: true }
   prescribe: >-
     Centralised telemetry with journey-level SLIs before further automation
-    investment; automation without observability destabilises L3+.
-  expected_impact: D5-SD1 foundations; unblocks predictive detection (D5-SD3-C07).
+    investment; automation without observability destabilises higher levels.
+  expected_impact: D07-SD01 foundations; unblocks predictive detection (OPS-D07-SD05-C02).
 
 - id: bp-strategy-loop
-  when: { dims: { 'D6-SD1': '<70', 'D6-SD2': '<70' }, all: true }
+  when: { dims: { D01-SD04: '<70', D01-SD01: '<70' }, all: true }
   prescribe: >-
     Operations objective cascade (OKR/scorecard) plus a versioned operating-
     model artifact with governance cadence; connect ops review packs to
     business reviews.
-  expected_impact: activates D6; makes day-to-day objectives traceable to goals.
+  expected_impact: activates D01; makes day-to-day objectives traceable to goals.
 
 - id: bp-nexus-adoption
-  when: { dims: { 'D6-SD3': '<70', 'D5-SD4': '>=70' }, all: true }
+  when: { dims: { D07-SD05: '<70', D04-SD04: '>=70' }, all: true }
   prescribe: >-
     Deliberate adoption track for AI/automation/data/platforms in operations,
-    each through the technology-assessment gate (OPS-D6-SD3-C07).
-  expected_impact: D6-SD3 rise without destabilising a strong D5.
+    each through the technology-assessment gate (OPS-D07-SD05-C03).
+  expected_impact: D07-SD05 rise without destabilising strong service-level management.
+
+- id: bp-continuity-resilience
+  when: { dims: { D08-SD04: '<70', D08-SD02: '<70' }, all: true }
+  prescribe: >-
+    Business continuity refresh with exercised disruption scenarios, an
+    owned operational risk register, and stated recovery objectives per
+    critical operation.
+  expected_impact: raises D08; converts resilience from documents into demonstrated recovery.
+
+- id: bp-value-realization
+  when: { dims: { D09-SD02: '>=70', D09-SD03: '<60' }, all: true }
+  prescribe: >-
+    Value-realization program: per-value-stream outcome measurement and a
+    benefits ledger for operational investments; read efficiency separately
+    from enterprise value realization before reinvesting efficiency gains.
+  expected_impact: exposes efficient-but-misaligned operations (D09-SD02 high, D09-SD03 low).
+
+- id: bp-readiness-closure
+  when: { gap: { dimension: any, rule: 'readiness < current' } }
+  prescribe: >-
+    Transformation-gap closure plan for the dimensions where future
+    readiness trails current realization — sequence target-operating-model
+    work before performance pressure exposes the deficit.
+  expected_impact: closes negative transformation gaps; the dual-perspective output of CR-OM-01.

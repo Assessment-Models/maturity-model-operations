@@ -2,7 +2,119 @@
 
 ## [Unreleased]
 
+### [3.0.0] — CR-OM-01: Enterprise Operations v3 (release prepared; tagging gated on dea-metamodel #214 ratification)
+
+Evolution of the model into the parent operational assessment for enterprise
+operations, from CR-Operations-00000 (domain foundation) and
+CR-Model-Assessment-Operations-0001 (evolution architecture), rebased on the
+approved CR-AM-17 scale identity migration and CR-AM-19 marginal-band EAV.
+Full programme: `docs/cr/CR-OM-01-enterprise-operations-v3.md`.
+
+### Added
+
+- **Nine-dimension enterprise-operations taxonomy** — D01 Operating Model,
+  D02 Operational Capabilities, D03 Value Streams & Processes, D04 Service &
+  Delivery Management, D05 People & Organization, D06 Resources & Assets,
+  D07 Information & Technology, D08 Operational Governance & Resilience,
+  D09 Operational Performance & Value. **44 sub-dimensions, 132 criteria**
+  (`OPS-D01-SD01-C01` … `OPS-D09-SD04-C03`), each carrying `statement`,
+  `intent`, `current_expectation`, `future_expectation`, `evidence` and
+  `indicators`.
+- **Dual assessment perspectives** — Current Operational Realization and
+  Future Operational Readiness scored on every criterion without collapsing
+  into one number; derived **Readiness Index** and **Transformation Gap**
+  (readiness − maturity, per dimension and overall). Four assessment result
+  views: current maturity (Operations Index + band + resolved level),
+  performance & value (efficiency/effectiveness read separately from
+  enterprise value realization), future readiness, transformation gap.
+- **Additive progression vocabulary** `ops_stage_by_ordinal` on the register
+  (Absent, Initial, Defined & Managed, Integrated, Adaptive) — metadata,
+  never a second level ladder.
+- `migrations/v2-to-v3-map.yaml` — all 51 v2 criterion ids → v3 homes; scale
+  identifiers and criterion scores are handled by (and preserved through) the
+  CR-AM-17 crosswalk; evidenced-absence and no-synthesized-L-0 rules.
+- `docs/domain/enterprise-operations.md` — authoritative domain definition,
+  boundaries, assessment lenses, method and constructs.
+- `docs/cr/CR-OM-01-enterprise-operations-v3.md` — the change programme
+  (reconnaissance, decisions, architecture, reconciliation with CR-AM-17/19,
+  phases, ecosystem dependencies, risks).
+- Blueprint-deduction rules for resilience, value realization and the
+  transformation gap (`bp-continuity-resilience`, `bp-value-realization`,
+  `bp-readiness-closure`).
+
 ### Changed
+
+- **Level semantics evolve to enterprise operations** (deliberate
+  major-boundary decision, CR-OM-01 §5a): the CR-AM-17 preserve-verbatim
+  choice is superseded for v3 — level definitions/characteristics are
+  rewritten from technology-operations wording to enterprise operations per
+  CR-Operations-00000, while the identifier migration, level names, score
+  bands and criterion score preservation (0/25/50/75/100) are unchanged.
+  L-5 explicitly does NOT require autonomous execution. Renumbering
+  adoption remains annotated pending dea-metamodel #214 ratification.
+- **BREAKING — criterion/dimension re-identification**: v2 D1..D6 map into
+  D01..D09; all 51 v2 criterion ids resolve through the migration map (v2 ids
+  remain resolvable benchmarking keys; 81 criteria are new and score only
+  from v3.0.0 campaigns).
+- Criteria register consolidated: `maturity/model/operations.yaml` becomes
+  the single v3 register (supersedes the v1 identity register at that path
+  and removes `operations-v2-draft.yaml` — the -draft rename recorded as
+  owner cleanup in the 2.0.0 CHANGELOG; 2.1.x additions — `scale_reference`,
+  `unassessed_level`, crosswalk pointer — are folded in).
+- `maturity/evaluation.yaml`: perspectives steps, Readiness Index,
+  Transformation Gap and the four result views added on top of the preserved
+  CR-AM-17 score mapping and CR-AM-19 marginal-band EAV formula;
+  `level_band_map` binding retained; band definitions referenced by id, not
+  restated in prose.
+- Questionnaire regenerated (132 dual-perspective entries) with the
+  `response_scale` contract (assessed levels L-1..L-5, unassessed L-0,
+  score mapping 0/25/50/75/100).
+- Evidence schema: criterion pattern `OPS-D0[1-9]-SD0[1-9]-C[0-9]{2}`;
+  per-perspective `criterion_score` records (2.1.0 structure preserved:
+  `level_id` / `assessment_status` / `score` / `evidence_confidence` with the
+  L-0 and legacy-L0 rules) composed as `current` + `future`; derived results
+  extended with the four views.
+- Touchpoints v0.3.0: every `ours:` mapping re-pointed to v3 criterion ids
+  (v2 ids noted inline); the reciprocal `peer_touchpoint_id` / `mirrors` /
+  `reciprocity` declarations and the corrected AO root-cause mapping
+  (OPS-D5-SD2-C05 → v3 OPS-D08-SD05-C03) are preserved; specialization rule
+  recorded (parent assesses governance/integration of autonomous execution,
+  AO peer assesses its depth; no cross-model score averaging); peer statuses
+  → `peer-remap-pending` pending the reciprocity wave.
+- Worked example and campaign recomputed under v3 (nine dimensions, dual
+  perspectives, marginal-band EAV); campaign re-pinned `@3.0.0`.
+- `model.yaml` 3.0.0 with the parent-assessment description; VERSION,
+  `standard.yaml` and `assessment-manifest.json` aligned at 3.0.0; manifest
+  gains nine dimension names, perspectives and a scale block.
+- `scripts/local_validate.py` extended on the 2.1.x rewrite: adds v3 register
+  taxonomy and dual-perspective field checks, questionnaire/evidence/
+  touchpoint/migration resolution, version coherence across VERSION /
+  model.yaml / standard.yaml / manifest / README, worked-example weighting
+  and campaign delta checks — retaining the canonical scale, crosswalk and
+  marginal-EAV boundary checks.
+- README reworked on the reader-first structure: nine-dimension table, dual
+  perspectives and the four result views, enterprise-operations level
+  semantics with the ops-stage vocabulary, updated boundaries (parent vs
+  specialized models), repository contents and 3.0.0 status.
+
+### Compatibility
+
+- Criterion IDs are permanent benchmarking keys: 1.x records convert via
+  `migrations/v1-to-v2-map.yaml`; 2.x records convert via
+  `migrations/v2-to-v3-map.yaml`; legacy scale identifiers translate only
+  through `migrations/scale-v1-to-v2-map.yaml` (legacy L0 → L-1, never L-0).
+  Criterion response scores are preserved throughout (0/25/50/75/100).
+- Evidenced absence scores L-1; L-0 is reserved exclusively for "not
+  assessed" and is never synthesized for missing legacy records.
+- Operations Index and band/level resolution semantics are unchanged by v3
+  itself; historical indexes re-aggregate only through the dimension/criterion
+  re-homing and the v3 weights.
+- Metamodel compatibility range unchanged (`>=1.0.0 <2.0.0`); scoring
+  handshake unchanged (`dea:maturity-bands-v2@v1.0.0`).
+- Gateway rendering of the six-level ladder is supported by the
+  convention-agnostic engine (levels fix merged).
+
+### Changed (pre-v3, on main)
 
 - **CR-AM-13 Phase 2 reconciliation**: make all six Operations touchpoint relationships explicitly reciprocal with peer touchpoint IDs, mirror IDs and directional reciprocity declarations. Preserve each model's assessment ownership and the draft touchpoint-contract status.
 - Correct the Autonomous Operations root-cause mapping to `OPS-D5-SD2-C05` (problem management); `OPS-D5-SD2-C03` remains the distinct incident-command criterion.

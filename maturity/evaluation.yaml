@@ -1,20 +1,26 @@
 # =============================================================================
-# maturity/evaluation.yaml — RELEASE 2.1.0 (CR-AM-13)
-# Scoring model + assessment method for dea:maturity-operations v2.
+# maturity/evaluation.yaml — RELEASE 3.0.0 (CR-OM-01)
+# Scoring model + assessment method for dea:maturity-operations v3.
+# Adopts main's approved CR-AM-17 score preservation (0/25/50/75/100) and
+# CR-AM-19 marginal-band EAV verbatim; adds the CR-OM-01 dual perspectives.
+# Band definitions are referenced by id from dea:maturity-bands-v2@v1.0.0 and
+# are NOT restated here as local truth (CONTRIBUTING rule 2); the level_band_map
+# below is the binding, not a redefinition.
 # =============================================================================
-id: dea:operations-evaluation-v2
+id: dea:operations-evaluation-v3
 repo_id: maturity-model-operations
 model: dea:maturity-operations
-model_version: 2.1.0
-version: 1.1.0
+model_version: 3.0.0
+version: 2.1.0
 status: stable
 method:
-  name: weighted-mean-with-evidence-confidence
+  name: weighted-mean-with-evidence-confidence-and-perspectives
   steps:
   - >-
     Criterion maturity response: select one assessed capability level L-1..L-5; map ordinal 1..5
     to raw score 0, 25, 50, 75, 100 using ((ordinal - 1) / 4) * 100. L-0 is reserved for
-    Not Assessed and is not a scored capability level.
+    Not Assessed and is not a scored capability level. Scores are preserved across the
+    CR-AM-17 scale identity migration.
   - >-
     Unassessed criterion: record level_id L-0, assessment_status not-assessed and score 0;
     do not reinterpret it as L-1 Emergent. The unassessed state contributes zero to aggregation,
@@ -23,12 +29,25 @@ method:
     Evidence confidence multiplier: observed 1.0, evidenced 0.85, self-reported 0.6,
     unverified 0.3; retain the existing evidence-confidence adjustment for assessed criteria.
   - >-
+    Dual perspectives: each criterion is answered twice on the same scale and score
+    mapping — current realization (against current_expectation) and future readiness
+    (against future_expectation). The perspectives are aggregated separately and are never
+    collapsed into a single number.
+  - >-
     Sub-dimension score: mean of its criteria, with an unassessed criterion contributing zero
-    rather than being silently omitted.
+    rather than being silently omitted (per perspective).
   - >-
-    Dimension score: mean of its sub-dimensions.
+    Dimension score: mean of its sub-dimensions (per perspective).
   - >-
-    Operations Index: sum of dimension score x dimension weight (0-100).
+    Operations Index: sum of dimension score x dimension weight (0-100) over the
+    current-realization scores.
+  - >-
+    Readiness Index: the same aggregation over the future-readiness scores. Not averaged
+    into the Operations Index.
+  - >-
+    Transformation Gap: Readiness Index minus Operations Index, overall and per dimension.
+    Negative values are readiness deficits and are the actionable output for transformation
+    planning.
   - >-
     Maturity band and level: resolve the unrounded Operations Index against
     dea:maturity-bands-v2@v1.0.0; the band resolves to L-1..L-5. L-0 is never returned
@@ -42,7 +61,53 @@ method:
   - >-
     EAV is supplementary; it does not replace, modify or determine the 0-100 Operations Index
     or maturity-level resolution.
-dimension_weights: { D1: 0.20, D2: 0.18, D3: 0.18, D4: 0.14, D5: 0.20, D6: 0.10 }
+  - >-
+    Assessment result views (never collapsed into one number): (1) current operational
+    maturity (Operations Index + band + resolved level), (2) current operational performance
+    and value (D09 sub-dimension scores, efficiency/effectiveness read separately from
+    enterprise value realization), (3) future operational readiness (Readiness Index),
+    (4) operational transformation gap.
+score_mapping: { L-1: 0, L-2: 25, L-3: 50, L-4: 75, L-5: 100 }
+unassessed_level: L-0
+level_band_map:
+- level: L-1
+  band_id: level-1-emergent
+  band_range: [0, 20]
+  band_name: Emergent
+  effort_multiplier: 1.0
+  legacy_v1_name: Ad Hoc
+- level: L-2
+  band_id: level-2-structured
+  band_range: [20, 45]
+  band_name: Structured
+  effort_multiplier: 1.5
+  legacy_v1_name: Defined
+- level: L-3
+  band_id: level-3-systematic
+  band_range: [45, 70]
+  band_name: Systematic
+  effort_multiplier: 2.5
+  legacy_v1_name: Managed
+- level: L-4
+  band_id: level-4-adaptive
+  band_range: [70, 88]
+  band_name: Adaptive
+  effort_multiplier: 4.0
+  legacy_v1_name: Quantitatively Managed
+- level: L-5
+  band_id: level-5-self-optimising
+  band_range: [88, 100]
+  band_name: Self-Optimising
+  effort_multiplier: 6.0
+  legacy_v1_name: Optimising
+perspectives: [current-realization, future-readiness]
+dimension_weights: { D01: 0.12, D02: 0.12, D03: 0.12, D04: 0.11, D05: 0.10, D06: 0.09, D07: 0.12, D08: 0.11, D09: 0.11 }
+not_assessed_rule: >-
+  L-0 (Not Assessed) is not a capability level. It is recorded with
+  assessment_status not-assessed, contributes zero to aggregation, carries
+  unverified evidence confidence (0.3) and is never returned by score-based
+  maturity resolution; a high unassessed share invalidates the assessment
+  rather than flattering it.
 instruments:
   full-assessment: maturity/assessment-questionnaire.yaml
 evidence_schema: maturity/evidence/schema.yaml
@@ -53,7 +118,8 @@ benchmarking:
   criterion_ids_are_permanent: true
   cross_version_rule: >-
     Assessment records carry the model version; criterion identity conversion uses
-    migrations/v1-to-v2-map.yaml and legacy scale identifiers use
-    migrations/scale-v1-to-v2-map.yaml. Breaking criterion-ID changes require a
-    minor-model-version bump and a published migration map.
+    migrations/v1-to-v2-map.yaml and migrations/v2-to-v3-map.yaml; legacy scale
+    identifiers use migrations/scale-v1-to-v2-map.yaml (legacy L0 maps to L-1,
+    never L-0; criterion response scores are preserved). Breaking criterion-ID
+    changes require a model-version bump and a published migration map.
 touchpoints: touchpoints.yaml
