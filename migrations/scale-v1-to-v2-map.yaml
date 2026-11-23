@@ -1,0 +1,48 @@
+# Operations scale identity migration — CR-AM-17
+id: dea:operations-scale-migration-v1-to-v2
+status: stable
+from:
+  scale_id: dea:scale-operations-v1
+  version: 1.0.0
+  model_version: 2.0.0
+to:
+  scale_id: dea:scale-operations-v2
+  version: 2.0.0
+  model_version: 2.1.0
+mapping:
+  legacy_levels:
+    L0: L-1
+    L1: L-2
+    L2: L-3
+    L3: L-4
+    L4: L-5
+  new_unassessed_state:
+    id: L-0
+    legacy_equivalent: null
+    rule: >-
+      L-0 is a newly explicit Not Assessed state, not a relabelling of legacy L0.
+      Do not synthesize L-0 for absent legacy criterion records; retain missingness
+      unless a new assessment explicitly records not-assessed.
+  score_preservation:
+    legacy_response_mapping:
+      L0: 0
+      L1: 25
+      L2: 50
+      L3: 75
+      L4: 100
+    canonical_response_mapping:
+      L-1: 0
+      L-2: 25
+      L-3: 50
+      L-4: 75
+      L-5: 100
+    invariant: >-
+      The legacy-to-canonical level translation preserves the numeric criterion
+      score and Operations Index. The L-0 state has no legacy response equivalent.
+  compatibility:
+    historical_records: preserve_original_payload_and_model_version
+    translation: explicit_and_reversible_via_this_map
+    criterion_migration: migrations/v1-to-v2-map.yaml
+    eav: >-
+      Recalculate EAV from the stored 0-100 Operations Index using the marginal
+      band formula; do not reuse historical whole-score-times-multiplier values.
