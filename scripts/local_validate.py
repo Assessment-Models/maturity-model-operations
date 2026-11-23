@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Level 1 local validation for Operations Maturity Model 2.1.0.
+"""Level 1 local validation for the Operations Maturity Model.
 
 Validates canonical scale identity, legacy crosswalk, assessment-status semantics,
 canonical score-band resolution, marginal-band EAV, worked examples and manifest
@@ -46,8 +46,16 @@ for key in ("id", "type", "name", "version", "conformance"):
         errors.append(f"model.yaml: missing required field {key}")
 if manifest.get("type") not in ("maturity-model", "assessment-model", "assessment-tool"):
     errors.append(f"model.yaml: invalid type {manifest.get('type')!r}")
-if manifest.get("version") != "2.1.0":
-    errors.append(f"model.yaml: expected version 2.1.0, found {manifest.get('version')!r}")
+version_file = ROOT / "VERSION"
+if not version_file.is_file():
+    errors.append("VERSION: missing release version file")
+else:
+    declared_version = version_file.read_text().strip()
+    if manifest.get("version") != declared_version:
+        errors.append(
+            f"model.yaml: version {manifest.get('version')!r} does not match "
+            f"VERSION {declared_version!r}"
+        )
 conf = manifest.get("conformance") or {}
 if not (conf.get("contract") or {}).get("id") or not conf.get("version"):
     errors.append("model.yaml: incomplete contract handshake")
