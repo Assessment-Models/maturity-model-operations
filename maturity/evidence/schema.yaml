@@ -24,7 +24,7 @@ evidence_item:
 assessment_record:
   required: [id, model, date, assessor, scores]
   fields:
-    id: { type: string, pattern: ops-assessment-[a-z0-9-]+ }
+    id: { type: string, pattern: 'ops-assessment-[a-z0-9-]+' }
     model: { type: string, example: dea:maturity-operations@2.1.0 }
     date: { type: date }
     assessor: { type: string }
