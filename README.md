@@ -100,10 +100,10 @@ The Operations Maturity Model uses five assessed capability levels, identified *
 |---|---|---:|---|
 | L-0 | Not Assessed | Not a maturity band | No assessment evidence has been examined; recorded distinctly, contributes zero and carries unverified confidence |
 | L-1 | Emergent | 0–20 | Operations is reactive and person-dependent |
-| L-2 | Structured | 21–45 | Core practices are documented and becoming consistent |
-| L-3 | Systematic | 46–70 | Operations is governed, standardized and metrics-driven |
-| L-4 | Adaptive | 71–88 | Operations senses and responds using predictive insight and automation |
-| L-5 | Self-Optimising | 89–100 | Continuous improvement is embedded and increasingly autonomous |
+| L-2 | Structured | (20, 45] | Core practices are documented and becoming consistent |
+| L-3 | Systematic | (45, 70] | Operations is governed, standardized and metrics-driven |
+| L-4 | Adaptive | (70, 88] | Operations senses and responds using predictive insight and automation |
+| L-5 | Self-Optimising | (88, 100] | Continuous improvement is embedded and increasingly autonomous |
 
 The five assessed level identifiers align with the canonical v2 level-identification convention. The model retains its Operations-specific level names, definitions and evidence expectations. Historical records using the former model-local identifiers are translated through the explicit [scale migration map](migrations/scale-v1-to-v2-map.yaml): legacy L0–L4 map respectively to L-1–L-5. Legacy L0 is **not** the new L-0 Not Assessed state.
 
