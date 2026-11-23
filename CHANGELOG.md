@@ -6,6 +6,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [2.1.0] — 2026-11-23
+
+### Changed
+
+- **CR-AM-17**: migrate the Operations scale to the canonical L-1..L-5 identifiers and add L-0 Not Assessed as a distinct non-capability state. Preserve the five Operations level names, definitions, score bands and progression semantics. Publish an explicit legacy L0..L4 to L-1..L-5 compatibility map; legacy L0 is never translated to L-0.
+- **CR-AM-19**: replace whole-score-times-resolved-band EAV with marginal canonical-band contributions. The Operations Index, dimension weights, evidence-confidence multipliers and maturity-band resolution remain unchanged.
+- Update the assessment questionnaire, model register, evidence schema, worked examples, campaign example, local validator and README to the 2.1.0 scale/scoring contract.
+
+### Compatibility
+
+- Existing 2.0.0 assessment records retain their original identifiers and interpretation. Consumers translate legacy scale identifiers only through `migrations/scale-v1-to-v2-map.yaml`.
+- New 2.1.0 records use L-0 for Not Assessed and L-1..L-5 for assessed maturity levels. L-0 is never a score-resolved maturity level.
+- Operations Index values and canonical band/level resolution are unchanged; EAV values change to the marginal-band method and must not be compared with legacy whole-score-times-multiplier EAV values without recalculation.
+
 ## [2.0.0] — 2026-11-19
 
 Enterprise expansion of the model (CR-AM-13): from technology-operations
