@@ -1,5 +1,13 @@
 # Changelog — maturity-model-operations
 
+## [Unreleased]
+
+### Changed
+
+- **CR-AM-13 Phase 2 reconciliation**: make all six Operations touchpoint relationships explicitly reciprocal with peer touchpoint IDs, mirror IDs and directional reciprocity declarations. Preserve each model's assessment ownership and the draft touchpoint-contract status.
+- Correct the Autonomous Operations root-cause mapping to `OPS-D5-SD2-C05` (problem management); `OPS-D5-SD2-C03` remains the distinct incident-command criterion.
+
+
 All notable changes to this repository are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
