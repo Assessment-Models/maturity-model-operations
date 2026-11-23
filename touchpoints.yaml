@@ -8,7 +8,7 @@
 # =============================================================================
 id: dea:touchpoints-operations-v1
 repo_id: maturity-model-operations
-version: 0.2.2
+version: 0.2.3
 status: draft
 metamodel_version: 1.0.0
 description: >-
@@ -69,7 +69,7 @@ touchpoints:
       - ours: OPS-D5-SD3-C07
         theirs: 4.1.1            # Detect Anomaly Event (peer gated criterion)
         note: peer may cite our evidence without re-assessing
-      - ours: OPS-D5-SD2-C03
+      - ours: OPS-D5-SD2-C05
         theirs: 4.1.2            # Demarcate and locate root-cause
         note: closed-loop spine (4.1.1-4.1.4) gates the peer org level
       - ours: OPS-D5-SD4-C09
@@ -92,6 +92,8 @@ touchpoints:
 
   # --- Services Delivery -----------------------------------------------------
   - id: tp-ops-x-services-delivery
+    peer_touchpoint_id: tp-services-delivery-x-operations
+    mirrors: tp-services-delivery-x-operations
     peer_asset: dea:maturity-services-delivery
     peer_repo: maturity-model-services-delivery
     peer_contract_version: '^1.0'
@@ -116,11 +118,13 @@ touchpoints:
       - ours: OPS-D1-SD2-C04
         theirs: DLV-D4-SD2-C03
         note: peer derives delivery predictability from this
-    reciprocity: required
+    reciprocity: mirrors-tp-services-delivery-x-operations
     peer_status: peer-release-merged-tag-pending
 
   # --- Technology ------------------------------------------------------------
   - id: tp-ops-x-technology
+    peer_touchpoint_id: tp-technology-x-operations
+    mirrors: tp-technology-x-operations
     peer_asset: dea:maturity-technology
     peer_repo: maturity-model-technology
     peer_contract_version: '^1.0'
@@ -143,11 +147,13 @@ touchpoints:
           merged (PR #5, merge commit a7a40cd3); consume the peer's
           platform-capability scores once the peer tags v1.1.0; assess only
           tool-use effectiveness here.
-    reciprocity: required
+    reciprocity: mirrors-tp-technology-x-operations
     peer_status: peer-release-merged-tag-pending
 
   # --- Digital Transformation (composite) --------------------------------------
   - id: tp-ops-x-digital-transformation
+    peer_touchpoint_id: tp-digital-transformation-x-operations
+    mirrors: tp-digital-transformation-x-operations
     peer_asset: dea:maturity-digital-transformation
     peer_repo: maturity-model-digital-transformation
     peer_contract_version: '^1.0'
@@ -167,11 +173,13 @@ touchpoints:
           (per-component criteria); strategy-state mapping is anchored at the
           strategy dimension and resolved to component criterion IDs at the
           reciprocity merge.
-    reciprocity: required
+    reciprocity: mirrors-tp-digital-transformation-x-operations
     peer_status: mirror-merged-tag-pending
 
   # --- Digital Transformation Operationalized ----------------------------------
   - id: tp-ops-x-dt-operationalized
+    peer_touchpoint_id: tp-digital-transformation-operationalized-x-operations
+    mirrors: tp-digital-transformation-operationalized-x-operations
     peer_asset: dea:maturity-digital-transformation-operationalized
     peer_repo: maturity-model-digital-transformation-operationalized
     peer_contract_version: '^1.0'
@@ -207,11 +215,13 @@ touchpoints:
         note: >-
           DORA/flow telemetry shared; internal flow assessed here, customer-
           visible delivery outcomes assessed by services-delivery.
-    reciprocity: required
+    reciprocity: mirrors-tp-digital-transformation-operationalized-x-operations
     peer_status: mirror-merged-tag-pending
 
   # --- Modernization ----------------------------------------------------------
   - id: tp-ops-x-modernization
+    peer_touchpoint_id: tp-modernization-x-operations
+    mirrors: tp-modernization-x-operations
     peer_asset: dea:maturity-modernization
     peer_repo: maturity-model-modernization
     peer_contract_version: '^1.0'
@@ -237,5 +247,5 @@ touchpoints:
       repository: Assessment-Models/maturity-components
       id: operations-modernization
       reference: v1.0.0
-    reciprocity: required
+    reciprocity: mirrors-tp-modernization-x-operations
     peer_status: mirror-merged-tag-pending
