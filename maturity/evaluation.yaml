@@ -1,5 +1,5 @@
 # =============================================================================
-# maturity/evaluation.yaml — RELEASE 2.0.0 (CR-AM-13)
+# maturity/evaluation.yaml — RELEASE 2.1.0 (CR-AM-13)
 # Scoring model + assessment method for dea:maturity-operations v2.
 # =============================================================================
 id: dea:operations-evaluation-v2
@@ -12,7 +12,7 @@ method:
   name: weighted-mean-with-evidence-confidence
   steps:
   - Criterion maturity response: select one assessed capability level L-1..L-5; map ordinal 1..5 to raw score 0, 25, 50, 75, 100 using ((ordinal - 1) / 4) * 100. L-0 is reserved for Not Assessed and is not a scored capability level.
-  - Unassessed criterion: record level_id L-0, assessment_status not-assessed and score 0; do not reinterpret it as L-1 Emergent. The unassessed state contributes zero to aggregation and is reported distinctly.
+  - Unassessed criterion: record level_id L-0, assessment_status not-assessed and score 0; do not reinterpret it as L-1 Emergent. The unassessed state contributes zero to aggregation, is reported distinctly and carries unverified evidence confidence (0.3).
   - Evidence confidence multiplier: observed 1.0, evidenced 0.85, self-reported 0.6, unverified 0.3; retain the existing evidence-confidence adjustment for assessed criteria.
   - Sub-dimension score: mean of its criteria, with an unassessed criterion contributing zero rather than being silently omitted.
   - Dimension score: mean of its sub-dimensions.
