@@ -29,6 +29,7 @@ assessment_record:
     date: { type: date }
     assessor: { type: string }
     scores: { type: map, value_schema: criterion_score, description: criterion id -> criterion_score }
+    derived: { type: object, description: operations-index, resolved-level L-1..L-5, band, marginal-band EAV, per-dimension scores }
   criterion_score:
     required: [level_id, assessment_status, score, evidence_confidence]
     fields:
@@ -40,7 +41,6 @@ assessment_record:
     rules:
       - L-0 requires assessment_status not-assessed, score 0 and evidence_confidence unverified.
       - L-1..L-5 require assessment_status assessed; legacy L0 is translated to L-1, never L-0.
-    derived: { type: object, description: operations-index, resolved-level L-1..L-5, band, marginal-band EAV, per-dimension scores }
 campaign_record:
   required: [baseline, target, deltas, benchmark]
   fields:
