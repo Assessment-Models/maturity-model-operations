@@ -98,7 +98,7 @@ The Operations Maturity Model uses five assessed capability levels, identified *
 
 | Identifier | Capability level | Canonical score range | Interpretation |
 |---|---|---:|---|
-| L-0 | Not Assessed | Not a maturity band | No assessment evidence has been examined; recorded distinctly and contributes zero |
+| L-0 | Not Assessed | Not a maturity band | No assessment evidence has been examined; recorded distinctly, contributes zero and carries unverified confidence |
 | L-1 | Emergent | 0–20 | Operations is reactive and person-dependent |
 | L-2 | Structured | 21–45 | Core practices are documented and becoming consistent |
 | L-3 | Systematic | 46–70 | Operations is governed, standardized and metrics-driven |
@@ -187,7 +187,7 @@ The [assessment questionnaire](maturity/assessment-questionnaire.yaml) is the pr
 | [maturity/evidence/schema.yaml](maturity/evidence/schema.yaml) | Evidence item, assessment record and campaign record structures |
 | [maturity/blueprint-deduction.yaml](maturity/blueprint-deduction.yaml) | Draft rule map from assessment patterns to operational blueprint recommendations |
 | [campaigns/](campaigns/) | Baseline-to-target assessment campaign examples |
-| [migrations/](migrations/) | Mapping from v1 assessment items to v2 criterion identifiers |
+| [migrations/](migrations/) | Criterion and scale compatibility maps for v1/v2 transitions |
 | [touchpoints.yaml](touchpoints.yaml) | Declared relationships and evidence mappings to sibling assessment models |
 | [CHANGELOG.md](CHANGELOG.md) | Versioned model changes and release history |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Change control and contribution rules |
