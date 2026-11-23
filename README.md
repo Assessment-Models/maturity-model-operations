@@ -202,9 +202,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) and [CHANGELOG.md](CHANGELOG.md).
 
 ## Status
 
-**Repository maturity-model release: 2.1.0** · **License:** MIT
+**Repository maturity-model release: 2.1.1** · **License:** MIT
 
-The 2.1.0 release preserves the enterprise-wide scope introduced in 2.0.0 while aligning scale identifiers and EAV calculation with canonical conventions. Its six-dimension criteria register, questionnaire, evaluation method and evidence schema define the current assessment instrument.
+The 2.1.1 release preserves the enterprise-wide scope introduced in 2.0.0 while aligning scale identifiers and EAV calculation with canonical conventions. Its six-dimension criteria register, questionnaire, evaluation method and evidence schema define the current assessment instrument.
 
 ## License
 
