@@ -21,11 +21,13 @@ band_reference:
   version: 1.0.0
   organization: technehub-labs
   repository: dea-metamodel
-scale_levels: [L0, L1, L2, L3, L4]
+scale_levels: [L-1, L-2, L-3, L-4, L-5]
+scale_reference: { id: dea:scale-operations-v2, version: 2.0.0 }
+unassessed_level: L-0
 scoring:
   method: weighted-mean
   index: operations-index
-  criterion_scale: questionnaire response (L0-L4) x evidence confidence, 0-100
+  criterion_scale: assessed response L-1..L-5 mapped to 0/25/50/75/100, then evidence confidence; L-0 is Not Assessed and contributes zero
   dimension_weights: { D1: 0.20, D2: 0.18, D3: 0.18, D4: 0.14, D5: 0.20, D6: 0.10 }
 dimensions:
 
