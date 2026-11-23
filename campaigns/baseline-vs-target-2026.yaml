@@ -13,7 +13,7 @@ baseline:
   operations_index: 59.1
   resolved_band: level-3-systematic
   resolved_level: L-3
-  effort_adjusted_value: 42.27
+  effort_adjusted_value: 42.31
 target:
   dimension_scores: { D1: 68, D2: 62, D3: 70, D4: 72, D5: 70, D6: 65 }
   operations_index: 67.9
@@ -23,12 +23,12 @@ target:
 deltas:
   dimensions: { D1: 10, D2: 10, D3: 10, D4: 6, D5: 7, D6: 10 }
   operations_index: 8.8
-  effort_adjusted_value: 3.56
+  effort_adjusted_value: 3.52
   band_transition: none
 notes: >-
   The Operations Index remains the weighted score and resolves to L-3 Systematic
   under the canonical v2 bands. EAV is the sum of each band's marginal score
   contribution divided by that band's effort multiplier. Baseline 59.1 =
-  20/1.0 + 25/1.5 + 14.1/2.5 = 42.27. Target 67.9 =
-  20/1.0 + 25/1.5 + 22.9/2.5 = 45.83. The EAV delta is 3.56.
+  20/1.0 + 25/1.5 + 14.1/2.5 = 42.31. Target 67.9 =
+  20/1.0 + 25/1.5 + 22.9/2.5 = 45.83. The EAV delta is 3.52.
   EAV is supplementary and does not determine maturity-level resolution.
