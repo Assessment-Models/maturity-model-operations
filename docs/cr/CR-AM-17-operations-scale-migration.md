@@ -39,11 +39,11 @@ The Operations Index continues to resolve against the canonical v2 score interva
 
 | Score interval | Operations level | Canonical identifier |
 |---|---|---|
-| 0–20 | Emergent | L-1 |
-| 21–45 | Structured | L-2 |
-| 46–70 | Systematic | L-3 |
-| 71–88 | Adaptive | L-4 |
-| 89–100 | Self-Optimising | L-5 |
+| [0,20] | Emergent | L-1 |
+| (20,45] | Structured | L-2 |
+| (45,70] | Systematic | L-3 |
+| (70,88] | Adaptive | L-4 |
+| (88,100] | Self-Optimising | L-5 |
 
 The scale's effort multipliers remain 1.0, 1.5, 2.5, 4.0 and 6.0. Score aggregation, dimension weights, evidence-confidence multipliers and the 0–100 Operations Index are unchanged.
 
