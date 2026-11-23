@@ -1,11 +1,14 @@
 # =============================================================================
-# maturity/evidence/schema.yaml — RELEASE 2.1.0 (CR-AM-13)
-# Evidence-item and assessment-record schemas for dea:maturity-operations v2.
+# maturity/evidence/schema.yaml — RELEASE 3.0.0 (CR-OM-01)
+# Evidence-item and assessment-record schemas for dea:maturity-operations v3.
+# Merges main's 2.1.0 criterion_score structure (CR-AM-17 semantics) with the
+# CR-OM-01 dual perspectives: the scores map carries one criterion_score entry
+# per perspective.
 # =============================================================================
-id: dea:operations-evidence-schema-v1
+id: dea:operations-evidence-schema-v2
 repo_id: maturity-model-operations
 model: dea:maturity-operations
-version: 1.1.0
+version: 2.1.0
 status: stable
 confidence_levels:
   observed: 1.0
@@ -15,7 +18,7 @@ confidence_levels:
 evidence_item:
   required: [criterion, artifact_ref, collected_at, collected_by, confidence]
   fields:
-    criterion: { type: string, pattern: 'OPS-D[1-6]-SD[1-4]-C[0-9]+' }
+    criterion: { type: string, pattern: 'OPS-D0[1-9]-SD0[1-9]-C[0-9]{2}' }
     artifact_ref: { type: string, description: url | repo/path | document id }
     collected_at: { type: date }
     collected_by: { type: string, description: role name }
@@ -25,11 +28,28 @@ assessment_record:
   required: [id, model, date, assessor, scores]
   fields:
     id: { type: string, pattern: 'ops-assessment-[a-z0-9-]+' }
-    model: { type: string, example: dea:maturity-operations@2.1.0 }
+    model: { type: string, example: dea:maturity-operations@3.0.0 }
     date: { type: date }
     assessor: { type: string }
-    scores: { type: map, value_schema: criterion_score, description: criterion id -> criterion_score }
-    derived: { type: object, description: operations-index, resolved-level L-1..L-5, band, marginal-band EAV, per-dimension scores }
+    scores:
+      type: map
+      value_schema: dual_perspective_score
+      description: criterion id -> dual_perspective_score (one criterion_score per perspective)
+    derived:
+      type: object
+      description: >-
+        operations-index (current maturity) + resolved band + resolved level
+        L-1..L-5 + marginal-band EAV; readiness-index (future readiness);
+        transformation-gap (readiness minus current, overall and per
+        dimension); per-dimension scores for both perspectives;
+        performance-and-value view (D09 sub-dimension scores,
+        efficiency/effectiveness separate from enterprise value realization).
+  dual_perspective_score:
+    required: [current, future]
+    fields:
+      current: { type: ref, description: criterion_score (Current Operational Realization) }
+      future: { type: ref, description: criterion_score (Future Operational Readiness) }
+      evidence: { type: array, items: evidence_item }
   criterion_score:
     required: [level_id, assessment_status, score, evidence_confidence]
     fields:
@@ -37,20 +57,29 @@ assessment_record:
       assessment_status: { type: enum, values: [assessed, not-assessed] }
       score: { type: number, minimum: 0, maximum: 100 }
       evidence_confidence: { type: enum, values: [observed, evidenced, self-reported, unverified] }
-      evidence: { type: array, items: evidence_item }
     rules:
       - L-0 requires assessment_status not-assessed, score 0 and evidence_confidence unverified.
       - L-1..L-5 require assessment_status assessed; legacy L0 is translated to L-1, never L-0.
+      - A criterion not assessed in one perspective is still scored per perspective; do not synthesize an unassessed entry for a missing legacy record.
 campaign_record:
   required: [baseline, target, deltas, benchmark]
   fields:
     baseline: { type: ref, description: assessment-record reference }
     target: { type: ref, description: assessment-record reference + target date }
-    deltas: { type: object, description: per-dimension and criterion-level, baseline minus target }
+    deltas:
+      type: object
+      description: >-
+        per-dimension and criterion-level, baseline minus target, for both
+        perspectives; includes transformation-gap delta and band transition.
     benchmark: { type: object, required: false, description: anonymized sector/cohort/period }
 compatibility_rule: >-
   Assessment records carry the model version used. Criterion IDs are permanent
-  keys; records remain benchmarkable across 1.x/2.x via migrations/v1-to-v2-map.yaml.
-  Version 2.1.0 records use canonical scale identifiers and explicit assessment_status;
-  legacy 2.0.0 identifiers are translated only through migrations/scale-v1-to-v2-map.yaml.
-  An explicit L-0 score entry uses evidence_confidence unverified (0.3); no evidence item is fabricated.
+  keys; records remain benchmarkable across 1.x/2.x/3.x via
+  migrations/v1-to-v2-map.yaml and migrations/v2-to-v3-map.yaml (v3 re-homes
+  criteria into the D01..D09 taxonomy; criterion response scores are preserved
+  at 0/25/50/75/100), and legacy scale identifiers only through
+  migrations/scale-v1-to-v2-map.yaml. Version 2.1.0+ records use canonical
+  scale identifiers and explicit assessment_status; legacy 2.0.0 identifiers
+  are translated only through migrations/scale-v1-to-v2-map.yaml. An explicit
+  L-0 score entry uses evidence_confidence unverified (0.3); no evidence item
+  is fabricated.

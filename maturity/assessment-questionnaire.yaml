@@ -1,183 +1,1051 @@
 # =============================================================================
-# maturity/assessment-questionnaire.yaml — RELEASE 2.1.0 (CR-AM-13)
-# One entry per criterion in the v2 register (dea:maturity-operations-register-v2).
-# Scoring: assessed capability levels L-1..L-5 map to 0/25/50/75/100; L-0 is Not Assessed. Evidence
-# confidence (observed 1.0 / evidenced 0.85 / self-reported 0.6 / unverified 0.3).
+# maturity/assessment-questionnaire.yaml — RELEASE 3.0.0 (CR-OM-01)
+# One entry per criterion in the v3 register (dea:maturity-operations-register-v3).
+# GENERATED from maturity/model/operations.yaml — regenerate rather than hand-edit.
+#
+# Dual-perspective instrument (CR-OM-01): every criterion is answered twice —
+#   current:  realization of current_expectation today
+#   future:   readiness of current practice for future_expectation
+# Response scale (maturity/scale.yaml, dea:scale-operations-v2 v3.0.0):
+#   L-0 Not Assessed (no evidence examined — recorded distinctly, contributes
+#       zero, carries unverified confidence 0.3, never inflates an index)
+#   L-1 Emergent (0) · L-2 Structured (25) · L-3 Systematic (50)
+#   L-4 Adaptive (75) · L-5 Self-Optimising (100)
+# Assessed levels map to 0/25/50/75/100 ((ordinal - 1) / 4 x 100) per the
+# CR-AM-17 score-preservation contract, then multiply by evidence confidence
+# (observed 1.0 / evidenced 0.85 / self-reported 0.6 / unverified 0.3).
+# The Operations Index and Readiness Index resolve against the canonical v2
+# bands; EAV is the CR-AM-19 marginal-band sum.
 # =============================================================================
-id: dea:operations-questionnaire-v2
+id: dea:operations-questionnaire-v3
 repo_id: maturity-model-operations
 model: dea:maturity-operations
-model_version: 2.1.0
-version: 1.1.0
+model_version: 3.0.0
+version: 2.1.0
 status: stable
-response_scale:
-  assessed_levels: [L-1, L-2, L-3, L-4, L-5]
-  unassessed_level: L-0
-  score_mapping: { L-1: 0, L-2: 25, L-3: 50, L-4: 75, L-5: 100 }
 instrument: full-assessment
+response_scale:
+  assessed_levels:
+  - L-1
+  - L-2
+  - L-3
+  - L-4
+  - L-5
+  unassessed_level: L-0
+  score_mapping:
+    L-1: 0
+    L-2: 25
+    L-3: 50
+    L-4: 75
+    L-5: 100
+perspectives:
+- current-realization
+- future-readiness
 entries:
 
-# --- D1 Value-Stream & Daily Operations --------------------------------------
-- criterion: OPS-D1-SD1-C01
-  question: Are your value streams mapped end-to-end, and is the flow of work visible to the teams executing it?
-  evidence_prompts: [Current-state value-stream maps, Live flow boards]
-- criterion: OPS-D1-SD1-C02
-  question: Are flow, work-in-progress and throughput measured for your key value streams?
-  evidence_prompts: [Flow metrics dashboards, WIP limits configured in tooling]
-- criterion: OPS-D1-SD1-C03
-  question: Are bottlenecks in your value streams identified and actively managed?
-  evidence_prompts: [Impediment logs, Bottleneck review records]
-- criterion: OPS-D1-SD2-C04
-  question: Does a defined daily operating cadence exist (huddles, stand-ups, tiered meetings) with clear decision rights?
-  evidence_prompts: [Cadence schedule, Escalation matrix]
-- criterion: OPS-D1-SD2-C05
-  question: Are daily commitments set explicitly and tracked for delivery reliability?
-  evidence_prompts: [Commitment/attainment records]
-- criterion: OPS-D1-SD3-C07
-  question: Is demand triaged through a single intake with visible prioritization rules?
-  evidence_prompts: [Intake records, Prioritization policy]
-- criterion: OPS-D1-SD3-C08
-  question: Is work right-sized and classified (standard vs exception) before execution?
-  evidence_prompts: [Work item taxonomy and sample data]
-- criterion: OPS-D1-SD3-C09
-  question: Is work-in-flight balanced against available capacity?
-  evidence_prompts: [Capacity plans, Utilization trends]
+# --- D01 Operating Model -----------------------------------------
+- criterion: OPS-D01-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: The operating model is documented,
+    versioned and owned?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The target operating
+    model required by the future strategic direction is defined, with the delta from the current state
+    planned and owned?'
+  evidence_prompts:
+  - Operating-model artifact with named owner
+  - Operating-model version history
+- criterion: OPS-D01-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: The operating model defines how operations
+    create and deliver value — value streams, capabilities, organization, resources, technology and governance?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The operating
+    model explicitly expresses future-state requirements — new channels, products, partners and increasingly
+    intelligent execution?'
+  evidence_prompts:
+  - Operating-model content inventory
+  - Architecture review records
+- criterion: OPS-D01-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: The operating model is communicated
+    and understood by the leaders and teams that must operate it?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Operating-model
+    literacy is built into leadership development and change programmes ahead of operating-model change?'
+  evidence_prompts:
+  - Communication records
+  - Leadership briefing packs
+- criterion: OPS-D01-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Organizational structures and operational
+    responsibilities are designed to support the operating model?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Structural changes
+    required by the target operating model are sequenced into transformation plans?'
+  evidence_prompts:
+  - Organization design documents
+  - Structure-to-operating-model mapping
+- criterion: OPS-D01-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Team boundaries follow an explicit
+    team design (stream-aligned, platform, enabling) consistent with the operating model?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Team design is
+    re-evaluated as products, channels and platforms evolve?'
+  evidence_prompts:
+  - Team-topology design
+  - Team catalogue
+- criterion: OPS-D01-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Accountability for operational outcomes
+    is assigned at every level of the operating model?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The accountability
+    model anticipates the operating units the future strategy will require?'
+  evidence_prompts:
+  - Accountability register
+- criterion: OPS-D01-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational decision rights are explicit
+    — who decides, who is consulted and who executes, for each major decision class?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Decision rights
+    are defined for emerging decision classes, including automated and AI-assisted decisions?'
+  evidence_prompts:
+  - Decision-rights matrices
+  - Escalation matrices
+- criterion: OPS-D01-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Operational decisions are made at the
+    lowest competent level, with escalation paths that operate in practice?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Decision latency
+    is measured and delegation adjusts with demonstrated capability?'
+  evidence_prompts:
+  - Escalation records
+  - Decision logs
+- criterion: OPS-D01-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Decision-making during disruption is
+    pre-authorised through delegated authority and emergency playbooks?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Pre-authorisation
+    covers novel disruption classes and intervention in automated decision systems?'
+  evidence_prompts:
+  - Delegation-of-authority documents
+  - Incident decision records
+- criterion: OPS-D01-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: Strategy is translated into measurable
+    operational objectives, and operational insight flows back into strategy?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Translation refreshes
+    at strategy cadence and future operational requirements are identified before execution depends on
+    them?'
+  evidence_prompts:
+  - OKR cascades
+  - Balanced scorecards
+- criterion: OPS-D01-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: The operating model is aligned with
+    the business model — what operations must produce and deliver is explicit?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Business-model
+    evolution (new revenue models, segments, channels) is translated into operating-model change deliberately?'
+  evidence_prompts:
+  - Business-model-to-operating-model linkage artifacts
+- criterion: OPS-D01-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Operations surfaces risks, constraints
+    and opportunities that feed strategy adjustment?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Operations contributes
+    quantified scenario input to strategic planning?'
+  evidence_prompts:
+  - Risk registers
+  - Strategy input memos
+- criterion: OPS-D01-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: Operating-model changes are governed
+    with impact assessment?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Operating-model
+    evolution is continuous, monitored through realization metrics rather than one-off programmes?'
+  evidence_prompts:
+  - Change decisions
+  - Impact assessment records
+- criterion: OPS-D01-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: The realized operating model is compared
+    against the designed operating model on a defined cadence?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Realization metrics
+    are continuous; divergence triggers corrective design or execution action?'
+  evidence_prompts:
+  - Operating-model realization reviews
+- criterion: OPS-D01-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: Lessons from operating-model realization
+    feed its next revision?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The revision
+    cycle is institutionalized with explicit triggers?'
+  evidence_prompts:
+  - Revision histories
+  - Retrospective records
 
-# --- D2 Capability Orchestration ---------------------------------------------
-- criterion: OPS-D2-SD1-C01
-  question: Does a consistently described inventory of key organizational capabilities exist?
-  evidence_prompts: [Capability inventory]
-- criterion: OPS-D2-SD1-C02
-  question: Are capabilities mapped to the outcomes and value streams they serve?
-  evidence_prompts: [Capability-to-outcome maps]
-- criterion: OPS-D2-SD1-C03
-  question: Is capability health and gap status assessed on a regular cadence?
-  evidence_prompts: [Capability review reports]
-- criterion: OPS-D2-SD2-C04
-  question: Do day-to-day activities leverage the capabilities you have identified as key?
-  evidence_prompts: [Activities-to-capability mapping]
-- criterion: OPS-D2-SD2-C05
-  question: Do capability gaps drive operational investment decisions?
-  evidence_prompts: [Investment decisions traceable to gaps]
-- criterion: OPS-D2-SD3-C06
-  question: Does cross-functional work have identified owners and coordination mechanisms?
-  evidence_prompts: [RACI/interaction registers, Cross-team charters]
-- criterion: OPS-D2-SD3-C07
-  question: Are dependencies across teams and functions managed proactively?
-  evidence_prompts: [Dependency boards]
-- criterion: OPS-D2-SD3-C08
-  question: Are shared services and platforms reused before new equivalents are built?
-  evidence_prompts: [Reuse policy and metrics]
+# --- D02 Operational Capabilities --------------------------------
+- criterion: OPS-D02-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: Key operational capabilities are inventoried
+    and described consistently?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The capability
+    architecture covers the capabilities the future strategy requires, not only those in use today?'
+  evidence_prompts:
+  - Enterprise capability map
+  - Capability definitions
+- criterion: OPS-D02-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: Capabilities are mapped to the outcomes
+    and value streams they serve?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Mapping covers
+    target-state value streams so future capability needs are derivable?'
+  evidence_prompts:
+  - Capability-to-outcome maps
+- criterion: OPS-D02-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Capability definitions distinguish
+    the capability from the processes, people and technology that realize it?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The model supports
+    reconfiguration analysis (what changes if a realization changes)?'
+  evidence_prompts:
+  - Capability modelling conventions
+- criterion: OPS-D02-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Every key operational capability has
+    a named owner accountable for its health and performance?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Ownership is
+    assigned for future capabilities as they are defined, before they are needed?'
+  evidence_prompts:
+  - Capability ownership register
+- criterion: OPS-D02-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Capability owners have the authority
+    and information to manage their capabilities?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Owner decision
+    rights scale with the capability''s maturity and criticality?'
+  evidence_prompts:
+  - Owner mandates
+  - Capability review records
+- criterion: OPS-D02-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Capability health and performance are
+    assessed on a regular cadence?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Assessments include
+    projected capability needs under the future operating requirements?'
+  evidence_prompts:
+  - Capability review reports
+- criterion: OPS-D02-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Key capabilities are available at the
+    level required by current operations?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Availability
+    is planned against projected demand, including growth scenarios?'
+  evidence_prompts:
+  - Capability availability reports
+- criterion: OPS-D02-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Capability capacity — people, resources,
+    throughput — is planned against operational demand?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Capacity models
+    cover growth and surge scenarios for the target operating state?'
+  evidence_prompts:
+  - Capability capacity plans
+- criterion: OPS-D02-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Capability shortfalls are detected
+    before they disrupt delivery?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Capability risk
+    monitoring is predictive and tied to demand signals?'
+  evidence_prompts:
+  - Capability risk reports
+- criterion: OPS-D02-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: Day-to-day activities mobilize the
+    capabilities identified as key?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Mobilization
+    extends to newly established capabilities quickly and by design?'
+  evidence_prompts:
+  - Activities-to-capability mapping
+- criterion: OPS-D02-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Cross-functional work has identified
+    owners and coordination mechanisms?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Coordination
+    mechanisms adapt as the operating model and its boundaries evolve?'
+  evidence_prompts:
+  - RACI/interaction registers
+  - Cross-team charters
+- criterion: OPS-D02-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Capabilities can be reconfigured —
+    scaled, combined, redeployed — as business requirements change?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Reconfiguration
+    is designed for and exercised, not improvised?'
+  evidence_prompts:
+  - Reconfiguration records
+  - Exercise reports
+- criterion: OPS-D02-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: Dependencies across capabilities and
+    teams are understood and managed proactively?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Dependency intelligence
+    extends to planned change, not only current state?'
+  evidence_prompts:
+  - Dependency maps
+  - Dependency boards
+- criterion: OPS-D02-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: Capability gaps against current and
+    future requirements are identified and tracked?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Gap analysis
+    is strategy-triggered as well as periodic, covering target requirements?'
+  evidence_prompts:
+  - Capability gap register
+- criterion: OPS-D02-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: Capability gaps drive operational investment
+    decisions?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Investment is
+    prioritized by expected contribution to enterprise outcomes?'
+  evidence_prompts:
+  - Investment decisions traceable to gaps
+  - Capability investment roadmap
 
-# --- D3 Service & Process Management -----------------------------------------
-- criterion: OPS-D3-SD1-C01
-  question: Are core operational processes documented to a standard with named owners?
-  evidence_prompts: [Process repository, Ownership register]
-- criterion: OPS-D3-SD1-C02
-  question: Is process compliance monitored, with deviations visible to owners?
-  evidence_prompts: [Compliance dashboards]
-- criterion: OPS-D3-SD1-C03
-  question: Are process exceptions granted explicitly with an expiry, rather than tolerated silently?
-  evidence_prompts: [Exception register]
-- criterion: OPS-D3-SD2-C04
-  question: Does a service catalogue define services, their owners and their consumers?
-  evidence_prompts: [Published service catalogue]
-- criterion: OPS-D3-SD2-C05
-  question: Do SLAs/OLAs exist for core services, and are they measured?
-  evidence_prompts: [SLA/OLA reports]
-- criterion: OPS-D3-SD2-C06
-  question: Do service performance reviews occur on a defined cadence with actions tracked to closure?
-  evidence_prompts: [Review minutes, Action logs]
-- criterion: OPS-D3-SD3-C07
-  question: Does a continual-improvement mechanism (Lean/Kaizen) operate with a live backlog?
-  evidence_prompts: [Improvement kanban]
-- criterion: OPS-D3-SD3-C08
-  question: Is the impact of improvement work measured (cycle time, quality, cost)?
-  evidence_prompts: [Before/after improvement metrics]
+# --- D03 Value Streams & Processes -------------------------------
+- criterion: OPS-D03-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: Value streams are mapped end-to-end
+    with the flow of work visible to the teams executing it?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Target-state
+    value streams are designed for the future product and channel portfolio?'
+  evidence_prompts:
+  - Value-stream maps
+  - Live flow boards
+- criterion: OPS-D03-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: Flow, work-in-progress and throughput
+    are measured for key value streams?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Flow intelligence
+    is predictive — bottlenecks and delays are anticipated?'
+  evidence_prompts:
+  - Flow metrics dashboards
+  - WIP limits in tooling
+- criterion: OPS-D03-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Bottlenecks are identified and actively
+    managed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Bottleneck prevention
+    is designed into value-stream change?'
+  evidence_prompts:
+  - Impediment logs
+  - Bottleneck review records
+- criterion: OPS-D03-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Core operational processes are documented
+    to a standard with named owners?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The process architecture
+    covers the processes the target operating requirements demand?'
+  evidence_prompts:
+  - Process repository
+  - Ownership register
+- criterion: OPS-D03-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: The process architecture shows how
+    processes relate to value streams, capabilities and services?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The architecture
+    supports change impact analysis across the execution estate?'
+  evidence_prompts:
+  - Process architecture models
+- criterion: OPS-D03-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Process design standards — entry/exit
+    criteria, controls, handoffs — are defined and applied?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Standards evolve
+    to govern automated and human-automated hybrid execution?'
+  evidence_prompts:
+  - Process design standards
+- criterion: OPS-D03-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Process compliance is monitored and
+    deviations are visible to owners?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Consistency is
+    measured across units and regions, not assumed?'
+  evidence_prompts:
+  - Compliance dashboards
+- criterion: OPS-D03-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Process exceptions are granted explicitly
+    with expiry, never tolerated silently?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Exception patterns
+    feed deliberate process redesign?'
+  evidence_prompts:
+  - Exception registers
+- criterion: OPS-D03-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Work is right-sized and classified
+    (standard vs exception) before execution?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Classification
+    drives differentiated execution paths automatically?'
+  evidence_prompts:
+  - Work item taxonomy data
+- criterion: OPS-D03-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: A daily operating cadence exists —
+    huddles, tiered meetings — with clear decision rights?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Cadence integrates
+    cross-unit and partner coordination as the operating scope grows?'
+  evidence_prompts:
+  - Cadence schedule
+  - Escalation matrices
+- criterion: OPS-D03-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Daily commitments are set explicitly
+    and their delivery reliability is tracked?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Commitment reliability
+    is benchmarked and targeted like a service level?'
+  evidence_prompts:
+  - Commitment/attainment records
+- criterion: OPS-D03-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Demand is triaged through a single
+    intake with visible prioritization rules?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Demand forecasting
+    informs capacity and commitment-setting ahead of arrival?'
+  evidence_prompts:
+  - Intake records
+  - Prioritization policy
+- criterion: OPS-D03-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: A continual-improvement mechanism operates
+    with a live improvement backlog?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The improvement
+    portfolio is aligned to strategy and enterprise outcomes?'
+  evidence_prompts:
+  - Improvement kanban
+- criterion: OPS-D03-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: Improvement impact is measured — cycle
+    time, quality, cost?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Improvement benefits
+    are tracked through to value realization?'
+  evidence_prompts:
+  - Before/after improvement metrics
+- criterion: OPS-D03-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: Processes are redesigned — not only
+    patched — when performance indicates structural weakness?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Performance intelligence
+    triggers process re-engineering candidates?'
+  evidence_prompts:
+  - Process redesign records
 
-# --- D4 Workforce & Ways of Working -----------------------------------------
-- criterion: OPS-D4-SD1-C01
-  question: Are operational roles and responsibilities defined for the operating model?
-  evidence_prompts: [Role definitions, Role-activity mapping]
-- criterion: OPS-D4-SD1-C02
-  question: Are skills for key operational capabilities assessed and developed?
-  evidence_prompts: [Skills matrix, Training plans]
-- criterion: OPS-D4-SD1-C03
-  question: Is onboarding into operational roles structured and repeatable?
-  evidence_prompts: [Onboarding playbooks]
-- criterion: OPS-D4-SD2-C04
-  question: Do team boundaries follow an explicit team-topology design (stream-aligned/platform/enabling)?
-  evidence_prompts: [Operating-model team design]
-- criterion: OPS-D4-SD2-C05
-  question: Are team interaction modes defined and reviewed, including cognitive load?
-  evidence_prompts: [Interaction model, Cognitive-load reviews]
-- criterion: OPS-D4-SD3-C06
-  question: Are on-call/exception rotas sustainable, with load and satisfaction tracked?
-  evidence_prompts: [Rota load data, Satisfaction scores]
-- criterion: OPS-D4-SD3-C07
-  question: Is operational knowledge (runbooks, playbooks) captured and demonstrably current?
-  evidence_prompts: [Runbook currency checks]
+# --- D04 Service & Delivery Management ---------------------------
+- criterion: OPS-D04-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: A service catalogue defines services,
+    their owners and their consumers?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The portfolio
+    reflects planned services for future products and channels?'
+  evidence_prompts:
+  - Published service catalogue
+- criterion: OPS-D04-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: The service portfolio is managed —
+    services are introduced, retired and reprioritized deliberately?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Portfolio decisions
+    are tied to business-model and strategy change?'
+  evidence_prompts:
+  - Portfolio review records
+- criterion: OPS-D04-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Internal services are managed with
+    the same discipline as customer-facing services?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Internal service
+    experience is measured with the same rigour as external?'
+  evidence_prompts:
+  - Internal service catalogue
+- criterion: OPS-D04-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Service performance reviews occur on
+    a defined cadence with actions tracked to closure?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Delivery management
+    spans partner-delivered services with the same cadence?'
+  evidence_prompts:
+  - Review minutes
+  - Action logs
+- criterion: OPS-D04-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Fulfilment and delivery of services
+    is orchestrated end-to-end across contributing functions?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Orchestration
+    extends to ecosystem and partner-delivered steps?'
+  evidence_prompts:
+  - Delivery workflow records
+- criterion: OPS-D04-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Delivery issues are visible in real
+    time and trigger coordinated response?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Delivery-risk
+    prediction alerts before commitments are missed?'
+  evidence_prompts:
+  - Delivery dashboards
+- criterion: OPS-D04-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Service quality is defined through
+    explicit quality criteria and measured for key services?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Quality criteria
+    anticipate evolving customer expectations, not only historic ones?'
+  evidence_prompts:
+  - Quality frameworks
+  - Quality reports
+- criterion: OPS-D04-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Customer and user experience of services
+    is measured and acted upon?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Experience telemetry
+    drives service design ahead of complaints?'
+  evidence_prompts:
+  - Experience/satisfaction data
+- criterion: OPS-D04-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Complaints, defects and rework are
+    tracked to root cause across the delivery chain?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Defect prevention
+    is designed into services, reducing defect classes at source?'
+  evidence_prompts:
+  - Complaint/defect records
+- criterion: OPS-D04-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: SLAs/OLAs exist for core services and
+    are measured?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Service levels
+    are renegotiated ahead of business-model and demand shifts?'
+  evidence_prompts:
+  - SLA/OLA reports
+- criterion: OPS-D04-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Service-level objectives with enforced
+    error budgets govern reliability-critical services?'
+  future_question: 'To what extent will current practice satisfy the future requirement: SLO coverage
+    extends to new services by default, per criticality?'
+  evidence_prompts:
+  - SLO/error-budget reports
+- criterion: OPS-D04-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Service-level breaches trigger analysis
+    and corrective action, not just logging?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Breach patterns
+    inform reliability investment decisions?'
+  evidence_prompts:
+  - Breach analysis records
+- criterion: OPS-D04-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: Delivery of commitments is reliable
+    under normal conditions — on time and first-time-right?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Reliability is
+    sustained through demand surges, not only averages?'
+  evidence_prompts:
+  - On-time/first-time-right metrics
+- criterion: OPS-D04-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: Continuity mechanisms — failover, alternate
+    paths — exist for critical services?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Continuity is
+    exercised against plausible future disruption scenarios?'
+  evidence_prompts:
+  - Continuity plans
+  - Test records
+- criterion: OPS-D04-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: Delivery performance during disruption
+    is preserved or recovered within defined tolerances?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Recovery objectives
+    are set per service criticality and validated empirically?'
+  evidence_prompts:
+  - Recovery records
+  - Disruption reviews
 
-# --- D5 Technology & Infrastructure Operations -------------------------------
-- criterion: OPS-D5-SD1-C01
-  question: Is telemetry (logs, metrics, traces) centralised and actively used in daily operations?
-  evidence_prompts: [Observability coverage report]
-- criterion: OPS-D5-SD1-C02
-  question: Does monitoring cover user-facing journeys, not just individual components?
-  evidence_prompts: [Journey dashboards, SLI coverage]
-- criterion: OPS-D5-SD2-C03
-  question: Does an incident command system operate, with defined roles and records?
-  evidence_prompts: [ICS documents, Incident records]
-- criterion: OPS-D5-SD2-C04
-  question: Are post-mortems blameless, timely and producing tracked actions?
-  evidence_prompts: [PIR records within 7 days for sev-1/2]
-- criterion: OPS-D5-SD2-C05
-  question: Are root causes eliminated through problem management rather than just closing incidents?
-  evidence_prompts: [Problem records, Recurrence trends]
-- criterion: OPS-D5-SD3-C06
-  question: Are deployments automated with full audit trails?
-  evidence_prompts: [Deployment automation rate, Change records]
-- criterion: OPS-D5-SD3-C07
-  question: Does predictive incident detection flag issues before users report them?
-  evidence_prompts: [Predictive alert share of sev-1]
-- criterion: OPS-D5-SD3-C08
-  question: Is change automation scored against the shared operations-modernization component?
-  evidence_prompts: [Component scoring record]
-- criterion: OPS-D5-SD4-C09
-  question: Does auto-remediation handle known failure modes within defined guardrails?
-  evidence_prompts: [Auto-remediation rate, Playbook library]
-- criterion: OPS-D5-SD4-C10
-  question: Do SLOs exist for customer-facing services with enforced error budgets?
-  evidence_prompts: [SLO/error-budget reports]
-- criterion: OPS-D5-SD4-C11
-  question: Is operating cost per workload tracked and optimized?
-  evidence_prompts: [Cost dashboards, Unit-economics trends]
-- criterion: OPS-D5-SD4-C12
-  question: Is capacity planning data-driven, with headroom tracked?
-  evidence_prompts: [Capacity headroom dashboards]
+# --- D05 People & Organization -----------------------------------
+- criterion: OPS-D05-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: Workforce needs for operations are
+    planned — numbers, roles, locations — against operational demand?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The workforce
+    plan includes the skills the future operating requirements demand?'
+  evidence_prompts:
+  - Workforce plans
+- criterion: OPS-D05-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: Workforce capacity is monitored against
+    load and imbalances are corrected?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Scenario-based
+    workforce modelling covers growth and contraction?'
+  evidence_prompts:
+  - Capacity/utilization reports
+- criterion: OPS-D05-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Critical-role risk — single points
+    of human dependency — is identified and mitigated?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Succession and
+    knowledge redundancy cover critical operational knowledge?'
+  evidence_prompts:
+  - Key-role risk register
+- criterion: OPS-D05-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational roles and responsibilities
+    are defined for the operating model?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The role architecture
+    supports the target operating model?'
+  evidence_prompts:
+  - Role definitions
+  - Role-activity mapping
+- criterion: OPS-D05-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Responsibilities are unambiguous across
+    functions — no unowned operational activities?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Responsibility
+    mapping refreshes with structural change as a controlled step?'
+  evidence_prompts:
+  - Responsibility matrices
+- criterion: OPS-D05-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Operational workload is humane and
+    sustainable — rotas, after-hours load and satisfaction are tracked?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Workload sustainability
+    is a managed objective with targets, per unit?'
+  evidence_prompts:
+  - Rota load data
+  - Satisfaction scores
+- criterion: OPS-D05-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Skills for key operational capabilities
+    are assessed and developed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Skill strategy
+    anticipates automation and AI-driven role shifts?'
+  evidence_prompts:
+  - Skills matrices
+  - Training plans
+- criterion: OPS-D05-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Competency pathways exist for key operational
+    roles?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Pathways are
+    updated as operations modernize and roles change?'
+  evidence_prompts:
+  - Competency frameworks
+- criterion: OPS-D05-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Onboarding into operational roles is
+    structured and repeatable?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Onboarding scales
+    with growth without quality loss?'
+  evidence_prompts:
+  - Onboarding playbooks
+- criterion: OPS-D05-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: Team interaction modes are defined
+    and reviewed, including cognitive load?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Collaboration
+    design is reviewed against new operating arrangements before adoption?'
+  evidence_prompts:
+  - Interaction model
+  - Cognitive-load reviews
+- criterion: OPS-D05-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Operational culture supports accountability,
+    candour and continuous improvement?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Culture is deliberately
+    shaped for adaptive operations, with tracked interventions?'
+  evidence_prompts:
+  - Culture/engagement surveys
+- criterion: OPS-D05-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Operations participates in internal
+    and industry practice exchange?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The enterprise
+    contributes practice back to the industry?'
+  evidence_prompts:
+  - External contributions
+  - Internal guild records
+- criterion: OPS-D05-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: Ways of working — cadences, ceremonies,
+    working agreements — are explicit and consistently applied?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Ways of working
+    evolve deliberately with operating-model change?'
+  evidence_prompts:
+  - Working agreements
+  - Team charters
+- criterion: OPS-D05-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: Operational knowledge — runbooks, playbooks
+    — is captured and demonstrably current?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Knowledge is
+    discoverable at the point of need, with usage-driven currency?'
+  evidence_prompts:
+  - Runbook currency checks
+  - Knowledge base metrics
+- criterion: OPS-D05-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: Knowledge transfer happens before key
+    people move, not after they leave?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Knowledge continuity
+    is an institutionalized practice with triggers?'
+  evidence_prompts:
+  - Handover records
 
-# --- D6 Strategy Alignment & Operating Blueprint ------------------------------
-- criterion: OPS-D6-SD1-C01
-  question: Is strategy translated into measurable operational objectives, with operational insight flowing back into strategy?
-  evidence_prompts: [OKR cascades, Balanced scorecards]
-- criterion: OPS-D6-SD1-C02
-  question: Do operations reports flow upward into business reviews framed as outcomes?
-  evidence_prompts: [Ops-to-exec review packs]
-- criterion: OPS-D6-SD1-C03
-  question: Does operations surface risks and opportunities that feed strategy adjustment?
-  evidence_prompts: [Risk registers, Strategy input memos]
-- criterion: OPS-D6-SD2-C04
-  question: Is the operating model (blueprint) documented, versioned and owned?
-  evidence_prompts: [Operating-model artifact with named owner]
-- criterion: OPS-D6-SD2-C05
-  question: Are operating-model changes governed with impact assessment?
-  evidence_prompts: [Change decisions, Impact records]
-- criterion: OPS-D6-SD3-C06
-  question: Are digital nexus forces (AI, automation, data, platforms) adopted deliberately in operations?
-  evidence_prompts: [Adoption roadmap, Deployment records]
-- criterion: OPS-D6-SD3-C07
-  question: Do new technologies entering operations go through a value/risk/lifecycle assessment?
-  evidence_prompts: [Technology-assessment records]
-- criterion: OPS-D6-SD3-C08
-  question: Does operations participate in industry practice exchange?
-  evidence_prompts: [External contributions]
+# --- D06 Resources & Assets --------------------------------------
+- criterion: OPS-D06-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational resources — financial,
+    physical, human — are planned and allocated against operational priorities?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Allocation responds
+    dynamically to demand shifts within governed limits?'
+  evidence_prompts:
+  - Resource plans
+  - Allocation records
+- criterion: OPS-D06-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: Resource allocation decisions are visible
+    and justified against outcomes?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Allocation is
+    outcome-linked and benchmarked (cost-to-serve)?'
+  evidence_prompts:
+  - Allocation decisions
+  - Cost-to-serve data
+- criterion: OPS-D06-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Shared resources and platforms are
+    reused before new equivalents are acquired or built?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Reuse is the
+    default with explicit, governed exceptions?'
+  evidence_prompts:
+  - Reuse policy and metrics
+- criterion: OPS-D06-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational assets — facilities, equipment,
+    tooling — are inventoried with lifecycle state?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Lifecycle data
+    supports renewal forecasting tied to operational plans?'
+  evidence_prompts:
+  - Asset registers
+- criterion: OPS-D06-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Asset maintenance and renewal are planned
+    rather than reactive?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Predictive maintenance
+    is applied to critical assets?'
+  evidence_prompts:
+  - Maintenance plans
+  - Renewal schedules
+- criterion: OPS-D06-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Asset performance — availability, cost,
+    utilization — is tracked per asset class?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Asset intelligence
+    informs investment and retirement decisions?'
+  evidence_prompts:
+  - Asset performance reports
+- criterion: OPS-D06-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Work-in-flight is balanced against
+    available capacity?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Capacity balancing
+    is continuous and forward-looking across units?'
+  evidence_prompts:
+  - Capacity plans
+  - Utilization trends
+- criterion: OPS-D06-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Capacity planning is data-driven with
+    tracked headroom?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Headroom is managed
+    per service criticality and demand scenario?'
+  evidence_prompts:
+  - Capacity headroom dashboards
+- criterion: OPS-D06-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Surge and contingency capacity arrangements
+    exist for predictable peaks?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Surge capacity
+    is exercised, not just documented?'
+  evidence_prompts:
+  - Surge plans
+  - Exercise records
+- criterion: OPS-D06-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: Suppliers and partners critical to
+    operations are identified with managed relationships?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The dependency
+    map covers the full supply chain to critical inputs?'
+  evidence_prompts:
+  - Supplier register
+  - Contract records
+- criterion: OPS-D06-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Supplier performance is measured against
+    agreed commitments?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Supplier risk
+    is monitored continuously, not at renewal only?'
+  evidence_prompts:
+  - Supplier performance reports
+- criterion: OPS-D06-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Supplier failure scenarios are assessed
+    and mitigated for critical inputs?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Multi-sourcing
+    or exit strategies exist for critical dependencies?'
+  evidence_prompts:
+  - Supplier risk assessments
+- criterion: OPS-D06-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: Resource waste — idle capacity, spoilage,
+    rework, over-provisioning — is measured and reduced?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Efficiency targets
+    are embedded in operational objectives per unit?'
+  evidence_prompts:
+  - Waste/efficiency metrics
+- criterion: OPS-D06-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: Resource and asset decisions account
+    for sustainability obligations?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Sustainability
+    is a managed operational performance dimension?'
+  evidence_prompts:
+  - Sustainability reports
+- criterion: OPS-D06-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: Cost-to-serve is understood per product,
+    service or customer segment?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Cost-to-serve
+    drives portfolio and pricing decisions?'
+  evidence_prompts:
+  - Cost-to-serve analyses
+
+# --- D07 Information & Technology --------------------------------
+- criterion: OPS-D07-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: Telemetry — logs, metrics, traces —
+    is centralised and actively used in daily operations?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Observability
+    extends to end-to-end operational flows beyond IT services?'
+  evidence_prompts:
+  - Observability coverage reports
+- criterion: OPS-D07-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: Monitoring covers user-facing journeys
+    and operational outcomes, not just components?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Observability
+    is anticipatory — leading indicators precede consumer impact?'
+  evidence_prompts:
+  - Journey dashboards
+  - SLI coverage
+- criterion: OPS-D07-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Operational information beyond technical
+    telemetry — schedules, status, commitments, inventories — is accurate, timely and accessible?'
+  future_question: 'To what extent will current practice satisfy the future requirement: A coherent operational
+    information spine serves decisions at every level?'
+  evidence_prompts:
+  - Operational information audit
+- criterion: OPS-D07-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Data required for operations is available
+    where and when needed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Data availability
+    meets the requirements of future operating models?'
+  evidence_prompts:
+  - Data availability reports
+- criterion: OPS-D07-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Operational data quality — accuracy,
+    completeness, timeliness — is measured and managed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Data quality
+    gates operational processes automatically?'
+  evidence_prompts:
+  - Data quality metrics
+- criterion: OPS-D07-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Operational data is governed — ownership,
+    definitions and lineage are established?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Governance extends
+    to data feeding automated and AI-assisted decisions?'
+  evidence_prompts:
+  - Data ownership register
+  - Data dictionaries
+- criterion: OPS-D07-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Deployments and changes to operational
+    systems are automated with audit trails?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Change automation
+    extends across the operational systems estate, not only IT services?'
+  evidence_prompts:
+  - Deployment automation rate
+  - Change records
+- criterion: OPS-D07-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Operational applications and platforms
+    are operated to defined standards — support, patching, lifecycle?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Platform operations
+    scale with the growing system estate without discipline loss?'
+  evidence_prompts:
+  - Operational runbooks
+  - Support records
+- criterion: OPS-D07-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Change automation is scored against
+    the shared operations-modernization component?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The modernization
+    roadmap sustains improvement of the scored component?'
+  evidence_prompts:
+  - Component scoring record
+- criterion: OPS-D07-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: Auto-remediation handles known failure
+    modes within defined guardrails?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Remediation scope
+    grows under governed constraints with verified outcomes?'
+  evidence_prompts:
+  - Auto-remediation rate
+  - Playbook library
+- criterion: OPS-D07-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Infrastructure reliability meets the
+    requirements of the services it underpins?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Reliability engineering
+    effort is allocated by criticality, not uniformly?'
+  evidence_prompts:
+  - Availability reports
+- criterion: OPS-D07-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Technology risks to operations — capacity,
+    obsolescence, dependency — are identified and managed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Technology risk
+    horizon scanning is routine and connected to investment?'
+  evidence_prompts:
+  - Technology risk register
+- criterion: OPS-D07-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: Digital nexus forces — AI, automation,
+    data, platforms — are adopted deliberately in operations?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The adoption
+    portfolio is strategy-aligned and value-tracked?'
+  evidence_prompts:
+  - Adoption roadmap
+  - Deployment records
+- criterion: OPS-D07-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: Predictive detection flags issues before
+    users report them?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Prediction spans
+    operational outcomes beyond incidents — demand, quality, capacity?'
+  evidence_prompts:
+  - Predictive alert share of severe incidents
+- criterion: OPS-D07-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: New technologies entering operations
+    pass a value, risk and lifecycle assessment?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The gate includes
+    autonomy- and AI-specific criteria (oversight, explainability, fail-safe)?'
+  evidence_prompts:
+  - Technology-assessment records
+
+# --- D08 Operational Governance & Resilience ---------------------
+- criterion: OPS-D08-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational policies and standards
+    exist, are current and are followed where applicable?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The policy estate
+    stays coherent as operations modernize?'
+  evidence_prompts:
+  - Policy register
+  - Attestation records
+- criterion: OPS-D08-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: Policies are proportionate — they enable
+    execution while managing risk?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Policy burden
+    is measured and reduced where risk allows?'
+  evidence_prompts:
+  - Policy review records
+- criterion: OPS-D08-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Standards for how operational work
+    is performed — quality, safety, service — are defined per domain?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Standards absorb
+    new work classes, including automated work outputs?'
+  evidence_prompts:
+  - Standards library
+- criterion: OPS-D08-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational risks are identified, assessed,
+    owned and treated?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Risk horizon
+    includes emerging operating models (automation, ecosystem)?'
+  evidence_prompts:
+  - Risk register
+  - Treatment records
+- criterion: OPS-D08-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Regulatory and contractual obligations
+    binding operations are known and compliance is evidenced?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Obligation change
+    is traced to operational impact quickly?'
+  evidence_prompts:
+  - Obligation register
+  - Compliance reports
+- criterion: OPS-D08-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Operational risk appetite is explicit
+    and decision-making respects it?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Appetite is calibrated
+    per decision class, including automated decisions?'
+  evidence_prompts:
+  - Risk appetite statement
+  - Decision records
+- criterion: OPS-D08-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Key operational processes operate under
+    defined controls?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Control design
+    adapts to automated execution without losing assurance?'
+  evidence_prompts:
+  - Control frameworks
+- criterion: OPS-D08-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Control effectiveness is tested and
+    assured independently?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Assurance extends
+    to algorithmic controls and automated decisions?'
+  evidence_prompts:
+  - Audit reports
+  - Control test records
+- criterion: OPS-D08-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Control failures and near-misses are
+    analysed and fed back into design?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Control learning
+    is systemic across the operations estate?'
+  evidence_prompts:
+  - Control incident records
+- criterion: OPS-D08-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: Business continuity plans exist for
+    critical operations and are current?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Continuity planning
+    covers plausible future disruption classes?'
+  evidence_prompts:
+  - BC plans
+  - Review records
+- criterion: OPS-D08-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Continuity and disruption scenarios
+    are exercised, with findings actioned?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Exercises include
+    cascading and ecosystem-wide disruption?'
+  evidence_prompts:
+  - Exercise records
+  - Action logs
+- criterion: OPS-D08-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: The enterprise recovers from disruption
+    within stated recovery objectives?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Recovery objectives
+    are validated empirically through exercises and events?'
+  evidence_prompts:
+  - Recovery records
+  - Disruption reviews
+- criterion: OPS-D08-SD05-C01
+  question: 'To what extent does the enterprise currently satisfy: An incident command system operates
+    with defined roles and records?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Incident management
+    covers non-IT operational disruption with equal discipline?'
+  evidence_prompts:
+  - ICS documents
+  - Incident records
+- criterion: OPS-D08-SD05-C02
+  question: 'To what extent does the enterprise currently satisfy: Post-incident reviews are blameless,
+    timely and produce tracked actions?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Incident learning
+    reaches design and investment, not only fixes?'
+  evidence_prompts:
+  - PIR records within 7 days for sev-1/2
+- criterion: OPS-D08-SD05-C03
+  question: 'To what extent does the enterprise currently satisfy: Root causes are eliminated through
+    problem management, not just incidents closed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Recurring-problem
+    elimination is measured as an outcome, not an activity?'
+  evidence_prompts:
+  - Problem records
+  - Recurrence trends
+
+# --- D09 Operational Performance & Value -------------------------
+- criterion: OPS-D09-SD01-C01
+  question: 'To what extent does the enterprise currently satisfy: Operations reports flow upward into
+    business reviews framed as outcomes?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The performance
+    narrative connects operations explicitly to enterprise strategy?'
+  evidence_prompts:
+  - Ops-to-exec review packs
+- criterion: OPS-D09-SD01-C02
+  question: 'To what extent does the enterprise currently satisfy: A balanced operational performance
+    framework is measured — efficiency, effectiveness, quality, responsiveness, reliability, resilience?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The framework
+    includes forward-looking indicators, not only lagging ones?'
+  evidence_prompts:
+  - Performance framework
+  - KPI catalogue
+- criterion: OPS-D09-SD01-C03
+  question: 'To what extent does the enterprise currently satisfy: Performance review drives decisions
+    — escalation, intervention, investment — not just reporting?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Review cadence
+    matches decision cadence per performance tier?'
+  evidence_prompts:
+  - Review decision records
+- criterion: OPS-D09-SD02-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational efficiency — cost per transaction,
+    resource utilization, productivity — is measured and managed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Efficiency gains
+    are reinvested deliberately into capability and value?'
+  evidence_prompts:
+  - Efficiency metrics
+  - Unit-cost trends
+- criterion: OPS-D09-SD02-C02
+  question: 'To what extent does the enterprise currently satisfy: Operating cost per workload is tracked
+    and optimized?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Cost intelligence
+    spans the full operations estate including ecosystem steps?'
+  evidence_prompts:
+  - Cost dashboards
+  - Unit-economics trends
+- criterion: OPS-D09-SD02-C03
+  question: 'To what extent does the enterprise currently satisfy: Operational effectiveness — outcome
+    achievement, first-time-right, service success — is measured alongside efficiency?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Effectiveness
+    is weighted appropriately against efficiency in operational decisions?'
+  evidence_prompts:
+  - Outcome/first-time-right metrics
+- criterion: OPS-D09-SD03-C01
+  question: 'To what extent does the enterprise currently satisfy: Operations'' contribution to enterprise
+    outcomes — customer value, business performance — is explicit and assessed?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Value contribution
+    is quantified per value stream against business-model promises?'
+  evidence_prompts:
+  - Value realization reports
+- criterion: OPS-D09-SD03-C02
+  question: 'To what extent does the enterprise currently satisfy: Operational investments generate their
+    expected business benefits?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Benefits tracking
+    spans the investment lifecycle, from business case to retirement?'
+  evidence_prompts:
+  - Benefits realization records
+- criterion: OPS-D09-SD03-C03
+  question: 'To what extent does the enterprise currently satisfy: Operational execution sustains stakeholder
+    trust — customers, regulators, partners?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Trust indicators
+    are managed as operational outcomes with owners?'
+  evidence_prompts:
+  - Trust/satisfaction/compliance indicators
+- criterion: OPS-D09-SD04-C01
+  question: 'To what extent does the enterprise currently satisfy: Operational performance data is analysed
+    into intelligence — trends, benchmarks, prediction?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Intelligence
+    is predictive and prescriptive for operational decisions?'
+  evidence_prompts:
+  - Analytics products
+  - Benchmark reports
+- criterion: OPS-D09-SD04-C02
+  question: 'To what extent does the enterprise currently satisfy: Improvement priorities are set by performance
+    intelligence and enterprise outcomes?'
+  future_question: 'To what extent will current practice satisfy the future requirement: Portfolio optimization
+    is continuous against outcome contribution?'
+  evidence_prompts:
+  - Improvement portfolio records
+- criterion: OPS-D09-SD04-C03
+  question: 'To what extent does the enterprise currently satisfy: Modernization priorities for operations
+    are identified from performance and capability evidence?'
+  future_question: 'To what extent will current practice satisfy the future requirement: The modernization
+    roadmap addresses future operating requirements, not only current pain?'
+  evidence_prompts:
+  - Modernization backlog
+  - Roadmap
