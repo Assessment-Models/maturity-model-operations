@@ -1,12 +1,31 @@
 id: dea:scale-operations-v2
-version: 2.0.0
+version: 3.0.0
 metamodel_version: 1.0.0
-name: Operations Maturity Model Scale (5-level plus unassessed sentinel)
-description: 'Model-owned scale for the Operations Maturity Model. Five capability levels (L-1..L-5) plus the L-0 Not Assessed sentinel; the five assessed levels are scored against
-  the canonical v2 band instance (dea:maturity-bands-v2 v1.0.0): non-linear band widths 20/25/25/18/12
-  with per-level effort multipliers 1.0 → 6.0. Linear topology, exponential progression. Level semantics
-  are carried verbatim from the authoritative source; only the scoring fields differ between the frozen
-  v1-alpha lineage and the canonical v2 scheme.'
+name: Operations Maturity Scale (L-0 sentinel + 5 capability levels)
+description: >-
+  Model-owned scale for the Operations Maturity Model, restated for release
+  3.0.0 (CR-OM-01). Six level slots: L-0 Not Assessed (a status sentinel, not
+  a capability level; zero points) plus capability levels L-1..L-5 whose
+  ordinals align one-to-one with the canonical v2 band ordinals
+  (dea:maturity-bands-v2 v1.0.0: level-1-emergent [0,20] through
+  level-5-self-optimising (88,100], effort multipliers 1.0 -> 6.0). Level
+  NAMES are the canonical band vocabulary; the enterprise-operations
+  progression vocabulary (Absent, Initial, Defined & Managed, Integrated,
+  Adaptive) is carried as additive metadata (ops_stage_by_ordinal) on the
+  model register, never as a second level ladder.
+  CR-AM-17 migrated the level identifiers and deliberately preserved the
+  legacy level semantics verbatim; release 3.0.0 now evolves those
+  definitions/characteristics to enterprise operations as its deliberate
+  MAJOR-boundary decision (docs/cr/CR-OM-01-enterprise-operations-v3.md
+  §5a, from CR-Operations-00000), superseding the preserve-verbatim choice
+  for v3 only — the identifier migration and criterion score preservation
+  (0/25/50/75/100) are unchanged. Criterion response scores are NOT the
+  band edges. L-5 does NOT require autonomous execution — autonomous
+  execution is a specialized maturity assessed by the Autonomous Operations
+  Maturity Model. Adoption of the L-0 + L-1..L-5 numbering follows the
+  upstream change request dea-metamodel #214 and remains annotated as
+  adoption-pending until the canonical owners ratify and release the
+  renumbered scale instance.
 status: stable
 ordering: ascending
 progression:
@@ -31,88 +50,108 @@ levels:
 - id: L-1
   ordinal: 1
   name: Emergent
-  definition: Practice exists but is person-dependent and informal
+  definition: >-
+    Operations are informal, fragmented and person-dependent: outcomes rely
+    on individual effort and heroics rather than established organizational
+    mechanisms. (Enterprise-operations stage: Absent / ad hoc.)
   characteristics:
-  - Production issues detected by user complaints
-  - Manual deployments, often after-hours
-  - No incident response process
-  - Logs exist but not centralised
+  - Outcomes depend on specific individuals rather than defined practices.
+  - Work is coordinated informally; no common operating cadence exists.
+  - Practice varies across units and is largely undocumented.
+  - Operational information is scattered and assembled reactively.
   expected_practices:
-  - Centralised logging deployed
-  - Incident response runbook exists
-  - Deployment automation ≥ 50% of services
+  - Core operational activities identified, if not yet formalised.
+  - Key operational accountabilities named.
+  - Basic records of operational activity exist.
   evidence_expectations:
-  - Frequent customer-reported incidents
-  - Frequent rollbacks after deployment
-  - Mean time to recovery measured in days
-  short_description: Operations is reactive
+  - Similar work produces inconsistent outcomes across teams.
+  - Operational knowledge is concentrated in a few individuals.
+  - Issues surface through escalation rather than measurement.
+  short_description: Operations is reactive and person-dependent
 - id: L-2
   ordinal: 2
   name: Structured
-  definition: Documented, agreed, but inconsistently enforced
+  definition: >-
+    Operational practices, responsibilities and expectations are documented
+    and established; operations become repeatable through defined mechanisms
+    rather than individual effort. (Enterprise-operations stage: Initial.)
   characteristics:
-  - Incident command system documented
-  - Observability stack deployed (logs, metrics, traces)
-  - Post-mortem culture started
-  - Deployment automation > 80%
+  - Core processes and services are documented with named owners.
+  - Roles, responsibilities and decision rights are defined.
+  - A common operating cadence operates across units.
+  - Operational information is organised and accessible.
   expected_practices:
-  - SLOs defined for top services
-  - Error budgets enforced
-  - Post-mortems within 7 days of incident for sev-1/sev-2
+  - Operating model documented, versioned and owned.
+  - Process and service inventories maintained for core operations.
+  - Operational policies and standards published.
   evidence_expectations:
-  - SLO dashboards published
-  - Incident review board meets regularly
-  - Deployment frequency tracked
+  - Repeated execution follows documented practice.
+  - Onboarding relies on documented practice rather than individuals.
+  - Deviations from practice are visible to process and service owners.
   short_description: Core practices in place
 - id: L-3
   ordinal: 3
   name: Systematic
-  definition: Formal, tooling-enabled, governance active
+  definition: >-
+    Operations are consistently executed, measured, governed and controlled;
+    performance is managed within defined risk and quality parameters.
+    (Enterprise-operations stage: Defined & Managed.)
   characteristics:
-  - SLOs defined for all customer-facing services
-  - Error budgets influence release decisions
-  - Chaos engineering experiments run
-  - On-call rotations are sustainable
+  - Execution is consistent and deviation is actively managed.
+  - Operational performance is measured against defined indicators.
+  - Control, risk and compliance mechanisms operate and are tested.
+  - Service commitments (SLAs/OLAs) are defined, measured and reviewed.
   expected_practices:
-  - MTTR < 30 minutes for sev-1
-  - Deployment frequency > 10/day
-  - Change failure rate < 15%
+  - Operational indicators measured and reviewed on a defined cadence.
+  - Control and assurance mechanisms evidenced (audit, review).
+  - Improvement backlog managed with measured impact.
   evidence_expectations:
-  - Quarterly ops health report
-  - Chaos engineering results tracked
-  - On-call satisfaction score > 7/10
-  short_description: Operations is metrics-driven
+  - Operational dashboards drive reviews and decisions.
+  - Control effectiveness is evidenced by audit or review findings.
+  - Delivery against service commitments is tracked and reported.
+  short_description: Operations is measured and managed
 - id: L-4
   ordinal: 4
   name: Adaptive
-  definition: Metrics-driven; organisation senses and responds
+  definition: >-
+    Operational capabilities are coordinated across the enterprise and
+    optimised using performance intelligence; operations sense and respond
+    to changing conditions instead of only reacting. (Enterprise-operations
+    stage: Integrated.)
   characteristics:
-  - Predictive incident detection
-  - Auto-remediation for known failure modes
-  - Capacity planning is data-driven
-  - Cost of operations tracked per workload
+  - Capabilities and workflows coordinate across organizational boundaries.
+  - Performance intelligence (trends, prediction, benchmarks) drives optimization.
+  - Operational investment is prioritized by contribution to outcomes.
+  - Demand and risk are anticipated, not only absorbed.
   expected_practices:
-  - Auto-remediation > 30% of incidents
-  - Predictive alerts > 50% of sev-1
-  - Cost per workload tracked weekly
+  - Cross-enterprise operational integration mechanisms operate.
+  - Leading and predictive indicators inform operational decisions.
+  - Improvement is portfolio-managed against enterprise outcomes.
   evidence_expectations:
-  - ML-based anomaly detection deployed
-  - Auto-remediation playbook library
-  - Capacity headroom dashboards
-  short_description: Operations is optimised
+  - Cross-unit operational intelligence products are in active use.
+  - Demonstrated adaptation to demand or disruption shifts.
+  - Investment decisions traceable to performance intelligence.
+  short_description: Operations is integrated and performance-driven
 - id: L-5
   ordinal: 5
   name: Self-Optimising
-  definition: Continuous improvement is autonomous, not programme-driven
+  definition: >-
+    Operations continuously learn, anticipate and adapt with increasing
+    intelligence and speed; improvement is systemic rather than
+    programme-driven. Autonomous execution may contribute, but is NOT
+    required — well-governed human-led operations can sustain this level.
+    Depth of autonomous execution itself is assessed by the specialized
+    Autonomous Operations Maturity Model. (Enterprise-operations stage:
+    Adaptive.)
   characteristics:
-  - Reliability is a product feature
-  - Operations practice contributes to industry
-  - Cross-team operational excellence programs
-  - Internal SRE training academy
+  - Learning loops are institutionalized across operations.
+  - Change is absorbed without disproportionate disruption.
+  - Increasingly intelligent execution (automation, AI) operates within explicit, governed constraints.
+  - Operational excellence compounds across the enterprise.
   expected_practices:
-  - None — continuous improvement is the practice
+  - None — continuous learning and adaptation is the practice.
   evidence_expectations:
-  - External conference talks on ops
-  - Open-source observability contributions
-  - Internal SRE certification programme
-  short_description: Operations as competitive advantage
+  - Documented adaptation to strategic or market shifts with measurable outcomes.
+  - Operational learning products shared beyond the enterprise.
+  - Sustained delivery of commitments through disruption.
+  short_description: Operations as adaptive, learning system
